@@ -2,13 +2,18 @@ import { useState } from 'react'
 import './App.css'
 import { StartUp } from '@/components/Startup'
 import ReduxProvider from '@/components/providers/ReduxProvider'
+import PageNotFound from '@/views/404'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <ReduxProvider>
-      <StartUp />
+      <BrowserRouter>
+        <Routes>
+          <Route path="*" element={<PageNotFound />} />
+        </Routes>
+      </BrowserRouter>
     </ReduxProvider>
   )
 }

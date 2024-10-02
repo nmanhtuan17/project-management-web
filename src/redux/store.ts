@@ -1,4 +1,4 @@
-import { appSlice, AppSliceState } from '@/redux/actions/app.action';
+import { appSlice, AppSliceState } from '@/redux/slices/app.slice';
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { persistReducer, persistStore } from 'redux-persist';
