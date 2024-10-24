@@ -1,4 +1,5 @@
 import { appSlice, AppSliceState } from '@/redux/slices/app.slice';
+import { authSlice, AuthSliceState } from '@/redux/slices/auth.slice';
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { persistReducer, persistStore } from 'redux-persist';
@@ -6,7 +7,8 @@ import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import storage from 'redux-persist/lib/storage';
 
 const reducers = combineReducers({
-  app: appSlice.reducer
+  app: appSlice.reducer,
+  auth: authSlice.reducer
 })
 
 const persistedReducer = persistReducer({
@@ -28,6 +30,7 @@ export const persistor = persistStore(store);
 
 export type RootState = {
   app: AppSliceState;
+  auth: AuthSliceState;
 };
 
 export type AppDispatch = typeof store.dispatch;
