@@ -11,6 +11,10 @@ class ApiService {
     refreshToken: '',
   }
 
+  async setCredentials(tokens: { accessToken: string, refreshToken: string }) {
+    this.auth = tokens;
+  }
+
   constructor() {
   }
 
@@ -56,7 +60,7 @@ class ApiService {
   }
 
   async refreshTokenCheck() {
-    
+
   }
 
 }

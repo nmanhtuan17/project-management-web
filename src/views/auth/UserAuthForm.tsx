@@ -68,27 +68,25 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   // });
 
   const finalizeLogin = async (response: any) => {
-    // const { data } = response;
+    const { data } = response;
 
-    // const authRdr = localStorage.getItem('auth_rdr');
-    // if (authRdr) {
-    //   localStorage.clear();
-    //   location.href = authRdr + `#access_token=${encodeURI(data.access_token)}&refresh_token=${encodeURI(data.refresh_token)}`;
-    // } else {
-    //   await apiService.setCredentials({
-    //     accessToken: data.access_token,
-    //     refreshToken: data.refresh_token,
-    //   });
-    //   const { data: user } = await apiService.callApi('GET', '/users/me');
-    //   dispatch(setAuth({
-    //     loggedIn: true,
-    //     tokens: {
-    //       access_token: data.access_token,
-    //       refresh_token: data.refresh_token,
-    //     },
-    //     user,
-    //   }));
-    // }
+    const authRdr = localStorage.getItem('auth_rdr');
+    if (authRdr) {
+      localStorage.clear();
+      location.href = authRdr + `#access_token=${encodeURI(data.access_token)}&refresh_token=${encodeURI(data.refresh_token)}`;
+    } else {
+      await apiService.setCredentials({
+        accessToken: data.access_token,
+        refreshToken: data.refresh_token,
+      });
+      dispatch(setAuth({
+        loggedIn: true,
+        tokens: {
+          access_token: data.access_token,
+          refresh_token: data.refresh_token,
+        }
+      }));
+    }
   }
 
   // const googleLogin = useGoogleLogin({
@@ -127,7 +125,9 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   }, [message.show]);
 
   useEffect(() => {
-    if (auth.loggedIn) navigate('/spaces/');
+    if (auth.loggedIn) {
+      navigate('/boarding/');
+    }
   }, [auth.loggedIn]);
 
   return (

@@ -6,6 +6,8 @@ import LoginPage from '@/views/auth/Login'
 import RegisterPage from '@/views/auth/Register'
 import VerifyPage from '@/views/auth/VerifyPage'
 import AuthLayout from '@/components/layouts/AuthLayout'
+import BoardingLayout from '@/components/layouts/BoardingLayout'
+import Boarding from '@/views/boading/Boading'
 
 function App() {
 
@@ -13,6 +15,9 @@ function App() {
     <ReduxProvider>
       <BrowserRouter>
         <Routes>
+          <Route path={'boarding/'} element={<BoardingLayout />}>
+            <Route index element={<Boarding />} />
+          </Route>
           <Route path={'auth/'} element={<AuthLayout />}>
             <Route index path="login" element={<LoginPage />} />
             <Route path="register" element={<RegisterPage />} />

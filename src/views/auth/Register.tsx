@@ -24,7 +24,6 @@ export default function RegisterPage() {
     const data = Object.fromEntries(formData);
     apiService.callApi('POST', '/auth/register', data)
       .then((response) => {
-        // redirect
         setMessage({
           show: true,
           title: 'SUCCESS',
