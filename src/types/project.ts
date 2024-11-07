@@ -22,7 +22,7 @@ export interface Project {
 
 export interface ProjectMember {
   _id: string;
-  user: User | string;
+  user: User;
   project: Project | string;
   role: ProjectRoles;
 }

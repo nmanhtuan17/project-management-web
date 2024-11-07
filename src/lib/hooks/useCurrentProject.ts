@@ -1,29 +1,20 @@
-import {useAppSelector} from "@/redux/store.ts";
+import { useAppSelector } from "@/redux/store.ts";
 import { Project, ProjectMember, ProjectRoles, ProjectTypes } from "@/types/project";
-import {useEffect, useState} from "react";
-import {useParams} from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
-interface ProjectWithProfile extends Project {
-  profile: ProjectMember;
-}
 
-const defaultProject: ProjectWithProfile = {
+const defaultProject: Project = {
   _id: '',
   slug: '',
   name: '',
   avatar: '',
   type: ProjectTypes.TEAM,
   memberCount: 1,
-  profile: {
-    _id: "",
-    user: "",
-    project: "",
-    role: ProjectRoles.MEMBER
-  }
 }
 
 export default function useCurrentSpace() {
-  const {projects} = useAppSelector(state => state.project);
+  const { projects } = useAppSelector(state => state.project);
   const [project, setProject] = useState<Project>(defaultProject);
   const params = useParams();
 
@@ -31,5 +22,5 @@ export default function useCurrentSpace() {
     if (params.projectSlug) setProject(projects.find(s => s?.slug?.toLowerCase() === params.projectSlug));
   }, [projects, params.projectSlug]);
 
-  return project as ProjectWithProfile;
+  return project;
 }

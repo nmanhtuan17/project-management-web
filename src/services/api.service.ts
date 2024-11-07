@@ -1,4 +1,6 @@
 import { appConfig } from "@/configs/app.config";
+import { setAuth } from "@/redux/slices/auth.slice";
+import { store } from "@/redux/store";
 import axios, { AxiosRequestConfig } from "axios";
 
 class ApiService {
@@ -13,6 +15,7 @@ class ApiService {
 
   async setCredentials(tokens: { accessToken: string, refreshToken: string }) {
     this.auth = tokens;
+    return this.refreshTokenCheck()
   }
 
   constructor() {
@@ -60,9 +63,25 @@ class ApiService {
   }
 
   async refreshTokenCheck() {
-
+    if (this.auth.accessToken) {
+      let tokenData = JSON.parse(atob(this.auth.accessToken.split('.')[1]));
+      if (tokenData.exp <= ~~(new Date().getTime() / 1000)) {
+        // refresh
+        const { data: tokenResponse } = await this.callApi('POST', '/auth/jwt/refresh', {
+          refresh_token: this.auth.accessToken,
+        }, {}, true);
+        store.dispatch(setAuth({
+          tokens: {
+            ...tokenResponse,
+          }
+        }));
+        this.setCredentials({
+          accessToken: tokenResponse.access_token,
+          refreshToken: tokenResponse.refresh_token,
+        });
+      }
+    }
   }
-
 }
 
 export default new ApiService()

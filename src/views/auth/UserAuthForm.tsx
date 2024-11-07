@@ -79,12 +79,14 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         accessToken: data.access_token,
         refreshToken: data.refresh_token,
       });
+      const {data: user} = await apiService.callApi('GET', '/users/me');
       dispatch(setAuth({
         loggedIn: true,
         tokens: {
           access_token: data.access_token,
           refresh_token: data.refresh_token,
-        }
+        },
+        user
       }));
     }
   }
@@ -186,7 +188,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                     id="password"
                     placeholder="Password..."
                     name="password"
-                    type="password"
+                    type={hide ? 'password' : 'text'}
                     autoCapitalize="none"
                     autoComplete="email"
                     autoCorrect="off"
