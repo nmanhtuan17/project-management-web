@@ -4,12 +4,14 @@ import { loadProjectMembers, loadProjects } from '../actions/project.action';
 
 export interface ProjectSliceState {
   loaded: boolean;
+  loading: boolean;
   projects: Project[];
   members: ProjectMember[];
 }
 
 const initialState: ProjectSliceState = {
   loaded: false,
+  loading: false,
   projects: [],
   members: []
 };

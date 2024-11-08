@@ -28,10 +28,9 @@ export default function ProjectPage() {
 
   useEffect(() => {
     if (currentProject._id) {
-      console.log(currentProject)
       dispatch(loadProjectMembers(currentProject._id))
     }
-  }, [currentProject]);
+  }, [currentProject._id]);
 
   return (
     <div className={'flex-1 flex flex-row'}>

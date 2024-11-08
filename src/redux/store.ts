@@ -6,6 +6,7 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { persistReducer, persistStore } from 'redux-persist';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import storage from 'redux-persist/lib/storage';
+import { appMiddleware } from './middleware/app.middleware';
 
 const reducers = combineReducers({
   app: appSlice.reducer,
@@ -25,7 +26,7 @@ export const store = configureStore({
     getDefaultMiddleware({
       serializableCheck: false,
       immutableCheck: false,
-    })
+    }).prepend(appMiddleware.middleware),
 });
 
 export const persistor = persistStore(store);

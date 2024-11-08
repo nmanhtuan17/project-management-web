@@ -9,21 +9,21 @@ import AuthLayout from '@/components/layouts/AuthLayout'
 import BoardingLayout from '@/components/layouts/BoardingLayout'
 import Boarding from '@/views/boading'
 import ProjectPage from './views/project'
-import ProjectLayout from './components/layouts/ProjectLayout'
+import DialogProvider from './components/providers/DialogProvider'
+import MainLayout from './components/layouts/MainLayout'
+import { Toaster } from 'sonner'
 
 function App() {
 
   return (
     <ReduxProvider>
-      <>
-        <BrowserRouter>
-          <Routes>
-            <Route path='projects/' element={<ProjectLayout />}>
+      <BrowserRouter>
+        <Routes>
+          <Route path='/' element={<DialogProvider />}>
+            <Route path='projects/' element={<MainLayout />}>
               <Route path=':projectSlug/'>
                 <Route index element={<ProjectPage />} />
-
               </Route>
-
             </Route>
             <Route path={'boarding/'} element={<BoardingLayout />}>
               <Route index element={<Boarding />} />
@@ -35,10 +35,18 @@ function App() {
               <Route path="verify" element={<VerifyPage />} />
             </Route>
             <Route path="*" element={<PageNotFound />} />
+          </Route>
 
-          </Routes>
-        </BrowserRouter>
-      </>
+        </Routes>
+      </BrowserRouter>
+      <Toaster closeButton richColors toastOptions={{
+        classNames: {
+          error: 'bg-red-400',
+          success: 'bg-green-400',
+          warning: 'bg-yellow-400',
+          info: 'bg-blue-400',
+        }
+      }} />
     </ReduxProvider>
   )
 }

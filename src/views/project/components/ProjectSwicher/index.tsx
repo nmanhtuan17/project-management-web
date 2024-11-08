@@ -29,6 +29,7 @@ import {
 import { useAppDispatch, useAppSelector } from "@/redux/store.ts";
 import { useNavigate } from "react-router-dom";
 import useCurrentProject from "@/lib/hooks/useCurrentProject"
+import { useDialogContext } from "@/components/providers/DialogProvider"
 
 type PopoverTriggerProps = React.ComponentPropsWithoutRef<typeof PopoverTrigger>
 
@@ -40,6 +41,7 @@ export const ProjectSwitcher = ({ className }: ProjectSwitcherProps) => {
   const { projects } = useAppSelector(state => state.project);
   const currentProject = useCurrentProject();
   const navigate = useNavigate();
+  const { setDialogOpen } = useDialogContext()
 
   const groups = [{
     label: 'Personal Projects',
@@ -114,8 +116,7 @@ export const ProjectSwitcher = ({ className }: ProjectSwitcherProps) => {
         <CommandList>
           <CommandGroup>
             <CommandItem className={'cursor-pointer'} onSelect={() => {
-              console.log('ok')
-              navigate('/boarding/new');
+              setDialogOpen("createProject", true);
             }}>
               <PlusCircledIcon className="mr-2 h-5 w-5" />
               Create Project
