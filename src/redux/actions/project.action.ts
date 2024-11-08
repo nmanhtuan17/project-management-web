@@ -3,9 +3,7 @@ import { Project, ProjectTypes } from "@/types/project";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 export const loadProjects = createAsyncThunk("project/load-projects", async () => {
-  const res = await apiService.get('projects');
-  console.log(res)
-  return res
+  return await apiService.get('projects');
 })
 
 export const loadProjectMembers = createAsyncThunk<

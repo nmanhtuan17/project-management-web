@@ -12,18 +12,18 @@ export const MainNavMobile = ({ className, ...props }: HTMLAttributes<HTMLElemen
   const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
 
   const links = [{
-    path: `/spaces/${currentProject.slug}`,
+    path: currentProject._id ? `/projects/${currentProject.slug}` : `/`,
     label: 'Home'
   }, {
-    path: `/spaces/${currentProject.slug}/tasks`,
-    label: 'Tasks'
-  }, {
-    path: `/spaces/${currentProject.slug}/settings`,
-    label: 'Settings'
-  }, {
-    path: `/spaces/${currentProject.slug}/members`,
+    path: `/mails/inbox`,
+    label: 'Mails'
+  }, ...(currentProject._id ? [{
+    path: `/projects/${currentProject.slug}/members`,
     label: 'Members'
-  }];
+  }, {
+    path: `/projects/${currentProject.slug}/tasks`,
+    label: 'Tasks'
+  }] : [])]
 
   return (
     <nav

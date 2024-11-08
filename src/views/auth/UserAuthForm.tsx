@@ -126,12 +126,6 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     }, 5000);
   }, [message.show]);
 
-  useEffect(() => {
-    if (auth.loggedIn) {
-      navigate('/boarding/');
-    }
-  }, [auth.loggedIn]);
-
   return (
     <div className={cn("grid gap-6", className)} {...props}>
       <Alert hidden={!message.show} variant="destructive">

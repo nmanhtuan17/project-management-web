@@ -8,10 +8,12 @@ import VerifyPage from '@/views/auth/VerifyPage'
 import AuthLayout from '@/components/layouts/AuthLayout'
 import BoardingLayout from '@/components/layouts/BoardingLayout'
 import Boarding from '@/views/boading'
-import ProjectPage from './views/project'
+import HomePage from './views/project'
 import DialogProvider from './components/providers/DialogProvider'
 import MainLayout from './components/layouts/MainLayout'
 import { Toaster } from 'sonner'
+import { AuthProvider } from '@/components/providers/AuthProvider'
+import MailPage from '@/views/mail'
 
 function App() {
 
@@ -20,23 +22,35 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path='/' element={<DialogProvider />}>
-            <Route path='projects/' element={<MainLayout />}>
-              <Route path=':projectSlug/'>
-                <Route index element={<ProjectPage />} />
+            <Route path='/' element={<AuthProvider />}>
+              <Route path='/' element={<MainLayout />}>
+                <Route path='' index element={<HomePage />} />
+                <Route path='projects/'>
+                  <Route path=':projectSlug/'>
+                    <Route path='' index element={<HomePage />} />
+                    <Route path='tasks/' element={<div></div>} />
+                  </Route>
+                </Route>
+                <Route path={'mails/'} >
+                  {['inbox', 'sent', 'important', 'drafts', 'trash'].map(path => (
+                    <Route key={path} path="">
+                      <Route path={path} element={<MailPage />} />
+                      <Route path={`${path}/:mailId`} element={<MailPage />} />
+                    </Route>
+                  ))}
+                </Route>
               </Route>
+              <Route path={'boarding/'} element={<BoardingLayout />}>
+                <Route index element={<Boarding />} />
+              </Route>
+              <Route path={'auth/'} element={<AuthLayout />}>
+                <Route index path="login" element={<LoginPage />} />
+                <Route path="register" element={<RegisterPage />} />
+                <Route path="verify" element={<VerifyPage />} />
+              </Route>
+              <Route path="*" element={<PageNotFound />} />
             </Route>
-            <Route path={'boarding/'} element={<BoardingLayout />}>
-              <Route index element={<Boarding />} />
-              <Route path={'new'} element={<div />} />
-            </Route>
-            <Route path={'auth/'} element={<AuthLayout />}>
-              <Route index path="login" element={<LoginPage />} />
-              <Route path="register" element={<RegisterPage />} />
-              <Route path="verify" element={<VerifyPage />} />
-            </Route>
-            <Route path="*" element={<PageNotFound />} />
           </Route>
-
         </Routes>
       </BrowserRouter>
       <Toaster closeButton richColors toastOptions={{

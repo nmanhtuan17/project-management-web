@@ -60,16 +60,20 @@ export const ProjectSwitcher = ({ className }: ProjectSwitcherProps) => {
         aria-label="Select a project"
         className={cn("w-[200px] justify-between overflow-hidden", className)}
       >
-        <Avatar className="mr-2 h-5 w-5">
-          <AvatarImage
-            src={currentProject.avatar || `https://avatar.vercel.sh/${currentProject?.name}.png`}
-            alt={currentProject?.name}
-          />
-          <AvatarFallback>{currentProject?.name?.charAt(0)}</AvatarFallback>
-        </Avatar>
-        <span className="truncate">
-          {currentProject?.name}
-        </span>
+        {!!currentProject._id ? <>
+          <Avatar className="mr-2 h-5 w-5">
+            <AvatarImage
+              src={currentProject.avatar || `https://avatar.vercel.sh/${currentProject?.name}.png`}
+              alt={currentProject?.name}
+            />
+            <AvatarFallback>{currentProject?.name?.charAt(0)}</AvatarFallback>
+          </Avatar>
+          <span className="truncate">
+            {currentProject?.name}
+          </span>
+        </> :
+          <span className="truncate text-xs">Select project</span>
+        }
         <CaretSortIcon className="ml-auto h-4 w-4 shrink-0 opacity-50" />
       </Button>
     </PopoverTrigger>

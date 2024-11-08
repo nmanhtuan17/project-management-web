@@ -25,8 +25,6 @@ export const UserNav = () => {
   const { user } = useAppSelector(state => state.auth)
   const dispatch = useAppDispatch()
 
-  console.log(user)
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

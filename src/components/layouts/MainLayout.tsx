@@ -20,30 +20,17 @@ export default function MainLayout() {
   const dispatch = useAppDispatch();
   const { loggedIn } = useAppSelector(state => state.auth);
   const { projects, loaded } = useAppSelector(state => state.project);
-  const currentSpace = useCurrentProject();
+  const currentProject = useCurrentProject();
   const [showCreateSpaceModal, setShowCreateSpaceModal] = useState(false);
   const navigate = useNavigate();
   const params = useParams();
   const projectSlug = params.projectSlug;
 
   useEffect(() => {
-    if (!loggedIn) {
-      navigate('/auth/login');
-    } else dispatch(loadProjects());
+    dispatch(loadProjects());
   }, [loggedIn]);
 
-  useEffect(() => {
-    if (!projectSlug || projectSlug === '') return navigate('/boarding');
-    if (!loaded) return;
-    if (!currentSpace) {
-      navigate('/boarding');
-      return;
-    }
-    // dispatch(setSpaces({
-    //   currentSpaceProfile: currentSpace?.profile,
-    // }))
-  }, [projectSlug, loaded, projects]);
-  if (!currentSpace) return <div className="flex justify-center items-center w-full h-full">
+  if (!currentProject) return <div className="flex justify-center items-center w-full h-full">
     <LoadingSpinner size={16} />
   </div>;
 
@@ -51,12 +38,12 @@ export default function MainLayout() {
     <div className="flex flex-col h-full overflow-y-auto">
       <div className="border-b sticky top-0 left-0 right-0 bg-background">
         <div className="flex h-16 items-center px-4">
-          {!!currentSpace && <MainNavMobile className="block sm:hidden" />}
-          {!!currentSpace && <ProjectSwitcher />}
-          {!!currentSpace && <MainNav className="mx-6 hidden sm:flex" />}
+          {!!currentProject && <MainNavMobile className="block sm:hidden" />}
+          <ProjectSwitcher />
+          {!!currentProject && <MainNav className="mx-6 hidden sm:flex" />}
           <div className="ml-auto flex items-center space-x-4">
             {/* <ThemeSwitcher/> */}
-            {!!currentSpace && <SubNav />}
+            {!!currentProject && <SubNav />}
             <UserNav />
           </div>
         </div>

@@ -45,7 +45,6 @@ export function CreateProjectDialog() {
   });
 
   const onSubmit = async (data: ProjectFormValues) => {
-    console.log(data)
     dispatch(createProjectAction(data))
       .unwrap()
       .then((res) => {

@@ -9,7 +9,6 @@ export default function BoardingLayout() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  console.log(tokens)
 
   useEffect(() => {
     if (!loggedIn) {

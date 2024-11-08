@@ -52,7 +52,7 @@ export default function ProjectPage() {
             </div>
           </div>
         </ResizablePanel>
-        {currentProject && <>
+        {currentProject._id && <>
           <ResizableHandle />
           <ResizablePanel
             defaultSize={isMobileScreen ? 5 : 15}

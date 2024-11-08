@@ -13,17 +13,21 @@ import {Ellipsis, Plus, Settings} from "lucide-react";
 import * as React from "react";
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar.tsx";
 import {Badge} from "@/components/ui/badge.tsx";
+import { useDialogContext } from "@/components/providers/DialogProvider";
 
 export default function Boarding() {
   const {projects} = useAppSelector(state => state.project);
   const navigate = useNavigate();
+  const {createProject, setDialogOpen} = useDialogContext()
 
   return <div className={'flex-1 space-y-6 px-4 sm:px-0'}>
     <div>
       <div className={'flex flex-row justify-between'}>
         <h3 className="text-lg font-bold">Select Project</h3>
         <div>
-          <Button onClick={() => navigate('/boarding/new')}>
+          <Button onClick={() => {
+            setDialogOpen('createProject', true)
+          }}>
             <PlusIcon className={'mr-1'}/>
             Create Project
           </Button>
@@ -36,7 +40,7 @@ export default function Boarding() {
     <div className={'flex flex-col space-y-4'}>
       {projects.map(project => {
         return <Card key={project._id} className={'p-4 hover:border-gray-500 cursor-pointer'} onClick={() => {
-          navigate(`/projects/${project.slug}/`)
+          navigate(`/projects/${project.slug}`)
         }}>
           <div className={'flex items-start flex-row'}>
             <div className={'flex-1 flex flex-col items-start'}>

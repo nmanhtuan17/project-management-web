@@ -12,18 +12,18 @@ export const MainNav = ({
   const { pathname } = useLocation();
 
   const links = [{
-    path: `/projects/${currentProject.slug}`,
+    path: currentProject._id ? `/projects/${currentProject.slug}` : `/`,
     label: 'Home'
+  }, {
+    path: `/mails/inbox`,
+    label: 'Mails'
+  }, ...(currentProject._id ? [{
+    path: `/projects/${currentProject.slug}/members`,
+    label: 'Members'
   }, {
     path: `/projects/${currentProject.slug}/tasks`,
     label: 'Tasks'
-  }, {
-    path: `/projects/${currentProject.slug}/settings`,
-    label: 'Settings'
-  }, {
-    path: `/projects/${currentProject.slug}/members`,
-    label: 'Members'
-  }];
+  }] : [])]
 
   return (
     <nav
