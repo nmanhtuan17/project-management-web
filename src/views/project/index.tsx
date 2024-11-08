@@ -5,26 +5,23 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useEffect, useState } from "react";
-import apiService from "@/services/api.service.ts";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar.tsx";
 import { Download } from "lucide-react";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable.tsx";
-// import {useFloatingWindowCtx} from "@/components/providers/floating-window-provider.tsx";
-// import EmailComposer from "@/components/layouts/components/email-composer.tsx";
 import useCurrentProject from "@/lib/hooks/useCurrentProject";
-import { ProjectMember } from "@/types/project";
 import { CalendarDateRangePicker } from "@/components/common/DateRangePicker";
-import useApi from "@/lib/hooks/useApi";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { cn } from "@/lib/utils";
 import { loadProjectMembers } from "@/redux/actions/project.action";
+import { useWindowSize } from "@/lib/hooks/useWindowSize";
 
 export default function ProjectPage() {
-  // const {createWindow} = useFloatingWindowCtx();
   const currentProject = useCurrentProject();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const dispatch = useAppDispatch();
   const { members } = useAppSelector(state => state.project)
+  const { width } = useWindowSize();
+  const isMobileScreen = width < 768;
 
   useEffect(() => {
     if (currentProject._id) {
@@ -53,75 +50,68 @@ export default function ProjectPage() {
                 </Button>
               </div>
             </div>
-            {/* <Button onClick={() => {
-              createWindow({
-                title: "Compose email",
-                children: <EmailComposer/>,
-                width: 300,
-                height: 400,
-              })
-            }}>
-              Create window
-            </Button> */}
           </div>
         </ResizablePanel>
-        <ResizableHandle withHandle />
-        <ResizablePanel
-          defaultSize={20}
-          collapsedSize={15}
-          collapsible={true}
-          minSize={15}
-          maxSize={20}
-          className={cn(
-            isCollapsed &&
-            "min-w-[50px] transition-all duration-300 ease-in-out"
-          )}
-        >
-          <div>
-            <div className={'px-4 py-2 font-bold'}>
-              {!isCollapsed && 'Contacts'}
-            </div>
-            {members.map(mem => (!isCollapsed ?
-              <div
-                className={'px-4 py-2 flex flex-row items-center gap-2 hover:bg-muted cursor-pointer'}
-                key={mem._id}
-              >
-                <Avatar>
-                  <AvatarImage src={mem.user.avatar} />
-                  <AvatarFallback>{mem.user.fullName.split(' ')?.pop()?.charAt(0)?.toUpperCase() || '!'}</AvatarFallback>
-                </Avatar>
-                <div>
-                  <div className={'font-semibold text-sm'}>
-                    {mem.user.fullName}
-                  </div>
-                  <div className={'text-xs'}>
-                    {mem.role}
+        {currentProject && <>
+          <ResizableHandle />
+          <ResizablePanel
+            defaultSize={isMobileScreen ? 5 : 15}
+            collapsedSize={isMobileScreen ? 5 : 15}
+            collapsible={true}
+            minSize={isMobileScreen ? 5 : 15}
+            maxSize={isMobileScreen ? 5 : 15}
+            className={cn(
+              isCollapsed &&
+              "min-w-[50px] transition-all duration-300 ease-in-out"
+            )}
+          >
+            <div>
+              <div className={'px-4 py-2 font-bold'}>
+                {!isCollapsed && 'Contacts'}
+              </div>
+              {members.map(mem => (!isCollapsed ?
+                <div
+                  className={'px-4 py-2 flex flex-row items-center gap-2 hover:bg-muted cursor-pointer'}
+                  key={mem._id}
+                >
+                  <Avatar>
+                    <AvatarImage src={mem.user.avatar} />
+                    <AvatarFallback>{mem.user.fullName.split(' ')?.pop()?.charAt(0)?.toUpperCase() || '!'}</AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <div className={'font-semibold text-sm'}>
+                      {mem.user.fullName}
+                    </div>
+                    <div className={'text-xs'}>
+                      {mem.role}
+                    </div>
                   </div>
                 </div>
-              </div>
-              :
-              <div className={'px-4 py-2 flex flex-row items-center justify-center hover:bg-muted cursor-pointer'}>
-                <TooltipProvider>
-                  <Tooltip delayDuration={0}>
-                    <TooltipTrigger asChild>
-                      <Avatar>
-                        <AvatarImage src={mem.user.avatar} />
-                        <AvatarFallback>{mem.user.fullName.split(' ')?.pop()?.charAt(0)?.toUpperCase() || '!'}</AvatarFallback>
-                      </Avatar>
-                    </TooltipTrigger>
-                    <TooltipContent side="right">
-                      <div className={'text-sm'}>
-                        {mem.user.fullName}
-                      </div>
-                      <div className={'text-xs'}>
-                        {mem.role}
-                      </div>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </div>))}
-          </div>
-        </ResizablePanel>
+                :
+                <div className={'px-4 py-2 flex flex-row items-center justify-center hover:bg-muted cursor-pointer'}>
+                  <TooltipProvider>
+                    <Tooltip delayDuration={0}>
+                      <TooltipTrigger asChild>
+                        <Avatar>
+                          <AvatarImage src={mem.user.avatar} />
+                          <AvatarFallback>{mem.user.fullName.split(' ')?.pop()?.charAt(0)?.toUpperCase() || '!'}</AvatarFallback>
+                        </Avatar>
+                      </TooltipTrigger>
+                      <TooltipContent side="right">
+                        <div className={'text-sm'}>
+                          {mem.user.fullName}
+                        </div>
+                        <div className={'text-xs'}>
+                          {mem.role}
+                        </div>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>))}
+            </div>
+          </ResizablePanel>
+        </>
+        }
       </ResizablePanelGroup>
     </div>
   )
