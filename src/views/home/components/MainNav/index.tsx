@@ -21,7 +21,7 @@ export const MainNav = ({
     path: `/projects/${currentProject.slug}/members`,
     label: 'Members'
   }, {
-    path: `/projects/${currentProject.slug}/tasks`,
+    path: `/projects/${currentProject.slug}/details/tasks`,
     label: 'Tasks'
   }] : [])]
 

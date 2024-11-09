@@ -1,7 +1,7 @@
 import {createContext, ReactNode, useContext, useState} from "react";
 import {Outlet} from "react-router-dom";
 import { AlertDialogProvider } from "./AlertDialogProvider";
-import { CreateProjectDialog } from "@/views/project/components/CreateProjectDialog";
+import { CreateProjectDialog } from "@/views/home/components/CreateProjectDialog";
 
 interface DialogContextType {
   createProject: {

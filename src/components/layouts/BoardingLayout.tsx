@@ -2,7 +2,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@/redux/store.ts";
 import { useEffect } from "react";
 import { loadProjects } from "@/redux/actions/project.action";
-import { UserNav } from "@/views/project/components/UserNav";
+import { UserNav } from "@/views/home/components/UserNav";
 
 export default function BoardingLayout() {
   const { loggedIn, tokens } = useAppSelector(state => state.auth);

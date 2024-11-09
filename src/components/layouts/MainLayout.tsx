@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button.tsx";
 import { LoadingSpinner } from "@/components/ui/loading-spinner.tsx";
 import useCurrentProject from "@/lib/hooks/useCurrentProject";
 import { loadProjects } from "@/redux/actions/project.action";
-import { MainNav, ProjectSwitcher, UserNav, MainNavMobile, SubNav } from "@/views/project/components";
+import { MainNav, ProjectSwitcher, UserNav, MainNavMobile, SubNav } from "@/views/home/components";
 
 export default function MainLayout() {
   const dispatch = useAppDispatch();

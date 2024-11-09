@@ -8,12 +8,15 @@ import VerifyPage from '@/views/auth/VerifyPage'
 import AuthLayout from '@/components/layouts/AuthLayout'
 import BoardingLayout from '@/components/layouts/BoardingLayout'
 import Boarding from '@/views/boading'
-import HomePage from './views/project'
+import HomePage from './views/home'
 import DialogProvider from './components/providers/DialogProvider'
 import MainLayout from './components/layouts/MainLayout'
 import { Toaster } from 'sonner'
 import { AuthProvider } from '@/components/providers/AuthProvider'
 import MailPage from '@/views/mail'
+import { ProjectDetail } from '@/views/tasks'
+import ProjectTasks from '@/views/tasks/ProjectTask'
+import TasksBoard from '@/views/tasks/TaskBoard'
 
 function App() {
 
@@ -28,7 +31,14 @@ function App() {
                 <Route path='projects/'>
                   <Route path=':projectSlug/'>
                     <Route path='' index element={<HomePage />} />
-                    <Route path='tasks/' element={<div></div>} />
+                    <Route path='details/' element={<ProjectDetail />}>
+                      <Route path='overview/' element={<div />} />
+                      <Route path='tasks/' element={<ProjectTasks />} >
+                        <Route path='performance/' element={<TasksBoard />} />
+                        <Route path='list/' element={<TasksBoard />} />
+                        <Route path='board/' element={<TasksBoard />} />
+                      </Route>
+                    </Route>
                   </Route>
                 </Route>
                 <Route path={'mails/'} >
