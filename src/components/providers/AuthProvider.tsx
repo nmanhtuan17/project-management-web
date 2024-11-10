@@ -15,12 +15,14 @@ export const AuthProvider = () => {
       apiService.setCredentials({
         accessToken: tokens.access_token,
         refreshToken: tokens.refresh_token,
-      }).then(() => setAuthLoaded(true)).catch(err => {
-        dispatch(setAuth({
-          loggedIn: false,
-        }))
-        setAuthLoaded(true);
-      });
+      })
+        .then(() => setAuthLoaded(true))
+        .catch(err => {
+          dispatch(setAuth({
+            loggedIn: false,
+          }))
+          setAuthLoaded(true);
+        });
       navigate('/')
     } else {
       setAuthLoaded(true);

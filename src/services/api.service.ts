@@ -68,7 +68,7 @@ class ApiService {
       if (tokenData.exp <= ~~(new Date().getTime() / 1000)) {
         // refresh
         const { data: tokenResponse } = await this.callApi('POST', '/auth/jwt/refresh', {
-          refresh_token: this.auth.accessToken,
+          refresh_token: this.auth.refreshToken,
         }, {}, true);
         store.dispatch(setAuth({
           tokens: {

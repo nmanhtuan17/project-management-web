@@ -1,4 +1,4 @@
-import { UserAuthForm } from "@/views/auth/UserAuthForm.tsx";
+import { UserAuthForm } from "@/views/auth/components/UserAuthForm";
 
 
 export default function LoginPage() {
