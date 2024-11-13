@@ -7,6 +7,7 @@ export interface AuthSliceState {
     refresh_token?: string;
   },
   user?: {
+    _id: string;
     avatar: string;
     fullName: string;
     email: string;

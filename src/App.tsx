@@ -36,7 +36,7 @@ function App() {
                       <Route path='tasks/' element={<ProjectTasks />} >
                         <Route path='performance/' element={<TasksBoard />} />
                         <Route path='list/' element={<TasksBoard />} />
-                        <Route path='board/' element={<TasksBoard />} />
+                        <Route path='kanban/' element={<TasksBoard />} />
                       </Route>
                     </Route>
                   </Route>

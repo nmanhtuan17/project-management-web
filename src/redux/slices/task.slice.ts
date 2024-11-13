@@ -2,19 +2,14 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Board, Task, TaskPriority, TaskStatus, TaskTypes } from "@/types/task";
 import { loadSingleTask, loadTasks, updateTask } from "@/redux/actions/task.action.ts";
 import { toast } from "sonner";
+import { createKanbanColumn, loadKanbanBoard } from '@/redux/actions/project.action';
 
 export const initBoard = {
   columns: [
     {
       id: 'pending',
       title: 'Todo',
-      cards: [
-        {
-          id: 1,
-          title: 'Add card',
-          description: 'Add capability to add a card in a column'
-        },
-      ],
+      cards: [],
     },
     {
       id: 'on_going',
@@ -134,9 +129,34 @@ export const taskSlice = createSlice({
         }
         toast.success(action.payload.message);
         taskSlice.caseReducers.mapTaskToBoard(state, action);
-      }).addCase(updateTask.rejected, (state, action) => {
+      })
+      .addCase(updateTask.rejected, (state, action) => {
         toast.error(action.error.message);
-      });
+      })
+      .addCase(loadKanbanBoard.pending, (state, action) => {
+        state.loading = true
+      })
+      .addCase(loadKanbanBoard.fulfilled, (state, action) => {
+        state.loading = false
+        if (action.payload.length > 0) {
+          state.board = { columns: action.payload[0].columns }
+        } else {
+          state.board = { columns: []}
+        }
+      })
+      .addCase(loadKanbanBoard.rejected, (state, action) => {
+        state.loading = false
+      })
+      .addCase(createKanbanColumn.pending, (state, action) => {
+        state.loading = true
+      })
+      .addCase(createKanbanColumn.fulfilled, (state, action) => {
+        state.loading = false
+      })
+      .addCase(createKanbanColumn.rejected, (state, action) => {
+        state.loading = false
+      })
+
   }
 });
 

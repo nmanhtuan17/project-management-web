@@ -29,6 +29,7 @@
     "@radix-ui/react-tooltip": "^1.1.3",
     "@react-oauth/google": "^0.12.1",
     "@reduxjs/toolkit": "^2.2.7",
+    "@syncfusion/ej2-react-kanban": "^27.1.53",
     "axios": "^1.7.7",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",

@@ -13,6 +13,7 @@ export enum TaskStatus {
   ALL = 'all',
   PENDING = 'pending',
   ON_GOING = 'on_going',
+  REVIEW = 'review',
   COMPLETED = 'completed',
   REJECTED = 'rejected',
 }
@@ -69,6 +70,7 @@ export interface BoardTask extends Task{
 }
 
 export interface BoardColumn {
+  _id?: string;
   id: string;
   title: string;
   cards: BoardTask[];

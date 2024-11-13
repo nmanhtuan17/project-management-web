@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button.tsx";
 import { PlusIcon } from "@radix-ui/react-icons";
-import { useAppDispatch } from "@/redux/store.ts";
+import { useAppDispatch, useAppSelector } from "@/redux/store.ts";
 import { useEffect } from "react";
 import useCurrentProject from "@/lib/hooks/useCurrentProject";
 import { useDialogContext } from "@/components/providers/DialogProvider";
@@ -10,19 +10,19 @@ import { Outlet, useLocation } from "react-router-dom";
 import { ProjectDetailNav } from "@/views/tasks/nav/ProjectDetailNav";
 import { CheckCheck, Component, Gauge, ListChecks, SquareKanban } from "lucide-react";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
+import { loadTasks } from "@/redux/actions/task.action";
 
 export default function ProjectTasks() {
   const { openDialog } = useDialogContext();
   const currentProject = useCurrentProject();
   const dispatch = useAppDispatch();
-  const { pathname } = useLocation()
+  const { pathname } = useLocation();
 
-  // useEffect(() => {
-  //   dispatch(filterTask({project: projectId}))
-  //   if (currentProject._id) {
-  //     dispatch(loadTasks(currentProject._id));
-  //   }
-  // }, [currentProject._id]);
+  useEffect(() => {
+    if (currentProject._id) {
+      dispatch(loadTasks(currentProject._id));
+    }
+  }, [currentProject._id]);
 
   return (
 
@@ -61,8 +61,8 @@ export default function ProjectTasks() {
               title: "Board",
               label: "",
               icon: SquareKanban,
-              variant: pathname.includes('board') ? 'default' : 'ghost',
-              path: `/projects/${currentProject.slug}/details/tasks/board`
+              variant: pathname.includes('kanban') ? 'default' : 'ghost',
+              path: `/projects/${currentProject.slug}/details/tasks/kanban`
             }
           ]}
         />

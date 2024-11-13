@@ -30,6 +30,7 @@ import { useAppDispatch, useAppSelector } from "@/redux/store.ts";
 import { useNavigate } from "react-router-dom";
 import useCurrentProject from "@/lib/hooks/useCurrentProject"
 import { useDialogContext } from "@/components/providers/DialogProvider"
+import { loadKanbanBoard } from "@/redux/actions/project.action"
 
 type PopoverTriggerProps = React.ComponentPropsWithoutRef<typeof PopoverTrigger>
 
@@ -42,6 +43,7 @@ export const ProjectSwitcher = ({ className }: ProjectSwitcherProps) => {
   const currentProject = useCurrentProject();
   const navigate = useNavigate();
   const { setDialogOpen } = useDialogContext()
+  const dispatch = useAppDispatch();
 
   const groups = [{
     label: 'Personal Projects',
@@ -91,6 +93,7 @@ export const ProjectSwitcher = ({ className }: ProjectSwitcherProps) => {
                   key={project._id}
                   onSelect={() => {
                     setOpen(false)
+                    dispatch(loadKanbanBoard(project._id))
                     navigate('/projects/' + project.slug);
                   }}
                   className="text-sm"

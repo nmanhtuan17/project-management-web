@@ -33,7 +33,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     if (!showLoginPassword) return setShowLoginPassword(true);
     const formData = new FormData(event.target as HTMLFormElement);
     setIsLoading(true);
-    apiService.callApi('POST', '/auth/login', Object.fromEntries(formData))
+    apiService.callApi('POST', '/auth/login', Object.fromEntries(formData), {}, true)
       .then(finalizeLogin)
       .catch(err => {
         setMessage({
