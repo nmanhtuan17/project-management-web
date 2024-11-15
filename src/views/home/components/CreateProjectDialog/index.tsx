@@ -11,12 +11,13 @@ import useCurrentProject from "@/lib/hooks/useCurrentProject";
 import { useDialogContext } from "@/components/providers/DialogProvider";
 import { ProjectTypes } from "@/types/project";
 import { createProject as createProjectAction } from "@/redux/actions/project.action";
-import { cn, slugify } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import apiService from "@/services/api.service";
 import { Label } from "@radix-ui/react-label";
 import { CheckIcon, Cross1Icon, ReloadIcon } from "@radix-ui/react-icons";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { slugify } from "@/utils";
 
 const projectFormSchema = z.object({
   name: z.string().min(1, "PLEASE_ENTER_NAME"),

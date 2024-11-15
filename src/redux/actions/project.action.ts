@@ -1,6 +1,6 @@
-import { slugify } from "@/lib/utils";
 import apiService from "@/services/api.service";
 import { Project, ProjectTypes } from "@/types/project";
+import { slugify } from "@/utils";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 export const loadProjects = createAsyncThunk("project/load-projects", async () => {
