@@ -81,7 +81,7 @@ export default function ProjectTasks() {
               <TasksListHeader className="p-0 border-none w-full lg:w-[400px]" />
               <Button
                 onClick={() => {
-                  openDialog("createTask");
+                  openDialog("createTaskDialog");
                 }}
                 className="gap-1 w-full sm:w-auto" icon={<PlusIcon />}>Create Task</Button>
             </div>

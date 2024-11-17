@@ -17,6 +17,7 @@ import MailPage from '@/views/mail'
 import { ProjectDetail } from '@/views/tasks'
 import ProjectTasks from '@/views/tasks/ProjectTask'
 import TasksBoard from '@/views/tasks/TaskBoard'
+import { TaskList } from '@/views/tasks/TaskList'
 
 function App() {
 
@@ -32,10 +33,10 @@ function App() {
                   <Route path=':projectSlug/'>
                     <Route path='' index element={<HomePage />} />
                     <Route path='details/' element={<ProjectDetail />}>
-                      <Route path='overview/' element={<div />} />
+                      <Route index path='overview/' element={<div />} />
                       <Route path='tasks/' element={<ProjectTasks />} >
-                        <Route path='performance/' element={<TasksBoard />} />
-                        <Route path='list/' element={<TasksBoard />} />
+                        <Route index path='performance/' element={<TasksBoard />} />
+                        <Route path='list/' element={<TaskList />} />
                         <Route path='kanban/' element={<TasksBoard />} />
                       </Route>
                     </Route>

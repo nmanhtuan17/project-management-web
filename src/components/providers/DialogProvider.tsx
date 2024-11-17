@@ -2,9 +2,13 @@ import {createContext, ReactNode, useContext, useState} from "react";
 import {Outlet} from "react-router-dom";
 import { AlertDialogProvider } from "./AlertDialogProvider";
 import { CreateProjectDialog } from "@/views/home/components/CreateProjectDialog";
+import { CreateTaskDialog } from "@/views/tasks/components/CreateTaskDialog";
 
 interface DialogContextType {
   createProject: {
+    open: boolean;
+  }
+  createTaskDialog: {
     open: boolean;
   }
   
@@ -15,6 +19,9 @@ interface DialogContextType {
 
 const DialogContext = createContext<DialogContextType>({
   createProject: {
+    open: false
+  },
+  createTaskDialog: {
     open: false
   }
 });
@@ -27,6 +34,9 @@ export const useDialogContext = () => useContext(DialogContext);
 export default function DialogProvider(props: DialogProviderProps) {
   const [dialogs, setDialogs] = useState<DialogContextType>({
     createProject: {
+      open: false
+    },
+    createTaskDialog: {
       open: false
     }
   });
@@ -53,7 +63,8 @@ export default function DialogProvider(props: DialogProviderProps) {
       setDialogOpen,
     }}>
       <Outlet/>  
-      <CreateProjectDialog />    
+      <CreateProjectDialog />
+      <CreateTaskDialog /> 
     </DialogContext.Provider>
   </AlertDialogProvider>
 }

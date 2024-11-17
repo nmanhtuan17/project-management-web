@@ -16,6 +16,7 @@ import { createKanbanColumn, loadKanbanBoard, updateColumn } from "@/redux/actio
 import { loadTasks } from "@/redux/actions/task.action";
 import { ProjectRoles } from "@/types/project";
 import { toast } from "sonner";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface TasksBoardProps {
   className?: string;
@@ -58,12 +59,10 @@ export default function TasksBoard(props: TasksBoardProps) {
           })
       })
     } else {
-      
+
       toast.error('ACTION NOT PERMITTED')
     }
   }
-
-  console.log(board)
 
   return (
     <>
@@ -83,22 +82,29 @@ export default function TasksBoard(props: TasksBoardProps) {
             )}
             renderColumnAdder={() => {
               return (
-                <Button
-                  onClick={() => {
-                    dispatch(createKanbanColumn(currentProject._id))
-                      .then(() => {
-                        dispatch(loadKanbanBoard(currentProject._id))
-                          .then(() => {
-                            dispatch(loadTasks(currentProject._id))
-                          })
-                      })
-                  }}
-                  variant="secondary" className="m-[5px] justify-center items-center gap-1">
-                  <Plus size={18} strokeWidth={1.5} />
-                  <span className="font-medium text-[14px]">
-                    New Column
-                  </span>
-                </Button>
+                <TooltipProvider delayDuration={500}>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <Button
+                        onClick={() => {
+                          dispatch(createKanbanColumn(currentProject._id))
+                            .then(() => {
+                              dispatch(loadKanbanBoard(currentProject._id))
+                                .then(() => {
+                                  dispatch(loadTasks(currentProject._id))
+                                })
+                            })
+                        }}
+                        variant="secondary" className="m-[5px] justify-center items-center gap-1">
+                        <Plus size={18} />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent side={'right'}>
+                      <p>New Column</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+
 
               )
             }}
@@ -110,8 +116,6 @@ export default function TasksBoard(props: TasksBoardProps) {
           </ControlledBoard>
         </div>
       }
-
     </>
-
   )
 }

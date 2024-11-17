@@ -1,4 +1,4 @@
-import {ProjectMember} from "@/types/project";
+import { ProjectMember } from "@/types/project";
 
 export enum TaskTypes {
   ALL = 'all',
@@ -47,6 +47,7 @@ export interface Task {
   assignees: ProjectMember[];
   archived: boolean;
   attachments: string[] | any[];
+  label?: string;
 }
 
 export interface TaskActivity {
@@ -65,7 +66,7 @@ export interface Board {
   columns: BoardColumn[];
 }
 
-export interface BoardTask extends Task{
+export interface BoardTask extends Task {
   id: string;
 }
 
