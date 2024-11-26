@@ -1,8 +1,11 @@
+import { CalendarDateRangePicker } from "@/components/common/DateRangePicker";
 import { useDialogContext } from "@/components/providers/DialogProvider"
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { ResizablePanelGroup } from "@/components/ui/resizable";
+import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import useCurrentProject from "@/lib/hooks/useCurrentProject";
 import { loadTasks } from "@/redux/actions/task.action";
@@ -15,7 +18,11 @@ import { TaskPrioritySelect } from "@/views/tasks/components/TaskPrioritySelect"
 import { TaskStatusSelect } from "@/views/tasks/components/TaskStatusSelect";
 import { TaskTypeSelect } from "@/views/tasks/components/TaskTypeSelect";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { log, time } from "console";
+import { addDays } from "date-fns";
+import { Dot, File, Plus } from "lucide-react";
 import { useState } from "react";
+import { DateRange } from "react-day-picker";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -38,12 +45,20 @@ const createTaskFormSchema = z.object({
     message: "Task title too long"
   }),
   assignees: z.string().array().optional(),
-  dueDate: z.date({
-    required_error: "Please select task due date.",
-  }).optional(),
+  time: z.object({
+    from: z.date({
+      required_error: "Please select start date.",
+    }),
+    to: z.date({
+      required_error: "Please select due date.",
+    }),
+  }),
   description: z.string().optional(),
   parentTask: z.string().optional(),
   project: z.string().optional(),
+  attachments: z.string().array().optional(),
+  phase: z.string().optional(),
+  label: z.string().optional()
 })
 
 type CreateTaskFormValues = z.infer<typeof createTaskFormSchema>
@@ -54,15 +69,18 @@ export const CreateTaskDialog = () => {
   const currentProject = useCurrentProject()
   const dispatch = useAppDispatch();
   const [createTaskType, setCreateType] = useState<string>("normal");
+  const [date, setDate] = useState<DateRange | undefined>()
 
   const defaultValues: Partial<CreateTaskFormValues> = {
     type: TaskTypes.GENERAL,
     status: TaskStatus.PENDING,
     priority: TaskPriority.MEDIUM.toString(),
-    dueDate: new Date(),
+    time: {
+      from: new Date,
+      to: addDays(new Date(), 1)
+    },
     title: '',
     parentTask: '',
-    project: '',
   }
 
   const form = useForm({
@@ -71,7 +89,8 @@ export const CreateTaskDialog = () => {
   });
 
   const onSubmit = (data: CreateTaskFormValues) => {
-    if (data.project === "") delete data.project;
+    console.log(data)
+    // if (data.project === "") delete data.project;
     // apiService.post(`/spaces/${currentSpace._id}/tasks`, data).then(() => {
     //   dispatch(loadTasks(currentSpace._id));
     //   setDialogOpen('createTask', false);
@@ -85,40 +104,18 @@ export const CreateTaskDialog = () => {
         setDialogOpen('createTaskDialog', open)
       }}
     >
-      <DialogContent className="w-full max-w-[1000px]">
-        <DialogHeader>
-          <DialogTitle>
-            <div className="flex justify-between">
-              <p>
-                Create Task
-              </p>
-              {/* {!projectId && <Tabs
-              onValueChange={(e) => setCreateType(e)}
-              defaultValue={createTaskType}
-              className="mr-6 h-full">
-              <TabsList className={'w-full flex'}>
-                <TabsTrigger value="normal" className="h-full">
-                  Normal
-                </TabsTrigger>
-                <TabsTrigger value="project" className="h-full">
-                  Project
-                </TabsTrigger>
-              </TabsList>
-            </Tabs>} */}
-            </div>
-          </DialogTitle>
-        </DialogHeader>
+      <DialogContent className="w-full max-w-[1280px] min-h-[600px]">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
-            <div className={'grid grid-cols-3 gap-4'}>
-              <div className={'col-span-2 space-y-4'}>
+            <div className={'grid grid-cols-5 gap-4'}>
+              <div className={'col-span-3 space-y-4'}>
                 <FormField
                   control={form.control}
                   name="title"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>
-                        Task Title
+                        Title
                       </FormLabel>
                       <FormControl>
                         <Input placeholder="Title..." {...field} />
@@ -143,26 +140,7 @@ export const CreateTaskDialog = () => {
                   )}
                 />
                 <div className={'flex flex-row gap-2'}>
-                  <FormField
-                    control={form.control}
-                    name="assignees"
-                    render={({ field }) => (
-                      <FormItem className={'flex-1'}>
-                        <FormLabel>
-                          Assignees
-                        </FormLabel>
-                        <FormControl>
-                          <CreateTaskMemberSelector
-                            members={field.value}
-                            onChange={members => {
-                              field.onChange(members)
-                            }}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+
                   {/* <FormField
                   control={form.control}
                   name="parentTask"
@@ -185,95 +163,206 @@ export const CreateTaskDialog = () => {
                   )}
                 /> */}
                 </div>
-                <div className={'mt-4'}>
-                  <Button type={'submit'}>
-                    Create
-                  </Button>
+              </div>
+
+              <div className={'col-span-2'}>
+                <FormField
+                  control={form.control}
+                  name="assignees"
+                  render={({ field }) => (
+                    <FormItem className={'flex-1 mb-2'}>
+                      <FormLabel className="text-muted-foreground">
+                        Assignees
+                      </FormLabel>
+                      <FormControl>
+                        <CreateTaskMemberSelector
+                          members={field.value}
+                          onChange={members => {
+                            field.onChange(members)
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <div className="border p-3 rounded space-y-2">
+                  <FormField
+                    name={'time'}
+                    control={form.control}
+                    render={({ field }) => (
+                      <FormItem className="my-2">
+                        <div className="flex items-center">
+                          <FormLabel className="text-muted-foreground">
+                            Start Date
+                          </FormLabel>
+                          <Dot />
+                          <FormLabel className="text-muted-foreground" >
+                            Due Date
+                          </FormLabel>
+                        </div>
+                        <FormControl>
+                          <CalendarDateRangePicker
+                            className="flex-1 w-full"
+                            date={field.value as DateRange}
+                            onChange={field.onChange}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <Separator className="my-2" />
+                  <FormField
+                    name={'type'}
+                    control={form.control}
+                    render={({ field }) => (
+                      <FormItem className="grid grid-cols-6 items-center gap-4 !space-y-0">
+                        <FormLabel className="col-span-1 text-muted-foreground">
+                          Type
+                        </FormLabel>
+                        <FormControl className="col-span-5">
+                          <TaskTypeSelect
+                            className="shadow-none border-transparent hover:border-border hover:bg-muted/50"
+                            selected={field.value}
+                            showIcon
+                            onChange={type => {
+                              field.onChange(type);
+                            }}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    name={'status'}
+                    control={form.control}
+                    render={({ field }) => (
+                      <FormItem className="grid grid-cols-6 items-center gap-4 !space-y-0">
+                        <FormLabel className="col-span-1 text-muted-foreground" >
+                          Status
+                        </FormLabel>
+                        <FormControl className="col-span-5">
+                          <TaskStatusSelect
+                            className="shadow-none border-transparent hover:border-border hover:bg-muted/50"
+                            selected={field.value}
+                            showIcon
+                            onChange={type => {
+                              field.onChange(type);
+                            }}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    name={'priority'}
+                    control={form.control}
+                    render={({ field }) => (
+                      <FormItem className="grid grid-cols-6 items-center gap-4 !space-y-0">
+                        <FormLabel className="col-span-1 text-muted-foreground">
+                          Priority
+                        </FormLabel>
+                        <FormControl className="col-span-5">
+                          <TaskPrioritySelect
+                            className="shadow-none border-transparent hover:border-border hover:bg-muted/50"
+                            selected={field.value}
+                            showIcon
+                            onChange={type => {
+                              field.onChange(type);
+                            }}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    name={'phase'}
+                    control={form.control}
+                    render={({ field }) => (
+                      <FormItem className="grid grid-cols-6 items-center gap-4 !space-y-0">
+                        <FormLabel className="col-span-1 text-muted-foreground">
+                          Phase
+                        </FormLabel>
+                        <FormControl className="col-span-5">
+                          <TaskPrioritySelect
+                            className="shadow-none border-transparent hover:border-border hover:bg-muted/50"
+                            selected={field.value}
+                            showIcon
+                            onChange={type => {
+                              field.onChange(type);
+                            }}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    name={'label'}
+                    control={form.control}
+                    render={({ field }) => (
+                      <FormItem className="grid grid-cols-6 items-center !space-y-0">
+                        <FormLabel className="col-span-1 text-muted-foreground">
+                          Label
+                        </FormLabel>
+                        <FormControl className="col-span-5">
+                          <TaskPrioritySelect
+                            className="shadow-none border-transparent hover:border-border hover:bg-muted/50"
+                            selected={field.value}
+                            showIcon
+                            onChange={type => {
+                              field.onChange(type);
+                            }}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 </div>
+                <div className="mt-2">
+                  <FormField
+                    name={'attachments'}
+                    control={form.control}
+                    render={({ field }) => (
+                      <FormItem className="flex items-center gap-4 !space-y-0">
+                        <FormLabel className="flex flex-1 items-center gap-2 text-muted-foreground">
+                          <File size={16} />
+                          <span>
+                            Attachments
+                          </span>
+                        </FormLabel>
+                        <FormControl className="">
+                          <Button
+                            className="p-0 w-6 h-6 align-middle items-center"
+                            variant="ghost"
+                            onClick={(e) => {
+                              e.preventDefault()
+                            }}>
+                            <Plus size={16} />
+                          </Button>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
               </div>
-              <div className={'col-span-1 space-y-4'}>
-                <FormField
-                  name={'type'}
-                  control={form.control}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>
-                        Type
-                      </FormLabel>
-                      <FormControl>
-                        <TaskTypeSelect
-                          selected={field.value}
-                          showIcon
-                          onChange={type => {
-                            field.onChange(type);
-                          }}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  name={'status'}
-                  control={form.control}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>
-                        Status
-                      </FormLabel>
-                      <FormControl>
-                        <TaskStatusSelect
-                          selected={field.value}
-                          showIcon
-                          onChange={type => {
-                            field.onChange(type);
-                          }}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  name={'priority'}
-                  control={form.control}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>
-                        Priority
-                      </FormLabel>
-                      <FormControl>
-                        <TaskPrioritySelect
-                          selected={field.value}
-                          showIcon
-                          onChange={type => {
-                            field.onChange(type);
-                          }}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  name={'dueDate'}
-                  control={form.control}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>
-                        Due Date
-                      </FormLabel>
-                      <FormControl>
-                        <TaskDatePopupPicker
-                          date={field.value}
-                          onChange={date => field.onChange(date)}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
+            </div>
+            <div className="absolute bottom-0 right-0 p-6 space-x-2">
+              <Button variant="secondary" >
+                Cancel
+              </Button>
+              <Button type={'submit'}>
+                Save
+              </Button>
             </div>
           </form>
         </Form>

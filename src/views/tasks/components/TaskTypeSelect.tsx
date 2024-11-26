@@ -71,7 +71,7 @@ export function TaskTypeSelect(props: TaskTypeSelectProps) {
           const Icon = taskConfig.types.find(t => t.value === option.value)?.icon || QuestionMarkCircleIcon;
           return (
             <SelectItem value={option.value} key={index}>
-              <div className={'flex flex-row gap-1'}>
+              <div className={'flex flex-row gap-1 items-center'}>
                 {props.showIcon && <Icon className={'w-4 h-4'}/>} {option.label}
               </div>
             </SelectItem>

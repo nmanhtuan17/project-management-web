@@ -1,8 +1,8 @@
 import * as React from "react";
-import {cn} from "@/lib/utils";
+import { cn } from "@/lib/utils";
 
-import {Check, X, ChevronsUpDown, PlusCircleIcon} from "lucide-react";
-import {Button} from "@/components/ui/button";
+import { Check, X, ChevronsUpDown, PlusCircleIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   Command,
   CommandEmpty,
@@ -16,9 +16,9 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import {Badge} from "@/components/ui/badge";
-import {CommandList} from "cmdk";
-import {ReactNode} from "react";
+import { Badge } from "@/components/ui/badge";
+import { CommandList } from "cmdk";
+import { ReactNode } from "react";
 
 export type OptionType = {
   label: string | ReactNode;
@@ -34,13 +34,13 @@ interface MultiSelectProps {
 }
 
 export function MultiSelect({
-                              options,
-                              selected,
-                              onChange,
-                              className,
-                              placeholder,
-                              ...props
-                            }: MultiSelectProps) {
+  options,
+  selected,
+  onChange,
+  className,
+  placeholder,
+  ...props
+}: MultiSelectProps) {
   const [open, setOpen] = React.useState(false);
 
   const handleUnselect = (item: string) => {
@@ -55,7 +55,7 @@ export function MultiSelect({
 
   const handleNewOptionSubmit = () => {
     if (newOption) {
-      options.push({label: newOption, value: newOption});
+      options.push({ label: newOption, value: newOption });
       onChange(
         selected.includes(newOption)
           ? selected.filter((item) => item !== newOption)
@@ -99,18 +99,18 @@ export function MultiSelect({
                   }}
                   onClick={() => handleUnselect(item)}
                 >
-                  <X className="h-3 w-3 text-muted-foreground hover:text-foreground"/>
+                  <X className="h-3 w-3 text-muted-foreground hover:text-foreground" />
                 </button>
               </Badge>
             ))}
           </div>
-          <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50"/>
+          <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-full p-0">
         <Command className={className}>
           <CommandList>
-            <CommandInput placeholder={placeholder || "Search..."}/>
+            <CommandInput placeholder={placeholder || "Search..."} />
             <CommandEmpty>No item found.</CommandEmpty>
             <CommandGroup className="max-h-64 overflow-auto">
               {options.map((option) => (
@@ -125,14 +125,6 @@ export function MultiSelect({
                     setOpen(true);
                   }}
                 >
-                  <Check
-                    className={cn(
-                      "mr-2 h-3 w-3",
-                      selected.includes(option.value)
-                        ? "opacity-100"
-                        : "opacity-0"
-                    )}
-                  />
                   {option.label}
                 </CommandItem>
               ))}

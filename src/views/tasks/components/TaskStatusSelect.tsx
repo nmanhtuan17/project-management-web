@@ -62,7 +62,7 @@ export function TaskStatusSelect(props: TaskStatusSelectProps) {
       <SelectContent>
         {options.map((option, index) => (
           <SelectItem value={option.value} key={index}>
-            <div className={'flex flex-row gap-1'}>
+            <div className={'flex flex-row gap-1 items-center'}>
               {props.showIcon && createElement(taskConfig.statuses.find(t => t.value === option.value)?.icon, {
                 className: 'w-4 h-4',
               })} {option.label}

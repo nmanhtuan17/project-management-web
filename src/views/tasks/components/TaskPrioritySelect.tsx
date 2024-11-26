@@ -62,7 +62,7 @@ export function TaskPrioritySelect(props: TaskPrioritySelectProps) {
       <SelectContent>
         {options.map((option, index) => (
           <SelectItem value={option.value} key={index}>
-            <div className={'flex flex-row gap-1'}>
+            <div className={'flex flex-row gap-1 items-center'}>
               {props.showIcon && createElement(taskConfig.priorities.find(t => t.value === parseInt(option.value))?.icon || QuestionMarkIcon as any, {
                 className: 'w-4 h-4',
               })} {option.label}

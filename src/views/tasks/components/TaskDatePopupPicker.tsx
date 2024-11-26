@@ -7,7 +7,7 @@ import dayjs from "dayjs";
 import { useState } from "react";
 
 interface TaskDatePopupPickerProps {
-  date?: Date,
+  date?: Date | undefined,
   placeholder?: string,
   onChange?: (date: Date) => void,
   className?: string,

@@ -13,15 +13,9 @@ interface MemberSelectorProps {
 }
 
 export default function CreateTaskMemberSelector(props: MemberSelectorProps) {
-  // const [members, setMembers] = useState<ProjectMember[]>([]);
   const currentProject = useCurrentProject();
   const {members} = useAppSelector(state => state.project)
 
-  // useEffect(() => {
-  //   if (currentProject._id) apiService.getSpaceMembers(space._id).then(response => {
-  //     setMembers(response.data);
-  //   });
-  // }, [space._id]);
 
   return <MultiSelect
     placeholder="Search member..."
