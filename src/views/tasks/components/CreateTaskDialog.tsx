@@ -8,6 +8,7 @@ import { ResizablePanelGroup } from "@/components/ui/resizable";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import useCurrentProject from "@/lib/hooks/useCurrentProject";
+import { useTaskStatus } from "@/lib/hooks/useTaskStatus";
 import { loadTasks } from "@/redux/actions/task.action";
 import { useAppDispatch } from "@/redux/store";
 import apiService from "@/services/api.service";
@@ -31,7 +32,7 @@ const createTaskFormSchema = z.object({
   type: z.enum(Object.values(TaskTypes) as [string, ...string[]], {
     required_error: "Please select task type.",
   }),
-  status: z.enum(Object.values(TaskStatus) as [string, ...string[]], {
+  status: z.string({
     required_error: "Please select task status.",
   }),
   priority: z.enum(Object.values(TaskPriority).map(m => m.toString()) as [string, ...string[]], {
@@ -69,7 +70,7 @@ export const CreateTaskDialog = () => {
   const currentProject = useCurrentProject()
   const dispatch = useAppDispatch();
   const [createTaskType, setCreateType] = useState<string>("normal");
-  const [date, setDate] = useState<DateRange | undefined>()
+  const { statuses } = useTaskStatus();
 
   const defaultValues: Partial<CreateTaskFormValues> = {
     type: TaskTypes.GENERAL,
@@ -166,32 +167,34 @@ export const CreateTaskDialog = () => {
               </div>
 
               <div className={'col-span-2'}>
-                <FormField
-                  control={form.control}
-                  name="assignees"
-                  render={({ field }) => (
-                    <FormItem className={'flex-1 mb-2'}>
-                      <FormLabel className="text-muted-foreground">
-                        Assignees
-                      </FormLabel>
-                      <FormControl>
-                        <CreateTaskMemberSelector
-                          members={field.value}
-                          onChange={members => {
-                            field.onChange(members)
-                          }}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                <div className="flex gap-4 mb-2">
+                  <FormField
+                    name={'status'}
+                    control={form.control}
+                    render={({ field }) => (
+                      <FormItem className="items-center gap-4 !space-y-0">
+                        <FormControl>
+                          <TaskStatusSelect
+                            className="shadow-none bg-muted/50 hover:bg-muted gap-2"
+                            selected={field.value}
+                            showIcon
+                            onChange={type => {
+                              field.onChange(type);
+                            }}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                </div>
                 <div className="border p-3 rounded space-y-2">
                   <FormField
                     name={'time'}
                     control={form.control}
                     render={({ field }) => (
-                      <FormItem className="my-2">
+                      <FormItem className="flex gap-4 items-center !space-y-0 my-2">
                         <div className="flex items-center">
                           <FormLabel className="text-muted-foreground">
                             Start Date
@@ -203,6 +206,7 @@ export const CreateTaskDialog = () => {
                         </div>
                         <FormControl>
                           <CalendarDateRangePicker
+                            variant="ghost"
                             className="flex-1 w-full"
                             date={field.value as DateRange}
                             onChange={field.onChange}
@@ -212,7 +216,28 @@ export const CreateTaskDialog = () => {
                       </FormItem>
                     )}
                   />
-                  <Separator className="my-2" />
+                  <Separator className="my-4" />
+                  <FormField
+                    control={form.control}
+                    name="assignees"
+                    render={({ field }) => (
+                      <FormItem className={'flex items-center gap-4 !space-y-0'}>
+                        <FormLabel className="text-muted-foreground">
+                          Assignees
+                        </FormLabel>
+                        <FormControl className="col-span-5">
+                          <CreateTaskMemberSelector
+                            members={field.value}
+                            onChange={members => {
+                              field.onChange(members)
+                            }}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <Separator className="my-4" />
                   <FormField
                     name={'type'}
                     control={form.control}
@@ -223,51 +248,7 @@ export const CreateTaskDialog = () => {
                         </FormLabel>
                         <FormControl className="col-span-5">
                           <TaskTypeSelect
-                            className="shadow-none border-transparent hover:border-border hover:bg-muted/50"
-                            selected={field.value}
-                            showIcon
-                            onChange={type => {
-                              field.onChange(type);
-                            }}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    name={'status'}
-                    control={form.control}
-                    render={({ field }) => (
-                      <FormItem className="grid grid-cols-6 items-center gap-4 !space-y-0">
-                        <FormLabel className="col-span-1 text-muted-foreground" >
-                          Status
-                        </FormLabel>
-                        <FormControl className="col-span-5">
-                          <TaskStatusSelect
-                            className="shadow-none border-transparent hover:border-border hover:bg-muted/50"
-                            selected={field.value}
-                            showIcon
-                            onChange={type => {
-                              field.onChange(type);
-                            }}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    name={'priority'}
-                    control={form.control}
-                    render={({ field }) => (
-                      <FormItem className="grid grid-cols-6 items-center gap-4 !space-y-0">
-                        <FormLabel className="col-span-1 text-muted-foreground">
-                          Priority
-                        </FormLabel>
-                        <FormControl className="col-span-5">
-                          <TaskPrioritySelect
-                            className="shadow-none border-transparent hover:border-border hover:bg-muted/50"
+                            className="shadow-none border-transparent hover:bg-muted/50"
                             selected={field.value}
                             showIcon
                             onChange={type => {
@@ -281,6 +262,29 @@ export const CreateTaskDialog = () => {
                   />
 
                   <FormField
+                    name={'priority'}
+                    control={form.control}
+                    render={({ field }) => (
+                      <FormItem className="grid grid-cols-6 items-center gap-4 !space-y-0">
+                        <FormLabel className="col-span-1 text-muted-foreground">
+                          Priority
+                        </FormLabel>
+                        <FormControl className="col-span-5">
+                          <TaskPrioritySelect
+                            className="shadow-none border-transparent hover:bg-muted/50"
+                            selected={field.value}
+                            showIcon
+                            onChange={type => {
+                              field.onChange(type);
+                            }}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  {/* <FormField
                     name={'phase'}
                     control={form.control}
                     render={({ field }) => (
@@ -290,7 +294,7 @@ export const CreateTaskDialog = () => {
                         </FormLabel>
                         <FormControl className="col-span-5">
                           <TaskPrioritySelect
-                            className="shadow-none border-transparent hover:border-border hover:bg-muted/50"
+                            className="shadow-none border-transparent hover:bg-muted/50"
                             selected={field.value}
                             showIcon
                             onChange={type => {
@@ -313,7 +317,7 @@ export const CreateTaskDialog = () => {
                         </FormLabel>
                         <FormControl className="col-span-5">
                           <TaskPrioritySelect
-                            className="shadow-none border-transparent hover:border-border hover:bg-muted/50"
+                            className="shadow-none border-transparent hover:bg-muted/50"
                             selected={field.value}
                             showIcon
                             onChange={type => {
@@ -324,7 +328,7 @@ export const CreateTaskDialog = () => {
                         <FormMessage />
                       </FormItem>
                     )}
-                  />
+                  /> */}
                 </div>
                 <div className="mt-2">
                   <FormField
@@ -353,11 +357,14 @@ export const CreateTaskDialog = () => {
                     )}
                   />
                 </div>
-
               </div>
             </div>
             <div className="absolute bottom-0 right-0 p-6 space-x-2">
-              <Button variant="secondary" >
+              <Button variant="secondary" onClick={(e) => {
+                e.preventDefault()
+                setDialogOpen('createTaskDialog', false)
+                // form.reset()
+              }}>
                 Cancel
               </Button>
               <Button type={'submit'}>

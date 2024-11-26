@@ -1,4 +1,4 @@
-import { MultiSelect } from "@/components/ui/multi-select.tsx";
+import { MultiSelect, MultiSelectAssignees } from "@/components/ui/multi-select.tsx";
 import { useEffect, useState } from "react";
 import apiService from "@/services/api.service.ts";
 import useCurrentProject from "@/lib/hooks/useCurrentProject";
@@ -17,7 +17,7 @@ export default function CreateTaskMemberSelector(props: MemberSelectorProps) {
   const {members} = useAppSelector(state => state.project)
 
 
-  return <MultiSelect
+  return <MultiSelectAssignees
     placeholder="Search member..."
     className={props.className}
     selected={props.members || []}

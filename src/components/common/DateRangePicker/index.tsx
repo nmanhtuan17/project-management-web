@@ -15,17 +15,15 @@ interface CalendarDateRangePickerProps {
   className?: string
   date?: DateRange
   onChange?: (date: DateRange) => void;
+  variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link";
 }
 
 export function CalendarDateRangePicker({
                                           className,
                                           date,
-                                          onChange
+                                          onChange,
+                                          variant 
                                         }: CalendarDateRangePickerProps) {
-  // const [date, setDate] = React.useState<DateRange | undefined>({
-  //   from: new Date(2023, 0, 20),
-  //   to: addDays(new Date(2023, 0, 20), 20),
-  // })
 
 
   return (
@@ -34,7 +32,7 @@ export function CalendarDateRangePicker({
         <PopoverTrigger asChild>
           <Button
             id="date"
-            variant={"outline"}
+            variant={variant ?? "outline"}
             className={cn(
               "justify-start text-left font-normal",
               !date && "text-muted-foreground"

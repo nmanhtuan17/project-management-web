@@ -4,6 +4,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuRadioG
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { TableCell, TableRow } from "@/components/ui/table"
 import { taskConfig } from "@/configs/task.config"
+import { useTaskStatus } from "@/lib/hooks/useTaskStatus"
 import { Task } from "@/types/task"
 import dayjs from "dayjs"
 import { Ellipsis } from "lucide-react"
@@ -16,7 +17,8 @@ export const TaskListItem = ({ task }: TaskListItemProp) => {
 
   const type = taskConfig.types.find(t => t.value === task?.type);
   const priority = taskConfig.priorities.find(t => t.value === task?.priority);
-  const status = taskConfig.statuses.find(t => t.value === task?.status);
+  const { statuses } = useTaskStatus()
+  const status = statuses.find(t => t.value === task?.status);
   const labels = []
 
   return (
@@ -28,8 +30,7 @@ export const TaskListItem = ({ task }: TaskListItemProp) => {
       <TableCell className="text-xs font-semibold">{task.label ?? 'No label'}</TableCell>
       <TableCell className="text-xs font-semibold">
         <p className="text-[12px] line-clamp-2 font-semibold">
-          <status.icon className="w-4 h-4 inline-block font-light mb-[1px]" />
-          {""} {status.label}
+          {status.title}
         </p>
       </TableCell>
       <TableCell className="text-xs font-semibold">Assignees</TableCell>
