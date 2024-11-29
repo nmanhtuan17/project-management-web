@@ -9,15 +9,6 @@ export enum TaskTypes {
   INCIDENT = 'incident',
 }
 
-export enum TaskStatus {
-  ALL = 'all',
-  PENDING = 'pending',
-  ON_GOING = 'on_going',
-  REVIEW = 'review',
-  COMPLETED = 'completed',
-  REJECTED = 'rejected',
-}
-
 export enum TaskPriority {
   ALL = 'all',
   LOW = 1,
@@ -38,7 +29,7 @@ export interface Task {
   _id: string;
   title: string;
   type: TaskTypes;
-  status: TaskStatus;
+  status: string;
   priority?: number;
   createdAt: string;
   updatedAt: string;

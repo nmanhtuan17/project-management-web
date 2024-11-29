@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button.tsx";
 import { PlusIcon } from "@radix-ui/react-icons";
 import { useDialogContext } from "@/components/providers/DialogProvider";
-import { BoardColumn, TaskStatus } from "@/types/task";
+import { BoardColumn } from "@/types/task";
 import { useReducer, useRef, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Check, Delete, Ellipsis, X } from "lucide-react";

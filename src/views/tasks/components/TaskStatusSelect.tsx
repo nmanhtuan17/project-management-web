@@ -1,4 +1,4 @@
-import { TaskStatus, TaskTypes } from "@/types/task.ts";
+import { TaskTypes } from "@/types/task.ts";
 import { MultiSelect, OptionType } from "@/components/ui/multi-select.tsx";
 import { createElement, useEffect, useState } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select.tsx";

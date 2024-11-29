@@ -9,7 +9,7 @@ import {
   PlaneTakeoff,
   SquareCheck, TriangleAlertIcon
 } from "lucide-react";
-import {TaskPriority, TaskStatus, TaskTypes} from "@/types/task.ts";
+import {TaskPriority, TaskTypes} from "@/types/task.ts";
 import {ArrowRightIcon, DocumentIcon, ExclamationCircleIcon} from "@heroicons/react/16/solid";
 
 export const taskConfig = {
@@ -33,23 +33,6 @@ export const taskConfig = {
     icon: BookOpenIcon,
     value: TaskTypes.ISSUE,
     label: 'Issue'
-  }],
-  statuses: [{
-    icon: ClockIcon,
-    value: TaskStatus.PENDING,
-    label: 'Pending'
-  }, {
-    icon: PlaneTakeoff,
-    value: TaskStatus.ON_GOING,
-    label: 'On Going'
-  }, {
-    icon: SquareCheck,
-    value: TaskStatus.COMPLETED,
-    label: 'Completed'
-  }, {
-    icon: BanIcon,
-    value: TaskStatus.REJECTED,
-    label: 'Rejected'
   }],
   priorities: [{
     icon: ArrowUpIcon,

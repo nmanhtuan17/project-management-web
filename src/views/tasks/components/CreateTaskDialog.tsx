@@ -12,7 +12,7 @@ import { useTaskStatus } from "@/lib/hooks/useTaskStatus";
 import { loadTasks } from "@/redux/actions/task.action";
 import { useAppDispatch } from "@/redux/store";
 import apiService from "@/services/api.service";
-import { TaskPriority, TaskStatus, TaskTypes } from "@/types/task";
+import { TaskPriority, TaskTypes } from "@/types/task";
 import CreateTaskMemberSelector from "@/views/tasks/components/CreateTaskMemberSelector";
 import TaskDatePopupPicker from "@/views/tasks/components/TaskDatePopupPicker";
 import { TaskPrioritySelect } from "@/views/tasks/components/TaskPrioritySelect";
@@ -72,16 +72,17 @@ export const CreateTaskDialog = () => {
   const [createTaskType, setCreateType] = useState<string>("normal");
   const { statuses } = useTaskStatus();
 
+
   const defaultValues: Partial<CreateTaskFormValues> = {
     type: TaskTypes.GENERAL,
-    status: TaskStatus.PENDING,
+    status: statuses[0].value,
     priority: TaskPriority.MEDIUM.toString(),
     time: {
       from: new Date,
       to: addDays(new Date(), 1)
     },
     title: '',
-    parentTask: '',
+    parentTask: ''
   }
 
   const form = useForm({
@@ -91,11 +92,11 @@ export const CreateTaskDialog = () => {
 
   const onSubmit = (data: CreateTaskFormValues) => {
     console.log(data)
-    // if (data.project === "") delete data.project;
-    // apiService.post(`/spaces/${currentSpace._id}/tasks`, data).then(() => {
-    //   dispatch(loadTasks(currentSpace._id));
-    //   setDialogOpen('createTask', false);
-    // })
+    apiService.post(`/projects/${currentProject._id}/tasks`, data).then(() => {
+      dispatch(loadTasks(currentProject._id));
+      setDialogOpen('createTaskDialog', false);
+      form.reset();
+    })
   }
 
   return (

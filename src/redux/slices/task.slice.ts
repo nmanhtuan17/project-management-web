@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Board, Task, TaskPriority, TaskStatus, TaskTypes } from "@/types/task";
+import { Board, Task, TaskPriority, TaskTypes } from "@/types/task";
 import { loadSingleTask, loadTasks, updateTask } from "@/redux/actions/task.action.ts";
 import { toast } from "sonner";
 import { createKanbanColumn, loadKanbanBoard } from '@/redux/actions/project.action';
@@ -38,7 +38,7 @@ export interface TaskSliceState {
   tasks: Task[],
   filter: {
     types?: TaskTypes[],
-    statuses?: TaskStatus[],
+    statuses?: string[],
     priorities?: TaskPriority[],
     search?: string;
   },
@@ -51,7 +51,7 @@ const initialState: TaskSliceState = {
   filter: {
     search: '',
     types: [TaskTypes.ALL],
-    statuses: [TaskStatus.ALL],
+    statuses: ['all'],
     priorities: [TaskPriority.ALL],
   },
   board: initBoard,
