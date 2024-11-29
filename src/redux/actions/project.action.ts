@@ -27,8 +27,12 @@ export const loadKanbanBoard = createAsyncThunk("project/load-kanban-board", asy
   return data
 })
 
-export const createKanbanColumn = createAsyncThunk("project/create-column", async (projectId: string) => {
-  return await apiService.post(`projects/${projectId}/column`)
+export const createKanbanColumn = createAsyncThunk("project/create-column", async (payload: { projectId: string, title: string }) => {
+  const {projectId, title} = payload;
+  return await apiService.post(`projects/${projectId}/column`, {
+    id: slugify(title),
+    title
+  })
 })
 
 export const updateColumn = createAsyncThunk("project/update-column", async (payload: { projectId: string, columnId: string, title: string }) => {
@@ -37,4 +41,9 @@ export const updateColumn = createAsyncThunk("project/update-column", async (pay
     id: slugify(title),
     title
   })
+})
+
+export const removeColumn = createAsyncThunk('project/remove-column', async (payload: { projectId: string, columnId: string }) => {
+  const { projectId, columnId } = payload;
+  return await apiService.delete(`projects/${projectId}/column/${columnId}`, {})
 })

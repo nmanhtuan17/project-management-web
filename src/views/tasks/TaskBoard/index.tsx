@@ -11,12 +11,14 @@ import useCurrentProject from "@/lib/hooks/useCurrentProject";
 import TaskBoardTitle from "@/views/tasks/TaskBoard/TaskBoardTitle";
 import { TaskBoardItem } from "@/views/tasks/TaskBoard/TaskBoardItem";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
-import { createKanbanColumn, loadKanbanBoard, updateColumn } from "@/redux/actions/project.action";
+import { Check, Plus, X } from "lucide-react";
+import { createKanbanColumn, loadKanbanBoard, removeColumn, updateColumn } from "@/redux/actions/project.action";
 import { loadTasks } from "@/redux/actions/task.action";
 import { ProjectRoles } from "@/types/project";
 import { toast } from "sonner";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { useState } from "react";
+import { Input } from "@/components/ui/input";
 
 interface TasksBoardProps {
   className?: string;
@@ -28,6 +30,8 @@ export default function TasksBoard(props: TasksBoardProps) {
   const dispatch = useAppDispatch();
   const { theme } = useAppSelector(state => state.app);
   const currentProject = useCurrentProject();
+  const [visible, setVisible] = useState(false);
+  const [title, setTitle] = useState<string>('')
 
   async function handleCardMove(_card: BoardTask, source: any, destination: any) {
     // const updatedBoard = moveCard(board, source, destination);
@@ -64,6 +68,22 @@ export default function TasksBoard(props: TasksBoardProps) {
     }
   }
 
+  const handleRemoveColumn = async (columnId: string) => {
+    if (currentProject.profile.role === ProjectRoles.OWNER || currentProject.profile.role === ProjectRoles.MANAGER) {
+      dispatch(removeColumn({
+        projectId: currentProject._id,
+        columnId
+      })).then(() => {
+        dispatch(loadKanbanBoard(currentProject._id))
+          .then(() => {
+            dispatch(loadTasks(currentProject._id))
+          })
+      })
+    } else {
+      toast.error('ACTION NOT PERMITTED')
+    }
+  }
+
   return (
     <>
       {loading ? (<div>
@@ -77,35 +97,66 @@ export default function TasksBoard(props: TasksBoardProps) {
             onCardDragEnd={handleCardMove}
             renderColumnHeader={(column: any) => (
               <div key={column.id}>
-                <TaskBoardTitle column={column} handleUpdateTitle={updateColumnTitle} />
+                <TaskBoardTitle column={column} handleUpdateTitle={updateColumnTitle} handleRemoveColumn={handleRemoveColumn} />
               </div>
             )}
             renderColumnAdder={() => {
               return (
-                <TooltipProvider delayDuration={500}>
-                  <Tooltip>
-                    <TooltipTrigger>
-                      <Button
-                        onClick={() => {
-                          dispatch(createKanbanColumn(currentProject._id))
-                            .then(() => {
-                              dispatch(loadKanbanBoard(currentProject._id))
-                                .then(() => {
-                                  dispatch(loadTasks(currentProject._id))
-                                })
-                            })
+                <div>
+                  {!visible ?
+                    <TooltipProvider delayDuration={500}>
+                      <Tooltip>
+                        <TooltipTrigger>
+                          <Button
+                            onClick={() => {
+                              setVisible(true)
+
+                            }}
+                            variant="secondary" className="m-[5px] justify-center items-center gap-1">
+                            <Plus size={18} />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent side={'right'}>
+                          <p>New Column</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider >
+                    :
+                    <div className="w-[200px] gap-1 items-center">
+                      <Input
+                        className="outline-none focus:outline-[0px] mt-1"
+                        onChange={(e) => {
+                          setTitle(e.target.value)
                         }}
-                        variant="secondary" className="m-[5px] justify-center items-center gap-1">
-                        <Plus size={18} />
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent side={'right'}>
-                      <p>New Column</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+                        value={title} />
+                      <div className="flex !flex-row mt-2">
+                        <span
+                          onClick={() => {
+                            if (title.length > 0) {
+                              dispatch(createKanbanColumn({ projectId: currentProject._id, title }))
+                                .then(() => {
+                                  setVisible(false)
+                                  setTitle('')
+                                  dispatch(loadKanbanBoard(currentProject._id))
+                                    .then(() => {
+                                      dispatch(loadTasks(currentProject._id))
+                                    })
+                                })
+                            }
+                          }}
+                          className="p-2 bg-white rounded-sm cursor-pointer shadow-sm">
+                          <Check size={16} />
+                        </span>
+                        <span
+                          onClick={() => setVisible(false)}
+                          className="p-2 bg-white rounded-sm cursor-pointer">
+                          <X size={16} />
+                        </span>
 
-
+                      </div>
+                    </div>
+                  }
+                </div>
               )
             }}
             renderCard={(task: BoardTask) => (
@@ -113,8 +164,8 @@ export default function TasksBoard(props: TasksBoardProps) {
             )}
           >
             {board}
-          </ControlledBoard>
-        </div>
+          </ControlledBoard >
+        </div >
       }
     </>
   )
