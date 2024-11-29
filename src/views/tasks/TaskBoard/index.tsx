@@ -34,20 +34,23 @@ export default function TasksBoard(props: TasksBoardProps) {
   const [title, setTitle] = useState<string>('')
 
   async function handleCardMove(_card: BoardTask, source: any, destination: any) {
-    // const updatedBoard = moveCard(board, source, destination);
-    // const updatedTask = {
-    //   ..._card,
-    //   status: destination.toColumnId
-    // };
-    // const columnIndexUpdated = updatedBoard.columns.findIndex(item => item.id === destination.toColumnId);
-    // updatedBoard.columns[columnIndexUpdated].cards = updatedBoard.columns[columnIndexUpdated].cards.map((card: BoardTask) => {
-    //   if (card._id === _card._id) {
-    //     return updatedTask;
-    //   }
-    //   return card;
-    // });
-    // dispatch(setBoard({columns: [...updatedBoard.columns]}));
-    // await apiService.updateTask(space._id, updatedTask);
+    const updatedBoard = moveCard(board, source, destination);
+
+    const updatedTask = {
+      ..._card,
+      status: destination.toColumnId
+    };
+    console.log(updatedTask)
+    console.log(updatedBoard)
+    const columnIndexUpdated = updatedBoard.columns.findIndex(item => item.id === destination.toColumnId);
+    updatedBoard.columns[columnIndexUpdated].cards = updatedBoard.columns[columnIndexUpdated].cards.map((card: BoardTask) => {
+      if (card._id === _card._id) {
+        return updatedTask;
+      }
+      return card;
+    });
+    dispatch(setBoard({ columns: [...updatedBoard.columns] }));
+    await apiService.put(`projects/${currentProject._id}/tasks/${updatedTask._id}`, updatedTask);
   }
 
   const updateColumnTitle = async (columnId: string, title: string) => {
