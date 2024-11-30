@@ -22,7 +22,7 @@ export const TaskList = () => {
         </TableHeader>
         <TableBody>
           {tasks.map((task) => (
-            <TaskListItem task={task} />
+            <TaskListItem key={task._id} task={task} />
           ))}
         </TableBody>
       </Table>

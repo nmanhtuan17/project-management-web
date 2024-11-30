@@ -1,8 +1,10 @@
-import {createContext, ReactNode, useContext, useState} from "react";
-import {Outlet} from "react-router-dom";
+import { createContext, ReactNode, useContext, useState } from "react";
+import { Outlet } from "react-router-dom";
 import { AlertDialogProvider } from "./AlertDialogProvider";
 import { CreateProjectDialog } from "@/views/home/components/CreateProjectDialog";
 import { CreateTaskDialog } from "@/views/tasks/components/CreateTaskDialog";
+import { TaskDetailDialog } from "@/views/tasks/components/TaskDetailDialog";
+// import { TaskDetail } from "@/views/tasks/TaskDetail";
 
 interface DialogContextType {
   createProject: {
@@ -11,7 +13,12 @@ interface DialogContextType {
   createTaskDialog: {
     open: boolean;
   }
-  
+
+  taskDetail: {
+    open: boolean,
+    element?: ReactNode
+  }
+  createTaskDetailElemennt?: (element: ReactNode) => void,
   openDialog?: (dialog: Omit<keyof DialogContextType, 'openDialog'>, data?: any) => void,
   closeDialog?: (dialog: Omit<keyof DialogContextType, 'openDialog'>) => void,
   setDialogOpen?: (dialog: Omit<keyof DialogContextType, 'openDialog'>, open: boolean, data?: any) => void,
@@ -22,6 +29,9 @@ const DialogContext = createContext<DialogContextType>({
     open: false
   },
   createTaskDialog: {
+    open: false
+  },
+  taskDetail: {
     open: false
   }
 });
@@ -38,8 +48,12 @@ export default function DialogProvider(props: DialogProviderProps) {
     },
     createTaskDialog: {
       open: false
+    },
+    taskDetail: {
+      open: false
     }
   });
+
 
   const setDialogOpen = (dialog: keyof DialogContextType, open: boolean, data?: any) => {
     setDialogs({
@@ -62,9 +76,12 @@ export default function DialogProvider(props: DialogProviderProps) {
       closeDialog,
       setDialogOpen,
     }}>
-      <Outlet/>  
+      <Outlet />
       <CreateProjectDialog />
-      <CreateTaskDialog /> 
+      <CreateTaskDialog />
+      <TaskDetailDialog >
+        {dialogs.taskDetail.element}
+      </TaskDetailDialog>
     </DialogContext.Provider>
   </AlertDialogProvider>
 }

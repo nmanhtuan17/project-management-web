@@ -168,28 +168,6 @@ export const CreateTaskDialog = () => {
               </div>
 
               <div className={'col-span-2'}>
-                <div className="flex gap-4 mb-2">
-                  <FormField
-                    name={'status'}
-                    control={form.control}
-                    render={({ field }) => (
-                      <FormItem className="items-center gap-4 !space-y-0">
-                        <FormControl>
-                          <TaskStatusSelect
-                            className="shadow-none bg-muted/50 hover:bg-muted gap-2"
-                            selected={field.value}
-                            showIcon
-                            onChange={type => {
-                              field.onChange(type);
-                            }}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                </div>
                 <div className="border p-3 rounded space-y-2">
                   <FormField
                     name={'time'}
@@ -239,6 +217,28 @@ export const CreateTaskDialog = () => {
                     )}
                   />
                   <Separator className="my-4" />
+                  <FormField
+                    name={'status'}
+                    control={form.control}
+                    render={({ field }) => (
+                      <FormItem className="grid grid-cols-6 items-center gap-4 !space-y-0">
+                        <FormLabel className="col-span-1 text-muted-foreground">
+                          Status
+                        </FormLabel>
+                        <FormControl className="col-span-5">
+                          <TaskStatusSelect
+                            className="shadow-none border-transparent hover:bg-muted/50"
+                            selected={field.value}
+                            showIcon
+                            onChange={type => {
+                              field.onChange(type);
+                            }}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                   <FormField
                     name={'type'}
                     control={form.control}

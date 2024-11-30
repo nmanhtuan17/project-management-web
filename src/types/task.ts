@@ -1,4 +1,4 @@
-import { ProjectMember } from "@/types/project";
+import { Project, ProjectMember } from "@/types/project";
 
 export enum TaskTypes {
   ALL = 'all',
@@ -34,7 +34,10 @@ export interface Task {
   createdAt: string;
   updatedAt: string;
   description?: string;
-  dueDate: Date;
+  time: {
+    from: Date,
+    to: Date
+  };
   assignees: ProjectMember[];
   archived: boolean;
   attachments: string[] | any[];
@@ -50,6 +53,16 @@ export interface TaskActivity {
   meta?: any;
   linkedItemId?: string;
   createdAt: string;
+}
+
+export interface Comment {
+  _id: string;
+  from: ProjectMember;
+  text: string;
+  createdAt: string;
+  updatedAt: string;
+  photo?: string;
+  post: string;
 }
 
 

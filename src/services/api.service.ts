@@ -39,6 +39,14 @@ class ApiService {
     return this.callApi('DELETE', endpoint, data, config);
   }
 
+  getSubTasks(projectId: string, taskId: string) {
+    return this.get(`/projects/${projectId}/tasks/${taskId}/sub-tasks`, {});
+  }
+
+  getTaskActivities(projectId: string, taskId: string) {
+    return this.get(`/projects/${projectId}/tasks/${taskId}/activities`);
+  }
+
   async callApi(method: string, endpoint: string, data: any = {}, config?: AxiosRequestConfig, ignoreAuth = false) {
     if (!ignoreAuth) await this.refreshTokenCheck();
     try {

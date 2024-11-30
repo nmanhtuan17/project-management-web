@@ -169,9 +169,9 @@ export function MultiSelectAssignees({
           <div className="flex px-1 overflow-hidden items-center flex-wrap -space-x-2">
             {selected.length === 0 && <span className={'text-muted-foreground'}>Unassigned</span>}
             {selected.map((item) => (
-              <div>
+              <div key={item}>
                 {members.map(mem => mem._id === item && (
-                  <TooltipProvider>
+                  <TooltipProvider key={mem._id}>
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <Avatar className={'w-7 h-7'}>

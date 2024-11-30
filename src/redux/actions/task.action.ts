@@ -14,13 +14,15 @@ export const loadTasks = createAsyncThunk<Task[], string>('task/load', async (pr
   return data
 });
 
-export const loadSingleTask = createAsyncThunk('task/loadSingle', async () => {
-  // const r = await apiService.getTask(spaceId, taskId);
-  // return r.data;
-  return []
+export const loadSingleTask = createAsyncThunk<
+  Task,
+  { projectId: string, taskId: string }
+>('task/loadSingle', async ({ projectId, taskId }) => {
+  const r = await apiService.get(`projects/${projectId}/tasks/${taskId}`);
+  return r.data;
 });
 
-export const updateTask = createAsyncThunk<any, { task: Task, spaceId: string }>('task/update', ({ task, spaceId }, thunkApi) => {
+export const updateTask = createAsyncThunk<any, { task: Task, projectId: string }>('task/update', ({ task, projectId }, thunkApi) => {
   // let newTask = {
   //   ...task,
   //   attachments: task.attachments.filter(item => !!item).map((attachment: any) => {
