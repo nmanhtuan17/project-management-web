@@ -109,7 +109,7 @@ export const CreateTaskDialog = () => {
       <DialogContent className="w-full max-w-[1280px] min-h-[600px]">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
-            <div className={'grid grid-cols-5 gap-4'}>
+            <div className={'grid grid-cols-5 gap-4 p-4'}>
               <div className={'col-span-3 space-y-4'}>
                 <FormField
                   control={form.control}
@@ -141,30 +141,6 @@ export const CreateTaskDialog = () => {
                     </FormItem>
                   )}
                 />
-                <div className={'flex flex-row gap-2'}>
-
-                  {/* <FormField
-                  control={form.control}
-                  name="parentTask"
-                  render={({field}) => (
-                    <FormItem className={'flex-1'}>
-                      <FormLabel>
-                        Parent Task
-                      </FormLabel>
-                      <FormControl>
-                        <InputTask
-                          value={field.value}
-                          className={'h-10'}
-                          onValueChange={(taskId) => {
-                            field.onChange(taskId);
-                          }}
-                        />
-                      </FormControl>
-                      <FormMessage/>
-                    </FormItem>
-                  )}
-                /> */}
-                </div>
               </div>
 
               <div className={'col-span-2'}>
@@ -227,6 +203,7 @@ export const CreateTaskDialog = () => {
                         </FormLabel>
                         <FormControl className="col-span-5">
                           <TaskStatusSelect
+                            options={statuses}
                             className="shadow-none border-transparent hover:bg-muted/50"
                             selected={field.value}
                             showIcon

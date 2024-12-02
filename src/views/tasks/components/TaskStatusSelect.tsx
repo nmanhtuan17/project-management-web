@@ -7,6 +7,7 @@ import { QuestionMarkCircleIcon } from "@heroicons/react/16/solid";
 import { useTaskStatus } from "@/lib/hooks/useTaskStatus";
 
 interface TaskStatusSelectProps {
+  options: {label: string, value: string}[]
   showAllSelector?: boolean;
   multiple?: boolean;
   onChange?: (type: string | string[]) => void;
@@ -17,14 +18,17 @@ interface TaskStatusSelectProps {
 
 export function TaskStatusSelect(props: TaskStatusSelectProps) {
   const [items, setItems] = useState<string[] | string>(props.selected);
-  const { statuses } = useTaskStatus()
 
+
+  useEffect(() => {
+    if (props.selected !== items) setItems(props.selected);
+  }, [props.selected]);
 
   if (props.multiple) {
     return <MultiSelect
       className={props.className}
       selected={items as string[]}
-      options={statuses}
+      options={props.options}
       onChange={(selected: string[]) => {
         let filtered: string[] = selected;
         if (filtered[filtered.length - 1] === 'all') {
@@ -48,7 +52,7 @@ export function TaskStatusSelect(props: TaskStatusSelectProps) {
         <SelectValue placeholder={items as string} />
       </SelectTrigger>
       <SelectContent>
-        {statuses.map((option, index) => (
+        {props.options.map((option, index) => (
           <SelectItem value={option.value} key={index}>
             <div className={'flex flex-row gap-1 items-center'}>
               {option.label}
