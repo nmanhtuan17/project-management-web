@@ -1,6 +1,6 @@
 import {TaskPriority} from "@/types/task.ts";
 import {MultiSelect} from "@/components/ui/multi-select.tsx";
-import {createElement, useState} from "react";
+import {createElement, useEffect, useState} from "react";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select.tsx";
 import {taskConfig} from "@/configs/task.config.ts";
 import {QuestionMarkIcon} from "@radix-ui/react-icons";
@@ -33,6 +33,10 @@ export function TaskPrioritySelect(props: TaskPrioritySelectProps) {
     item.value = item.value.toString();
     return item as {label: string, value: string};
   });
+
+  useEffect(() => {
+    if (props.selected !== items) setItems(props.selected);
+  }, [props.selected]);
 
   if (props.multiple) {
     return <MultiSelect

@@ -1,8 +1,11 @@
 import {
+  Dot,
   FilePlus2Icon,
   InboxIcon, LinkIcon, LoaderCircleIcon,
   MessageSquareIcon,
-  PencilIcon
+  PencilIcon,
+  Plus,
+  File
 } from "lucide-react";
 import { useParams } from "react-router-dom";
 import { createContext, createElement, useContext, useEffect, useState } from "react";
@@ -35,6 +38,17 @@ import { DateRange } from "react-day-picker";
 import TaskActivities from "../components/TaskActivities";
 import { updateTask } from "@/redux/actions/task.action";
 import { useTask } from "@/lib/hooks/useTask";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import CreateTaskMemberSelector from "../components/CreateTaskMemberSelector";
+import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { addDays } from "date-fns";
+import { useTaskStatus } from "@/lib/hooks/useTaskStatus";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { TaskDetailTitle } from "../components/TaskDetailTitle";
+import { TaskDetailDescription } from "../components/TaskDetailDescription";
 
 interface TaskDetailContextType {
   taskId: string;
@@ -53,36 +67,95 @@ interface TaskDetailProps {
   taskId: string;
 }
 
+
+const taskFormSchema = z.object({
+  type: z.enum(Object.values(TaskTypes) as [string, ...string[]], {
+    required_error: "Please select task type.",
+  }),
+  status: z.string({
+    required_error: "Please select task status.",
+  }),
+  priority: z.enum(Object.values(TaskPriority).map(m => m.toString()) as [string, ...string[]], {
+    required_error: "Please select task priority.",
+  }),
+  title: z.string({
+    required_error: "Please enter task title",
+  }).min(4, {
+    message: "Task title too short",
+  }).max(100, {
+    message: "Task title too long"
+  }),
+  assignees: z.string().array().optional(),
+  time: z.object({
+    from: z.string({
+      required_error: "Please select start date.",
+    }),
+    to: z.string({
+      required_error: "Please select due date.",
+    }),
+  }),
+  description: z.string().optional(),
+  parentTask: z.string().optional(),
+  project: z.string().optional(),
+  attachments: z.string().array().optional(),
+  phase: z.string().optional(),
+  label: z.string().optional()
+})
+
+type TaskFormValues = z.infer<typeof taskFormSchema>
+
+
 export default function TaskDetail(props: TaskDetailProps) {
   const { taskId } = props;
   const dispatch = useAppDispatch();
   const project = useCurrentProject();
   const { task, setTask } = useTask(taskId);
-  const [archiveDialog, setArchiveDialog] = useState<boolean>(false);
   const [getActivities, { data: activities, error, loading }] = useApi<TaskActivity[]>(apiService.getTaskActivities);
   // const [getSubTasks, { data: subTasks }] = useApi<Task[]>(apiService.getSubTasks);
-  const { openDialog } = useDialogContext();
+  const { statuses } = useTaskStatus()
 
-  const callUpdateTask = async (taskObject: Task) => {
-    await dispatch(updateTask({
-      projectId: project._id,
-      task: taskObject,
-    }));
-    return loadActivities();
-  }
 
   const loadActivities = () => {
     getActivities(project._id, taskId).then(() => { })
   };
 
-  // useEffect(() => {
-  //   if (project._id && taskId) {
-  //     getSubTasks(project._id, taskId).then(() => {
-  //     });
-  //   }
-  // }, [project._id, taskId]);
+  useEffect(() => {
+    if (task) {
+      form.reset({
+        ...task as unknown as TaskFormValues,
+        assignees: task.assignees.map(mem => mem._id),
+      })
+    }
+  }, [task]);
+
+  const defaultValues: Partial<TaskFormValues> = {
+    type: TaskTypes.GENERAL,
+    status: statuses[0].value,
+    priority: TaskPriority.MEDIUM.toString(),
+    time: {
+      from: new Date as unknown as string,
+      to: addDays(new Date(), 1) as unknown as string
+    },
+    title: '',
+    parentTask: ''
+  }
+
+  const form = useForm({
+    resolver: zodResolver(taskFormSchema),
+    defaultValues: defaultValues,
+  })
+
+  const onSubmit = (data: TaskFormValues) => {
+    dispatch(updateTask({task: {
+      ...task,
+      ...data,
+      priority: +data.priority
+    } as unknown as Task, projectId: project._id})).then(res => {
+    })
+  }
 
   const type = taskConfig.types.find(t => t.value === task?.type);
+
   return <TaskDetailContext.Provider value={{
     taskId,
     task,
@@ -99,223 +172,251 @@ export default function TaskDetail(props: TaskDetailProps) {
         </div>
       </>
     ) : (
-      <div className={'p-4 flex-1 overflow-y-auto min-h-0'}>
-        <div className={'flex flex-row'}>
-          <div className={'bg-muted w-12 h-12 rounded-lg flex items-center justify-center'}>
-            <type.icon className={'w-6 h-6'} />
-          </div>
-          <div className={'pl-2'}>
-            <div className={'text-sm'}>
-              {type.label}
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <div className={'grid grid-cols-5 gap-4 p-4'}>
+            <div className={'col-span-3 space-y-4'}>
+              <FormField
+                control={form.control}
+                name="title"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <div>
+                        <Button variant="secondary" className="cursor-default" onClick={(e) => {
+                          e.preventDefault()
+                        }}>
+                          <type.icon className={'w-4 h-4'} />
+                          <div className={'text-sm pl-2'}>
+                            {type.label}
+                          </div>
+                        </Button>
+                        <TaskDetailTitle {...field} />
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-muted-foreground">
+                      Description
+                    </FormLabel>
+                    <FormControl>
+                      <TaskDetailDescription {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
-            <div className={'text-2xl font-bold'}>
-              {task.title}
+
+            <div className={'col-span-2'}>
+              <div className="border p-3 rounded space-y-2">
+                <FormField
+                  name={'time'}
+                  control={form.control}
+                  render={({ field }) => (
+                    <FormItem className="flex gap-4 items-center !space-y-0 my-2">
+                      <div className="flex items-center">
+                        <FormLabel className="text-muted-foreground">
+                          Start Date
+                        </FormLabel>
+                        <Dot />
+                        <FormLabel className="text-muted-foreground" >
+                          Due Date
+                        </FormLabel>
+                      </div>
+                      <FormControl>
+                        <CalendarDateRangePicker
+                          variant="ghost"
+                          className="flex-1 w-full"
+                          date={field.value as unknown as DateRange}
+                          onChange={field.onChange}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Separator className="my-4" />
+                <FormField
+                  control={form.control}
+                  name="assignees"
+                  render={({ field }) => (
+                    <FormItem className={'flex items-center gap-4 !space-y-0'}>
+                      <FormLabel className="text-muted-foreground">
+                        Assignees
+                      </FormLabel>
+                      <FormControl>
+                        <CreateTaskMemberSelector
+                          members={field.value}
+                          onChange={members => {
+                            field.onChange(members)
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Separator className="my-4" />
+                <FormField
+                  name={'status'}
+                  control={form.control}
+                  render={({ field }) => (
+                    <FormItem className="grid grid-cols-6 items-center gap-4 !space-y-0">
+                      <FormLabel className="col-span-1 text-muted-foreground">
+                        Status
+                      </FormLabel>
+                      <FormControl className="col-span-5">
+                        <TaskStatusSelect
+                          options={statuses}
+                          className="shadow-none border-transparent hover:bg-muted/50"
+                          selected={field.value}
+                          showIcon
+                          onChange={type => {
+                            field.onChange(type);
+                            console.log(type)
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  name={'type'}
+                  control={form.control}
+                  render={({ field }) => (
+                    <FormItem className="grid grid-cols-6 items-center gap-4 !space-y-0">
+                      <FormLabel className="col-span-1 text-muted-foreground">
+                        Type
+                      </FormLabel>
+                      <FormControl className="col-span-5">
+                        <TaskTypeSelect
+                          className="shadow-none border-transparent hover:bg-muted/50"
+                          selected={field.value}
+                          showIcon
+                          onChange={type => {
+                            field.onChange(type);
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  name={'priority'}
+                  control={form.control}
+                  render={({ field }) => (
+                    <FormItem className="grid grid-cols-6 items-center gap-4 !space-y-0">
+                      <FormLabel className="col-span-1 text-muted-foreground">
+                        Priority
+                      </FormLabel>
+                      <FormControl className="col-span-5">
+                        <TaskPrioritySelect
+                          className="shadow-none border-transparent hover:bg-muted/50"
+                          selected={field.value}
+                          showIcon
+                          onChange={type => {
+                            field.onChange(type);
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage className="col-span-6" />
+                    </FormItem>
+                  )}
+                />
+
+                {/* <FormField
+                    name={'phase'}
+                    control={form.control}
+                    render={({ field }) => (
+                      <FormItem className="grid grid-cols-6 items-center gap-4 !space-y-0">
+                        <FormLabel className="col-span-1 text-muted-foreground">
+                          Phase
+                        </FormLabel>
+                        <FormControl className="col-span-5">
+                          <TaskPrioritySelect
+                            className="shadow-none border-transparent hover:bg-muted/50"
+                            selected={field.value}
+                            showIcon
+                            onChange={type => {
+                              field.onChange(type);
+                            }}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    name={'label'}
+                    control={form.control}
+                    render={({ field }) => (
+                      <FormItem className="grid grid-cols-6 items-center !space-y-0">
+                        <FormLabel className="col-span-1 text-muted-foreground">
+                          Label
+                        </FormLabel>
+                        <FormControl className="col-span-5">
+                          <TaskPrioritySelect
+                            className="shadow-none border-transparent hover:bg-muted/50"
+                            selected={field.value}
+                            showIcon
+                            onChange={type => {
+                              field.onChange(type);
+                            }}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  /> */}
+              </div>
+              <div className="mt-2">
+                <FormField
+                  name={'attachments'}
+                  control={form.control}
+                  render={({ field }) => (
+                    <FormItem className="flex items-center gap-4 !space-y-0">
+                      <FormLabel className="flex flex-1 items-center gap-2 text-muted-foreground">
+                        <File size={16} />
+                        <span>
+                          Attachments
+                        </span>
+                      </FormLabel>
+                      <FormControl className="">
+                        <Button
+                          className="p-0 w-6 h-6 align-middle items-center"
+                          variant="ghost"
+                          onClick={(e) => {
+                            e.preventDefault()
+                          }}>
+                          <Plus size={16} />
+                        </Button>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
             </div>
           </div>
-        </div>
-        <div className={'flex flex-row gap-2 mt-2'}>
-          <Button variant={'outline'} className={'shadow'}>
-            <PencilIcon className={'w-4 h-4 mr-1'} />
-            Edit
-          </Button>
-          <Button variant={'outline'} className={'shadow'}>
-            <MessageSquareIcon className={'w-4 h-4 mr-1'} />
-            Comment
-          </Button>
-          <div className={'flex flex-row'}>
-            <Button variant={'outline'} className={'shadow rounded-r-none'}>
-              Assign
+          {form.formState.isDirty && <div className="absolute bottom-0 right-0 p-6 space-x-2">
+            <Button type={'submit'}>
+              Update
             </Button>
-            <DropdownMenu>
-              <DropdownMenuTrigger>
-                <Button variant={'outline'} className={'shadow rounded-l-none border-l-0'}>
-                  More
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem>Export...</DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem className={'text-destructive'} onSelect={() => {
-                  setArchiveDialog(true);
-                }}>
-                  Archive task
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        </div>
-        <div className={'grid grid-cols-1 md:grid-cols-3 mt-4 gap-4'}>
-          <div className={'col-span-2 space-y-4'}>
-            <div>
-              <div className={'font-semibold'}>
-                Description
-              </div>
-              <div className={cn('text-sm', !task.description ? 'text-muted-foreground' : '')}>
-                {task.description || 'This task is missing a description...'}
-              </div>
-            </div>
-            <div>
-              <div className={'flex flex-row justify-between'}>
-                <div className={'font-semibold'}>
-                  Sub-tasks
-                </div>
-                <div>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger>
-                      <Button size={'sm'} variant={'outline'} className={'px-2 py-1 h-6'}>
-                        Add <CaretDownIcon />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                      <DropdownMenuItem onSelect={() => openDialog('createTask', {
-                        parentTaskId: task._id,
-                      })}>
-                        <PlusIcon /> Create new task
-                      </DropdownMenuItem>
-                      <DropdownMenuItem>
-                        <LinkIcon className={'w-3 h-3 mr-1'} /> Add existing
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </div>
-              </div>
-              {/* <div className={'mt-2 border rounded-lg p-2 space-y-1 bg-muted'}>
-                {subTasks && subTasks.length > 0 ? subTasks.map(task => {
-                  const Icon = taskConfig.types.find(t => t.value === task.type)?.icon || QuestionMarkCircleIcon;
-                  return <div className={'border p-2 rounded bg-background flex flex-row items-center gap-2'}>
-                    <Icon className={'w-4 h-4'} />
-                    {task.title}
-                  </div>
-                }) : <div className={'text-sm text-muted-foreground'}>
-                  There's no sub-tasks....
-                </div>}
-              </div> */}
-            </div>
-            <div>
-              <div className={'font-semibold'}>
-                Linked items
-              </div>
-              <div className={cn('text-sm', !task.description ? 'text-muted-foreground' : '')}>
-                {task.description || 'This task is missing a description...'}
-              </div>
-            </div>
-            {/* <TaskAttachments task={task}/> */}
-            {/* <TaskActivities task={task} /> */}
-          </div>
-
-
-          <div className={'col-span-1'}>
-            <div className={'font-semibold mb-2'}>
-              Details
-            </div>
-            <Card>
-              <CardContent className={'px-4 py-2 space-y-2'}>
-                <div>
-                  <div className={'text-sm font-semibold'}>
-                    Assignees
-                  </div>
-                  <div className={'flex flex-row space-x-1'}>
-                    {task.assignees.map(assignee => (
-                      <Avatar className={'w-5 h-5'}>
-                        <AvatarImage src={assignee.user.avatar || getGravatar(assignee.user.email)} alt="Avatar" />
-                        <AvatarFallback>{assignee.user.fullName}</AvatarFallback>
-                      </Avatar>
-                    ))}
-                  </div>
-                </div>
-                <Separator />
-                <div className={'grid grid-cols-1'}>
-                  <div className={'flex flex-row items-center'}>
-                    <div className={'w-32 text-sm font-semibold'}>
-                      Status
-                    </div>
-                    <TaskStatusSelect
-                      selected={task.status}
-                      className={'border-none shadow-none'}
-                      showIcon
-                      onChange={(status: string) => {
-                        const taskObject = {
-                          ...task,
-                          status,
-                        };
-                        setTask(taskObject);
-                        callUpdateTask(taskObject);
-                      }}
-                    />
-                  </div>
-                  <div className={'flex flex-row items-center'}>
-                    <div className={'w-32 text-sm font-semibold'}>
-                      Type
-                    </div>
-                    <TaskTypeSelect
-                      selected={task.type}
-                      className={'border-none shadow-none'}
-                      showIcon
-                      onChange={(type: TaskTypes) => {
-                        const taskObject = {
-                          ...task,
-                          type,
-                        };
-                        setTask(taskObject);
-                        callUpdateTask(taskObject);
-                      }}
-                    />
-                  </div>
-
-                  <div className={'flex flex-row items-center'}>
-                    <div className={'w-32 text-sm font-semibold'}>
-                      Priority
-                    </div>
-                    <TaskPrioritySelect
-                      selected={task.priority.toString()}
-                      className={'border-none shadow-none'}
-                      showIcon
-                      onChange={(priority: string) => {
-                        const taskObject: Task = {
-                          ...task,
-                          priority: parseInt(priority),
-                        };
-                        setTask(taskObject);
-                        callUpdateTask(taskObject);
-                      }}
-                    />
-                  </div>
-                  <div className={'flex flex-row items-center'}>
-                    <div className={'w-32 text-sm font-semibold'}>
-                      Due Date
-                    </div>
-                    <CalendarDateRangePicker
-                      variant="ghost"
-                      className="flex-1 w-full"
-                      date={task.time}
-                      onChange={(time: { from: Date, to: Date }) => {
-                        const taskObject = {
-                          ...task,
-                          time: time,
-                        };
-                        setTask(taskObject);
-                        callUpdateTask(taskObject);
-                      }}
-                    />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-        {/* <ConfirmArchiveTaskDialog
-          open={archiveDialog}
-          onCancel={() => setArchiveDialog(false)}
-          onConfirm={() => {
-            setArchiveDialog(false);
-            const updated = {
-              ...task,
-              archived: true,
-            };
-            callUpdateTask(updated);
-          }}
-        /> */}
-      </div>
+          </div>}
+        </form>
+      </Form>
     )}
   </TaskDetailContext.Provider>;
 }

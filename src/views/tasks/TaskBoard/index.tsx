@@ -13,7 +13,7 @@ import { TaskBoardItem } from "@/views/tasks/TaskBoard/TaskBoardItem";
 import { Button } from "@/components/ui/button";
 import { Check, Plus, X } from "lucide-react";
 import { createKanbanColumn, loadKanbanBoard, removeColumn, updateColumn } from "@/redux/actions/project.action";
-import { loadTasks } from "@/redux/actions/task.action";
+import { loadTasks, updateTask } from "@/redux/actions/task.action";
 import { ProjectRoles } from "@/types/project";
 import { toast } from "sonner";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
@@ -40,8 +40,6 @@ export default function TasksBoard(props: TasksBoardProps) {
       ..._card,
       status: destination.toColumnId
     };
-    console.log(updatedTask)
-    console.log(updatedBoard)
     const columnIndexUpdated = updatedBoard.columns.findIndex(item => item.id === destination.toColumnId);
     updatedBoard.columns[columnIndexUpdated].cards = updatedBoard.columns[columnIndexUpdated].cards.map((card: BoardTask) => {
       if (card._id === _card._id) {
@@ -50,7 +48,10 @@ export default function TasksBoard(props: TasksBoardProps) {
       return card;
     });
     dispatch(setBoard({ columns: [...updatedBoard.columns] }));
-    await apiService.put(`projects/${currentProject._id}/tasks/${updatedTask._id}`, updatedTask);
+    await apiService.put(`projects/${currentProject._id}/tasks/${updatedTask._id}`, {
+      ...updatedTask,
+      assignees: updatedTask.assignees.map(i => i._id)
+    });
   }
 
   const updateColumnTitle = async (columnId: string, title: string) => {

@@ -8,7 +8,8 @@ export const loadTasks = createAsyncThunk<Task[], string>('task/load', async (pr
   const { types, search, statuses, priorities } = state.task.filter;
   const { data } = await apiService.get(`projects/${projectId}/tasks`, {}, {
     params: {
-      type: 'general'
+      type: 'all',
+      limit: 100
     }
   })
   return data
@@ -22,15 +23,15 @@ export const loadSingleTask = createAsyncThunk<
   return r.data;
 });
 
-export const updateTask = createAsyncThunk<any, { task: Task, projectId: string }>('task/update', ({ task, projectId }, thunkApi) => {
-  // let newTask = {
-  //   ...task,
-  //   attachments: task.attachments.filter(item => !!item).map((attachment: any) => {
-  //     if (typeof attachment !== 'string') {
-  //       return attachment._id;
-  //     }
-  //     return attachment;
-  //   })
-  // }
-  // return apiService.updateTask(spaceId, newTask);
+export const updateTask = createAsyncThunk<any, { task: Task, projectId: string }>('task/update', async ({ task, projectId }, thunkApi) => {
+  let newTask = {
+    ...task,
+    attachments: task.attachments.filter(item => !!item).map((attachment: any) => {
+      if (typeof attachment !== 'string') {
+        return attachment._id;
+      }
+      return attachment;
+    })
+  }
+  return await apiService.put(`projects/${projectId}/tasks/${task._id}`, newTask);
 })

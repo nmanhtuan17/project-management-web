@@ -1,5 +1,6 @@
 import { useDialogContext } from "@/components/providers/DialogProvider";
 import { Dialog, DialogContent } from "@/components/ui/dialog"
+import { DialogTitle } from "@radix-ui/react-dialog";
 import { ReactNode } from "react"
 
 interface TaskDetailDialogProps {

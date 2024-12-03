@@ -25,6 +25,7 @@ import { Dot, File, Plus } from "lucide-react";
 import { useState } from "react";
 import { DateRange } from "react-day-picker";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 
@@ -96,6 +97,7 @@ export const CreateTaskDialog = () => {
       dispatch(loadTasks(currentProject._id));
       setDialogOpen('createTaskDialog', false);
       form.reset();
+      toast.success('Task Created')
     })
   }
 

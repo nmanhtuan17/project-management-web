@@ -20,7 +20,7 @@ export default function CreateTaskMemberSelector(props: MemberSelectorProps) {
   return <MultiSelectAssignees
     placeholder="Search member..."
     className={props.className}
-    selected={props.members || []}
+    selected={props.members ?? []}
     options={members.map(mem => ({
       label: <div className={'flex items-center gap-2'}>
         <Avatar className={'w-4 h-4'}>
