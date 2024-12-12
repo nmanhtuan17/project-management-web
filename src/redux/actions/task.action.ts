@@ -15,6 +15,20 @@ export const loadTasks = createAsyncThunk<Task[], string>('task/load', async (pr
   return data
 });
 
+export const loadRecentTask = createAsyncThunk<Task[], { projectId: string, assignee: string }>('task/load-recent', async ({ projectId, assignee }, thunkAPI) => {
+  const state = thunkAPI.getState() as RootState;
+  const { data } = await apiService.get(`projects/${projectId}/tasks`, {}, {
+    params: {
+      type: 'all',
+      assignees: assignee,
+      sortItem: 'updatedAt',
+      sortType: 'desc',
+      limit: 4
+    }
+  })
+  return data
+});
+
 export const loadSingleTask = createAsyncThunk<
   Task,
   { projectId: string, taskId: string }

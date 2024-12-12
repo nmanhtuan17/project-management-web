@@ -17,13 +17,7 @@ export const MainNav = ({
   }, {
     path: `/mails/inbox`,
     label: 'Mails'
-  }, ...(currentProject._id ? [{
-    path: `/projects/${currentProject.slug}/members`,
-    label: 'Members'
-  }, {
-    path: `/projects/${currentProject.slug}/details/overview`,
-    label: 'Tasks'
-  }] : [])]
+  }]
 
   return (
     <nav

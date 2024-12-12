@@ -6,7 +6,7 @@ import {
 } from "@/components/ui/tooltip";
 import { useEffect, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar.tsx";
-import { Download } from "lucide-react";
+import { ArrowUpRight, Download, ListChecks, UserPlus } from "lucide-react";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable.tsx";
 import useCurrentProject from "@/lib/hooks/useCurrentProject";
 import { CalendarDateRangePicker } from "@/components/common/DateRangePicker";
@@ -14,18 +14,28 @@ import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { cn } from "@/lib/utils";
 import { loadProjectMembers } from "@/redux/actions/project.action";
 import { useWindowSize } from "@/lib/hooks/useWindowSize";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { loadRecentTask } from "@/redux/actions/task.action";
+import { Label } from "@/components/ui/label";
+import { RecentTaskItem } from "./components/RecentTaskItem";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
-export default function ProjectPage() {
+export default function HomePage() {
   const currentProject = useCurrentProject();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const dispatch = useAppDispatch();
   const { members } = useAppSelector(state => state.project)
+  const { user } = useAppSelector(state => state.auth)
+  const { recentTasks } = useAppSelector(state => state.task)
   const { width } = useWindowSize();
   const isMobileScreen = width < 768;
 
   useEffect(() => {
     if (currentProject._id) {
-      dispatch(loadProjectMembers(currentProject._id))
+      dispatch(loadProjectMembers(currentProject._id)).then(() => {
+        dispatch(loadRecentTask({ projectId: currentProject._id, assignee: currentProject.profile._id }))
+      })
     }
   }, [currentProject._id]);
 
@@ -39,15 +49,119 @@ export default function ProjectPage() {
         }}
       >
         <ResizablePanel>
-          <div className={'flex-1 p-4 md:p-8'}>
-            <div className="flex flex-col md:flex-row gap-2 items-start md:items-center justify-between mb-2">
+          <div className="flex flex-col flex-1 px-16 h-full">
+            <div className={'py-4 md:py-6'}>
               <h2 className="text-2xl md:text-3xl font-bold tracking-tight">Dashboard</h2>
-              <div className="flex items-center gap-2 w-full sm:w-auto">
-                <CalendarDateRangePicker />
-                <Button className="w-full">
-                  <Download className="block sm:hidden" size={16} />
-                  <span className="hidden sm:block">Download</span>
-                </Button>
+            </div>
+            <div className="flex flex-1 gap-4 pb-4">
+              <div className="space-y-4">
+                <Card className="w-[320px]">
+                  <CardContent className="flex flex-col items-center justify-center p-4 pb-0 mt-4">
+                    <Avatar className="w-16 h-16">
+                      <AvatarImage src={user.avatar} alt="@shadcn" />
+                      <AvatarFallback>CN</AvatarFallback>
+                    </Avatar>
+                    <p className="font-semibold text-lg mt-3">{user.fullName}</p>
+                    <p className="text-muted-foreground text-sm">{user.email}</p>
+                    <Separator className="mt-2" />
+                    <Button variant="link" className="w-full">
+                      View profile
+                      <ArrowUpRight size={18} />
+                    </Button>
+                  </CardContent>
+                </Card>
+                <Card className="w-[320px]">
+                  <CardHeader>
+                    <CardTitle>Activities</CardTitle>
+                    <CardDescription>Your recent activities</CardDescription>
+                    <Separator className="mt-2" />
+                  </CardHeader>
+                  <CardContent className="flex flex-col items-center justify-center p-4 pb-0 mt-4">
+
+                  </CardContent>
+                </Card>
+              </div>
+              <div className="flex flex-col flex-1 space-y-4">
+                <div className="grid grid-cols-3 gap-4">
+                  <Card className="">
+                    <CardHeader className='pb-3'>
+                      <CardTitle className="text-lg">Unresolve Tasks</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-3xl font-bold">
+                        16
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        Statistics
+                      </p>
+                    </CardContent>
+                  </Card>
+                  <Card className="">
+                    <CardHeader className='pb-3'>
+                      <CardTitle className="text-lg">Unresolve Tasks</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-3xl font-bold">
+                        16
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        Statistics
+                      </p>
+                    </CardContent>
+                  </Card>
+                  <Card className="">
+                    <CardHeader className='pb-3'>
+                      <CardTitle className="text-lg">Unresolve Tasks</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-3xl font-bold">
+                        16
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        Statistics
+                      </p>
+                    </CardContent>
+                  </Card>
+                </div>
+                {currentProject._id && <Card className="flex-1">
+                  <CardHeader className='pb-3 flex flex-row gap-4 items-center mt-0 justify-between'>
+                    <div className="flex flex-row gap-4 items-center">
+                      <Avatar className="w-12 h-12 !rounded-lg">
+                        <AvatarImage src={currentProject.avatar || `https://avatar.vercel.sh/${currentProject.name}.png`} alt="@shadcn" />
+                        <AvatarFallback className="rounded-lg">{currentProject?.name.charAt(0).toUpperCase()}</AvatarFallback>
+                      </Avatar>
+                      <div className="!mt-0">
+                        <p className="text-lg font-bold ">
+                          {currentProject.name}
+                        </p>
+                        <p className="text-sm text-muted-foreground">
+                          {members.length} members
+                        </p>
+                      </div>
+                    </div>
+                    <div className="space-x-4">
+                      <Button>
+                      <ListChecks size={18} className="mr-2" />
+                        All Tasks
+                      </Button>
+                      <Button>
+                        <UserPlus size={18} className="mr-2" />
+                        Invite member
+                      </Button>
+                    </div>
+                  </CardHeader>
+                  <Separator className="my-4" />
+                  <CardContent>
+                    <div>
+                      <Label>Recent Task</Label>
+                      <div className="gap-4 mt-2 grid grid-cols-4">
+                        {
+                          recentTasks.map(task => <RecentTaskItem key={task._id} task={task} />)
+                        }
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>}
               </div>
             </div>
           </div>

@@ -17,13 +17,7 @@ export const MainNavMobile = ({ className, ...props }: HTMLAttributes<HTMLElemen
   }, {
     path: `/mails/inbox`,
     label: 'Mails'
-  }, ...(currentProject._id ? [{
-    path: `/projects/${currentProject.slug}/members`,
-    label: 'Members'
-  }, {
-    path: `/projects/${currentProject.slug}/tasks`,
-    label: 'Tasks'
-  }] : [])]
+  }]
 
   return (
     <nav

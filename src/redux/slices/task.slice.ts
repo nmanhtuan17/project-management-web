@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Board, Task, TaskPriority, TaskTypes } from "@/types/task";
-import { loadSingleTask, loadTasks, updateTask } from "@/redux/actions/task.action.ts";
+import { loadRecentTask, loadSingleTask, loadTasks, updateTask } from "@/redux/actions/task.action.ts";
 import { toast } from "sonner";
 import { createKanbanColumn, loadKanbanBoard } from '@/redux/actions/project.action';
 
@@ -42,12 +42,14 @@ export interface TaskSliceState {
     priorities?: TaskPriority[],
     search?: string;
   },
+  recentTasks: Task[],
   board: Board;
   loading: boolean;
 }
 
 const initialState: TaskSliceState = {
   tasks: [],
+  recentTasks: [],
   filter: {
     search: '',
     types: [TaskTypes.ALL],
@@ -112,6 +114,16 @@ export const taskSlice = createSlice({
       .addCase(loadTasks.rejected, (state) => {
         state.loading = true;
       })
+      .addCase(loadRecentTask.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(loadRecentTask.fulfilled, (state, action) => {
+        state.recentTasks = action.payload;
+        state.loading = false;
+      })
+      .addCase(loadRecentTask.rejected, (state) => {
+        state.loading = true;
+      })
       .addCase(loadSingleTask.fulfilled, (state, action) => {
         // const taskIndex = state.tasks.findIndex(t => t._id === action.payload._id);
         // if (taskIndex >= 0) {
@@ -141,7 +153,7 @@ export const taskSlice = createSlice({
         if (action.payload.length > 0) {
           state.board = { columns: action.payload[0].columns }
         } else {
-          state.board = { columns: []}
+          state.board = { columns: [] }
         }
       })
       .addCase(loadKanbanBoard.rejected, (state, action) => {
