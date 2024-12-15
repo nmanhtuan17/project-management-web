@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import apiService from "@/services/api.service.ts";
 import { setTasks } from "@/redux/slices/task.slice.ts";
 import { Task } from "@/types/task";
-import useCurrentProject from "./useCurrentProject";
 import { loadSingleTask } from "@/redux/actions/task.action";
+import { useCurrentProject } from "./useCurrentProject";
 
 interface UseTaskType {
   task?: Task;
@@ -18,7 +18,7 @@ export function useTask(taskId: string): UseTaskType {
   const [loading, setLoading] = useState(false);
   const [task, setTask] = useState<Task>(undefined);
   const [error, setError] = useState(null);
-  const project = useCurrentProject();
+  const {currentProject: project, profile} = useCurrentProject();
   const { tasks } = useAppSelector(state => state.task);
 
   useEffect(() => {

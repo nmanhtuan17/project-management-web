@@ -7,7 +7,6 @@ import { ControlledBoard, moveCard } from '@caldwell619/react-kanban';
 import '@caldwell619/react-kanban/dist/styles.css';
 import apiService from "@/services/api.service.ts";
 import { LoadingSpinner } from "@/components/ui/loading-spinner.tsx";
-import useCurrentProject from "@/lib/hooks/useCurrentProject";
 import TaskBoardTitle from "@/views/tasks/TaskBoard/TaskBoardTitle";
 import { TaskBoardItem } from "@/views/tasks/TaskBoard/TaskBoardItem";
 import { Button } from "@/components/ui/button";
@@ -19,6 +18,7 @@ import { toast } from "sonner";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
+import { useCurrentProject } from "@/lib/hooks/useCurrentProject";
 
 interface TasksBoardProps {
   className?: string;
@@ -29,7 +29,7 @@ export default function TasksBoard(props: TasksBoardProps) {
   const { user } = useAppSelector(state => state.auth);
   const dispatch = useAppDispatch();
   const { theme } = useAppSelector(state => state.app);
-  const currentProject = useCurrentProject();
+  const { currentProject, profile } = useCurrentProject();
   const [visible, setVisible] = useState(false);
   const [title, setTitle] = useState<string>('')
 
@@ -55,7 +55,7 @@ export default function TasksBoard(props: TasksBoardProps) {
   }
 
   const updateColumnTitle = async (columnId: string, title: string) => {
-    if (currentProject.profile.role === ProjectRoles.OWNER || currentProject.profile.role === ProjectRoles.MANAGER) {
+    if (profile.role === ProjectRoles.OWNER || profile.role === ProjectRoles.MANAGER) {
       dispatch(updateColumn({
         projectId: currentProject._id,
         columnId,
@@ -73,7 +73,7 @@ export default function TasksBoard(props: TasksBoardProps) {
   }
 
   const handleRemoveColumn = async (columnId: string) => {
-    if (currentProject.profile.role === ProjectRoles.OWNER || currentProject.profile.role === ProjectRoles.MANAGER) {
+    if (profile.role === ProjectRoles.OWNER || profile.role === ProjectRoles.MANAGER) {
       dispatch(removeColumn({
         projectId: currentProject._id,
         columnId

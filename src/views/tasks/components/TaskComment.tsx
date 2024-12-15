@@ -11,8 +11,8 @@ import {
 } from "@/components/ui/dropdown-menu.tsx";
 import apiService from "@/services/api.service.ts";
 import { TaskActivity, Comment } from "@/types/task.ts";
-import useCurrentProject from "@/lib/hooks/useCurrentProject";
 import { ProjectMember } from "@/types/project";
+import { useCurrentProject } from "@/lib/hooks/useCurrentProject";
 
 interface TaskCommentProps {
   comment: Comment;
@@ -20,7 +20,7 @@ interface TaskCommentProps {
 }
 
 export default function TaskComment({ comment, activity }: TaskCommentProps) {
-  const currentProject = useCurrentProject();
+  const { currentProject } = useCurrentProject();
   const deleteComment = async (commentId: string) => {
     await apiService.callApi('DELETE', `/comments/${commentId}`);
   }

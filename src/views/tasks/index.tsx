@@ -1,5 +1,4 @@
 import { Outlet, useLocation, useParams } from "react-router-dom";
-import useCurrentProject from "@/lib/hooks/useCurrentProject";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { useState } from "react";
@@ -7,11 +6,12 @@ import { cn } from "@/lib/utils";
 import { ProjectDetailNav } from "@/views/tasks/nav/ProjectDetailNav";
 import { CheckCheck, Component } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import { useCurrentProject } from "@/lib/hooks/useCurrentProject";
 
 
 export function ProjectDetail(props: any) {
   const { defaultLayout = [265, 440, 655], defaultCollapsed = false, navCollapsedSize } = props;
-  const currentProject = useCurrentProject()
+  const { currentProject } = useCurrentProject()
   const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed);
   const { pathname } = useLocation();
 

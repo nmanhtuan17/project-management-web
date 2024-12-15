@@ -69,7 +69,6 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 
   const finalizeLogin = async (response: any) => {
     const { data } = response;
-
     const authRdr = localStorage.getItem('auth_rdr');
     if (authRdr) {
       localStorage.clear();
@@ -88,6 +87,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         },
         user
       }));
+      navigate('/')
     }
   }
 

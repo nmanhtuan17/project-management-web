@@ -8,7 +8,6 @@ import { useEffect, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar.tsx";
 import { ArrowUpRight, Download, ListChecks, UserPlus } from "lucide-react";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable.tsx";
-import useCurrentProject from "@/lib/hooks/useCurrentProject";
 import { CalendarDateRangePicker } from "@/components/common/DateRangePicker";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { cn } from "@/lib/utils";
@@ -20,9 +19,10 @@ import { loadRecentTask } from "@/redux/actions/task.action";
 import { Label } from "@/components/ui/label";
 import { RecentTaskItem } from "./components/RecentTaskItem";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { useCurrentProject } from "@/lib/hooks/useCurrentProject";
+import { ProjectSpace } from "./components/ProjectSpace";
 
 export default function HomePage() {
-  const currentProject = useCurrentProject();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const dispatch = useAppDispatch();
   const { members } = useAppSelector(state => state.project)
@@ -30,11 +30,15 @@ export default function HomePage() {
   const { recentTasks } = useAppSelector(state => state.task)
   const { width } = useWindowSize();
   const isMobileScreen = width < 768;
+  const { currentProject, profile, setCurrentProject, setProfile } = useCurrentProject();
+
+  console.log('currentProject-----', currentProject)
+  console.log(profile)
 
   useEffect(() => {
     if (currentProject._id) {
       dispatch(loadProjectMembers(currentProject._id)).then(() => {
-        dispatch(loadRecentTask({ projectId: currentProject._id, assignee: currentProject.profile._id }))
+        dispatch(loadRecentTask({ projectId: currentProject._id, assignee: profile._id }))
       })
     }
   }, [currentProject._id]);
@@ -58,11 +62,11 @@ export default function HomePage() {
                 <Card className="w-[320px]">
                   <CardContent className="flex flex-col items-center justify-center p-4 pb-0 mt-4">
                     <Avatar className="w-16 h-16">
-                      <AvatarImage src={user.avatar} alt="@shadcn" />
+                      <AvatarImage src={user?.avatar} alt="@shadcn" />
                       <AvatarFallback>CN</AvatarFallback>
                     </Avatar>
-                    <p className="font-semibold text-lg mt-3">{user.fullName}</p>
-                    <p className="text-muted-foreground text-sm">{user.email}</p>
+                    <p className="font-semibold text-lg mt-3">{user?.fullName}</p>
+                    <p className="text-muted-foreground text-sm">{user?.email}</p>
                     <Separator className="mt-2" />
                     <Button variant="link" className="w-full">
                       View profile
@@ -123,45 +127,7 @@ export default function HomePage() {
                     </CardContent>
                   </Card>
                 </div>
-                {currentProject._id && <Card className="flex-1">
-                  <CardHeader className='pb-3 flex flex-row gap-4 items-center mt-0 justify-between'>
-                    <div className="flex flex-row gap-4 items-center">
-                      <Avatar className="w-12 h-12 !rounded-lg">
-                        <AvatarImage src={currentProject.avatar || `https://avatar.vercel.sh/${currentProject.name}.png`} alt="@shadcn" />
-                        <AvatarFallback className="rounded-lg">{currentProject?.name.charAt(0).toUpperCase()}</AvatarFallback>
-                      </Avatar>
-                      <div className="!mt-0">
-                        <p className="text-lg font-bold ">
-                          {currentProject.name}
-                        </p>
-                        <p className="text-sm text-muted-foreground">
-                          {members.length} members
-                        </p>
-                      </div>
-                    </div>
-                    <div className="space-x-4">
-                      <Button>
-                      <ListChecks size={18} className="mr-2" />
-                        All Tasks
-                      </Button>
-                      <Button>
-                        <UserPlus size={18} className="mr-2" />
-                        Invite member
-                      </Button>
-                    </div>
-                  </CardHeader>
-                  <Separator className="my-4" />
-                  <CardContent>
-                    <div>
-                      <Label>Recent Task</Label>
-                      <div className="gap-4 mt-2 grid grid-cols-4">
-                        {
-                          recentTasks.map(task => <RecentTaskItem key={task._id} task={task} />)
-                        }
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>}
+                <ProjectSpace />
               </div>
             </div>
           </div>
@@ -202,7 +168,7 @@ export default function HomePage() {
                   </div>
                 </div>
                 :
-                <div className={'px-4 py-2 flex flex-row items-center justify-center hover:bg-muted cursor-pointer'}>
+                <div key={mem._id} className={'px-4 py-2 flex flex-row items-center justify-center hover:bg-muted cursor-pointer'}>
                   <TooltipProvider>
                     <Tooltip delayDuration={0}>
                       <TooltipTrigger asChild>

@@ -3,10 +3,10 @@ import { Button } from "@/components/ui/button.tsx";
 import { BanknoteIcon, CheckCheckIcon, LayoutGrid, MailIcon, SettingsIcon, StarIcon, UserIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAppSelector } from "@/redux/store.ts";
-import useCurrentProject from "@/lib/hooks/useCurrentProject";
+import { useCurrentProject } from "@/lib/hooks/useCurrentProject";
 
 export const SubNav = () => {
-  const currentProject = useCurrentProject();
+  const { currentProject } = useCurrentProject();
 
   return <Popover>
     <PopoverTrigger asChild>

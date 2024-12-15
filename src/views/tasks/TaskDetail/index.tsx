@@ -29,7 +29,6 @@ import useApi from "@/lib/hooks/useApi.ts";
 import { CaretDownIcon, PlusIcon } from "@radix-ui/react-icons";
 import { QuestionMarkCircleIcon } from "@heroicons/react/16/solid";
 import { useDialogContext } from "@/components/providers/DialogProvider";
-import useCurrentProject from "@/lib/hooks/useCurrentProject";
 import { TaskTypeSelect } from "../components/TaskTypeSelect";
 import { TaskStatusSelect } from "../components/TaskStatusSelect";
 import { TaskPrioritySelect } from "../components/TaskPrioritySelect";
@@ -49,6 +48,7 @@ import { useTaskStatus } from "@/lib/hooks/useTaskStatus";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { TaskDetailTitle } from "../components/TaskDetailTitle";
 import { TaskDetailDescription } from "../components/TaskDetailDescription";
+import { useCurrentProject } from "@/lib/hooks/useCurrentProject";
 
 interface TaskDetailContextType {
   taskId: string;
@@ -108,7 +108,7 @@ type TaskFormValues = z.infer<typeof taskFormSchema>
 export default function TaskDetail(props: TaskDetailProps) {
   const { taskId } = props;
   const dispatch = useAppDispatch();
-  const project = useCurrentProject();
+  const { currentProject: project } = useCurrentProject();
   const { task, setTask } = useTask(taskId);
   const [getActivities, { data: activities, error, loading }] = useApi<TaskActivity[]>(apiService.getTaskActivities);
   // const [getSubTasks, { data: subTasks }] = useApi<Task[]>(apiService.getSubTasks);
@@ -146,11 +146,13 @@ export default function TaskDetail(props: TaskDetailProps) {
   })
 
   const onSubmit = (data: TaskFormValues) => {
-    dispatch(updateTask({task: {
-      ...task,
-      ...data,
-      priority: +data.priority
-    } as unknown as Task, projectId: project._id})).then(res => {
+    dispatch(updateTask({
+      task: {
+        ...task,
+        ...data,
+        priority: +data.priority
+      } as unknown as Task, projectId: project._id
+    })).then(res => {
     })
   }
 

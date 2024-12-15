@@ -16,14 +16,12 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { useAppDispatch, useAppSelector } from "@/redux/store.ts";
 import { setAuth } from "@/redux/slices/auth.slice.ts";
-import { useNavigate } from "react-router-dom";
-// import {useDialogs} from "@/components/providers/alert-dialog-provider.tsx";
-import { useState } from "react";
-import useCurrentSpace from "@/lib/hooks/useCurrentProject";
+import { useCurrentProject } from "@/lib/hooks/useCurrentProject";
 
 export const UserNav = () => {
   const { user } = useAppSelector(state => state.auth)
   const dispatch = useAppDispatch()
+  const { reset } = useCurrentProject()
 
   return (
     <DropdownMenu>
@@ -53,6 +51,7 @@ export const UserNav = () => {
             tokens: {},
             user: undefined,
           }))
+          reset()
         }}>
           Log out
         </DropdownMenuItem>

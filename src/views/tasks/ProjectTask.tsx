@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button.tsx";
 import { PlusIcon } from "@radix-ui/react-icons";
 import { useAppDispatch, useAppSelector } from "@/redux/store.ts";
 import { useEffect } from "react";
-import useCurrentProject from "@/lib/hooks/useCurrentProject";
 import { useDialogContext } from "@/components/providers/DialogProvider";
 import TasksBoard from "@/views/tasks/TaskBoard";
 import TasksListHeader from "@/views/tasks/components/TasksListHeader";
@@ -11,10 +10,11 @@ import { ProjectDetailNav } from "@/views/tasks/nav/ProjectDetailNav";
 import { CheckCheck, Component, Gauge, ListChecks, SquareKanban } from "lucide-react";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
 import { loadTasks } from "@/redux/actions/task.action";
+import { useCurrentProject } from "@/lib/hooks/useCurrentProject";
 
 export default function ProjectTasks() {
   const { openDialog } = useDialogContext();
-  const currentProject = useCurrentProject();
+  const { currentProject } = useCurrentProject();
   const dispatch = useAppDispatch();
   const { pathname } = useLocation();
 

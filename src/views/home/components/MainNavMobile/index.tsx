@@ -4,10 +4,10 @@ import { useAppSelector } from "@/redux/store.ts";
 import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button.tsx";
 import { HTMLAttributes, useState } from "react";
-import useCurrentProject from "@/lib/hooks/useCurrentProject";
+import { useCurrentProject } from "@/lib/hooks/useCurrentProject";
 
 export const MainNavMobile = ({ className, ...props }: HTMLAttributes<HTMLElement>) => {
-  const currentProject = useCurrentProject();
+  const { currentProject } = useCurrentProject();
   const { pathname } = useLocation();
   const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
 

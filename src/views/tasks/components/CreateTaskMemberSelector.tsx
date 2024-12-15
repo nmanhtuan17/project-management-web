@@ -1,10 +1,10 @@
 import { MultiSelect, MultiSelectAssignees } from "@/components/ui/multi-select.tsx";
 import { useEffect, useState } from "react";
 import apiService from "@/services/api.service.ts";
-import useCurrentProject from "@/lib/hooks/useCurrentProject";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar.tsx";
 import { ProjectMember } from "@/types/project";
 import { useAppSelector } from "@/redux/store";
+import { useCurrentProject } from "@/lib/hooks/useCurrentProject";
 
 interface MemberSelectorProps {
   members: string[];
@@ -13,8 +13,8 @@ interface MemberSelectorProps {
 }
 
 export default function CreateTaskMemberSelector(props: MemberSelectorProps) {
-  const currentProject = useCurrentProject();
-  const {members} = useAppSelector(state => state.project)
+  const { currentProject } = useCurrentProject();
+  const { members } = useAppSelector(state => state.project)
 
 
   return <MultiSelectAssignees

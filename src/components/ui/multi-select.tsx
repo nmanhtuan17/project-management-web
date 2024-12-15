@@ -21,8 +21,8 @@ import { CommandList } from "cmdk";
 import { ReactNode } from "react";
 import { useAppSelector } from "@/redux/store";
 import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
-import useCurrentProject from "@/lib/hooks/useCurrentProject";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./tooltip";
+import { useCurrentProject } from "@/lib/hooks/useCurrentProject";
 
 export type OptionType = {
   label: string | ReactNode;
@@ -154,7 +154,7 @@ export function MultiSelectAssignees({
 }: MultiSelectAssigneesProps) {
   const [open, setOpen] = React.useState(false);
   const { members } = useAppSelector(state => state.project)
-  const currentProject = useCurrentProject()
+  const { currentProject, profile } = useCurrentProject()
 
   return (
     <Popover open={open} onOpenChange={setOpen} {...props}>
@@ -195,7 +195,7 @@ export function MultiSelectAssignees({
         variant="link"
         onClick={(e) => {
           e.preventDefault()
-          onChange([currentProject.profile._id])
+          onChange([profile._id])
         }}
         className="text-muted-foreground"
       >Assign to me</Button>

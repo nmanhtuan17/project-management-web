@@ -12,15 +12,15 @@ import { Button } from "@/components/ui/button.tsx";
 // import {setSpaces} from "@/redux/slices/space.slice.ts";
 // import SpaceApps from "@/views/space/components/apps.tsx";
 import { LoadingSpinner } from "@/components/ui/loading-spinner.tsx";
-import useCurrentProject from "@/lib/hooks/useCurrentProject";
 import { loadProjects } from "@/redux/actions/project.action";
 import { MainNav, ProjectSwitcher, UserNav, MainNavMobile, SubNav } from "@/views/home/components";
+import { useCurrentProject } from "@/lib/hooks/useCurrentProject";
 
 export default function MainLayout() {
   const dispatch = useAppDispatch();
   const { loggedIn } = useAppSelector(state => state.auth);
   const { projects, loaded } = useAppSelector(state => state.project);
-  const currentProject = useCurrentProject();
+  const { currentProject } = useCurrentProject();
   const [showCreateSpaceModal, setShowCreateSpaceModal] = useState(false);
   const navigate = useNavigate();
   const params = useParams();

@@ -28,9 +28,9 @@ import {
 } from "@/components/ui/popover"
 import { useAppDispatch, useAppSelector } from "@/redux/store.ts";
 import { useNavigate } from "react-router-dom";
-import useCurrentProject from "@/lib/hooks/useCurrentProject"
 import { useDialogContext } from "@/components/providers/DialogProvider"
 import { loadKanbanBoard } from "@/redux/actions/project.action"
+import { useCurrentProject } from "@/lib/hooks/useCurrentProject"
 
 type PopoverTriggerProps = React.ComponentPropsWithoutRef<typeof PopoverTrigger>
 
@@ -39,11 +39,12 @@ interface ProjectSwitcherProps extends PopoverTriggerProps {
 
 export const ProjectSwitcher = ({ className }: ProjectSwitcherProps) => {
   const [open, setOpen] = React.useState(false);
-  const { projects } = useAppSelector(state => state.project);
-  const currentProject = useCurrentProject();
+  const { projects, members } = useAppSelector(state => state.project);
+  const { user } = useAppSelector(state => state.auth);
   const navigate = useNavigate();
   const { setDialogOpen } = useDialogContext()
   const dispatch = useAppDispatch();
+  const { currentProject, profile, setCurrentProject, setProfile } = useCurrentProject();
 
   const groups = [{
     label: 'Personal Projects',
@@ -95,6 +96,8 @@ export const ProjectSwitcher = ({ className }: ProjectSwitcherProps) => {
                     setOpen(false)
                     dispatch(loadKanbanBoard(project._id))
                     navigate('/projects/' + project.slug);
+                    setCurrentProject(project)
+                    setProfile(members.length && members.find(member => member.user._id === user._id))
                   }}
                   className="text-sm"
                 >

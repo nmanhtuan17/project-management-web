@@ -7,7 +7,6 @@ import { Input } from "@/components/ui/input.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { toast } from "sonner";
-import useCurrentProject from "@/lib/hooks/useCurrentProject";
 import { useDialogContext } from "@/components/providers/DialogProvider";
 import { ProjectTypes } from "@/types/project";
 import { createProject as createProjectAction } from "@/redux/actions/project.action";

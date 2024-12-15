@@ -1,4 +1,5 @@
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
+import { useCurrentProject } from "@/lib/hooks/useCurrentProject";
 import { setAuth } from "@/redux/slices/auth.slice";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import apiService from "@/services/api.service";
@@ -10,6 +11,7 @@ export const AuthProvider = () => {
   const { tokens, loggedIn } = useAppSelector(state => state.auth);
   const [authLoaded, setAuthLoaded] = useState(false);
   const navigate = useNavigate();
+  const {currentProject} = useCurrentProject();
   useEffect(() => {
     if (loggedIn && tokens.access_token) {
       apiService.setCredentials({
@@ -23,7 +25,6 @@ export const AuthProvider = () => {
           }))
           setAuthLoaded(true);
         });
-      navigate('/')
     } else {
       setAuthLoaded(true);
       dispatch(setAuth({

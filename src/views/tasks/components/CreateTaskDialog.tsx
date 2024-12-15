@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { ResizablePanelGroup } from "@/components/ui/resizable";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
-import useCurrentProject from "@/lib/hooks/useCurrentProject";
+import { useCurrentProject } from "@/lib/hooks/useCurrentProject";
 import { useTaskStatus } from "@/lib/hooks/useTaskStatus";
 import { loadTasks } from "@/redux/actions/task.action";
 import { useAppDispatch } from "@/redux/store";
@@ -68,7 +68,7 @@ type CreateTaskFormValues = z.infer<typeof createTaskFormSchema>
 
 export const CreateTaskDialog = () => {
   const { createTaskDialog, setDialogOpen } = useDialogContext();
-  const currentProject = useCurrentProject()
+  const { currentProject } = useCurrentProject()
   const dispatch = useAppDispatch();
   const [createTaskType, setCreateType] = useState<string>("normal");
   const { statuses } = useTaskStatus();
@@ -76,7 +76,7 @@ export const CreateTaskDialog = () => {
 
   const defaultValues: Partial<CreateTaskFormValues> = {
     type: TaskTypes.GENERAL,
-    status: statuses[0].value,
+    status: 'pending',
     priority: TaskPriority.MEDIUM.toString(),
     time: {
       from: new Date,

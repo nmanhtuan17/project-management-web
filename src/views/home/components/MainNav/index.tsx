@@ -1,14 +1,14 @@
 import { cn } from "@/lib/utils"
 import { Link, useLocation, useParams } from "react-router-dom";
 import { useAppSelector } from "@/redux/store.ts";
-import useCurrentProject from "@/lib/hooks/useCurrentProject";
+import { useCurrentProject } from "@/lib/hooks/useCurrentProject";
 
 export const MainNav = ({
   className,
   ...props
 }: React.HTMLAttributes<HTMLElement>) => {
   const params = useParams();
-  const currentProject = useCurrentProject();
+  const { currentProject } = useCurrentProject();
   const { pathname } = useLocation();
 
   const links = [{

@@ -1,9 +1,9 @@
-import {Avatar, AvatarFallback} from "@/components/ui/avatar.tsx";
-import {AvatarImage} from "@radix-ui/react-avatar";
-import {getGravatar} from "@/lib/utils.ts";
-import {Button} from "@/components/ui/button.tsx";
-import {Textarea} from "@/components/ui/textarea.tsx";
-import {useParams} from "react-router-dom";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar.tsx";
+import { AvatarImage } from "@radix-ui/react-avatar";
+import { getGravatar } from "@/lib/utils.ts";
+import { Button } from "@/components/ui/button.tsx";
+import { Textarea } from "@/components/ui/textarea.tsx";
+import { useParams } from "react-router-dom";
 import {
   Timeline,
   TimelineContent,
@@ -12,21 +12,21 @@ import {
   TimelineItem,
   TimelineLine
 } from "@/components/ui/timeline.tsx";
-import dayjs from "dayjs";  
-import {Task, TaskActivity, TaskActivityType} from "@/types/task.ts";
-import {SyntheticEvent} from "react";
+import dayjs from "dayjs";
+import { Task, TaskActivity, TaskActivityType } from "@/types/task.ts";
+import { SyntheticEvent } from "react";
 import apiService from "@/services/api.service.ts";
-import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs.tsx";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs.tsx";
 import { ProjectMember } from "@/types/project";
 import TaskComment from "./TaskComment";
-import useCurrentProject from "@/lib/hooks/useCurrentProject";
 import { useTaskDetailContext } from "../TaskDetail";
+import { useCurrentProject } from "@/lib/hooks/useCurrentProject";
 
 interface TaskCommentsProps {
   task: Task;
 }
 
-function ActivityItem({activity}: {activity: TaskActivity}) {
+function ActivityItem({ activity }: { activity: TaskActivity }) {
   const member = activity.member as ProjectMember;
   return <TimelineItem status="done">
     {activity.type === TaskActivityType.Update && (
@@ -40,16 +40,16 @@ function ActivityItem({activity}: {activity: TaskActivity}) {
     )}
     <TimelineDot asChild>
       <Avatar className="h-5 w-5">
-        <AvatarImage src={member?.user.avatar || getGravatar(member?.user.email)} alt="Avatar"/>
+        <AvatarImage src={member?.user.avatar || getGravatar(member?.user.email)} alt="Avatar" />
         <AvatarFallback>
           SR
         </AvatarFallback>
       </Avatar>
     </TimelineDot>
-    <TimelineLine/>
+    <TimelineLine />
     <TimelineContent className={'mr-0 pt-0 text-sm w-full flex flex-col -mt-4'}>
       {activity.type === TaskActivityType.Comment && (
-        <TaskComment comment={activity.meta} activity={activity}/>
+        <TaskComment comment={activity.meta} activity={activity} />
       )}
       {activity.type === TaskActivityType.Update && dayjs(activity.createdAt).format('MMMM D, YYYY h:mm A')}
     </TimelineContent>
@@ -57,9 +57,9 @@ function ActivityItem({activity}: {activity: TaskActivity}) {
 }
 
 export default function TaskActivities(props: TaskCommentsProps) {
-  const currentProject = useCurrentProject();
-  const {taskId} = useParams();
-  const {activities, loadActivities} = useTaskDetailContext();
+  const { currentProject, profile } = useCurrentProject();
+  const { taskId } = useParams();
+  const { activities, loadActivities } = useTaskDetailContext();
 
   const postComment = async (event: SyntheticEvent) => {
     event.preventDefault();
@@ -79,14 +79,14 @@ export default function TaskActivities(props: TaskCommentsProps) {
       <TabsContent value="comments">
         <Timeline positions="left">
           {activities?.filter(a => a.type === TaskActivityType.Comment).map(a => (
-            <ActivityItem activity={a} key={a._id}/>
+            <ActivityItem activity={a} key={a._id} />
           ))}
         </Timeline>
         <form className={'flex flex-row'} onSubmit={postComment}>
           <Avatar className="h-8 w-8 mr-2">
-            <AvatarImage src={currentProject?.profile.user.avatar} alt="Avatar"/>
+            <AvatarImage src={profile.user.avatar} alt="Avatar" />
             <AvatarFallback>
-              {currentProject?.profile.user.fullName.charAt(0)}
+              {profile.user.fullName.charAt(0)}
             </AvatarFallback>
           </Avatar>
           <div className={'flex-1 space-y-2 flex flex-col items-end'}>
@@ -103,7 +103,7 @@ export default function TaskActivities(props: TaskCommentsProps) {
       <TabsContent value="activities">
         <Timeline positions="left">
           {activities?.filter(a => a.type !== TaskActivityType.Comment).map(a => (
-            <ActivityItem activity={a} key={a._id}/>
+            <ActivityItem activity={a} key={a._id} />
           ))}
         </Timeline>
       </TabsContent>

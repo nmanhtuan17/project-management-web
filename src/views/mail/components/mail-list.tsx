@@ -1,22 +1,22 @@
-import {useEffect} from "react";
-import {cn} from "@/lib/utils.ts";
+import { useEffect } from "react";
+import { cn } from "@/lib/utils.ts";
 import dayjs from "dayjs";
-import {Email} from "@/types/mail.ts";
-import {useLocation, useNavigate, useParams} from "react-router-dom";
-import {LoadingSpinner} from "@/components/ui/loading-spinner.tsx";
-import useCurrentSpace from "@/lib/hooks/useCurrentProject";
+import { Email } from "@/types/mail.ts";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { LoadingSpinner } from "@/components/ui/loading-spinner.tsx";
 import { useMailContext } from "@/views/mail";
+import { useCurrentProject } from "@/lib/hooks/useCurrentProject";
 
 interface MailListProps {
   items: Email[];
 }
 
-export function MailList({items}: MailListProps) {
-  const space = useCurrentSpace();
+export function MailList({ items }: MailListProps) {
+  const { currentProject } = useCurrentProject();
   const navigate = useNavigate();
   const params = useParams();
-  const {loading} = useMailContext();
-  const {pathname} = useLocation();
+  const { loading } = useMailContext();
+  const { pathname } = useLocation();
   const currentEmailLabel = pathname.split("/")[4];
 
 
@@ -24,7 +24,7 @@ export function MailList({items}: MailListProps) {
     <div className="flex flex-1 flex-col gap-2 p-4 pt-0">
       {loading ? (
         <div className="flex justify-center items-center h-full w-full">
-          <LoadingSpinner size={16}/>
+          <LoadingSpinner size={16} />
         </div>
       ) : (
         <>
@@ -36,13 +36,13 @@ export function MailList({items}: MailListProps) {
                   "flex flex-col items-start gap-2 rounded-lg border p-3 text-left text-sm transition-all hover:bg-accent",
                   params.mailId === item._id && "bg-muted"
                 )}
-                onClick={() => navigate(`/spaces/${space.slug}/mails/${currentEmailLabel}/${item._id}`)}
+                onClick={() => navigate(`/spaces/${currentProject.slug}/mails/${currentEmailLabel}/${item._id}`)}
               >
                 <div className="flex w-full flex-col gap-1">
                   <div className="flex items-center gap-1">
                     <div className="flex items-center gap-2">
                       <div className="font-semibold">{item.from}</div>
-                      {!item.seen && <span className="flex h-[6px] w-[6px] rounded-full bg-blue-600"/>}
+                      {!item.seen && <span className="flex h-[6px] w-[6px] rounded-full bg-blue-600" />}
                     </div>
                     <div
                       className={cn("ml-auto text-xs", params.mailId === item._id ? "text-foreground" : "text-muted-foreground")}>
