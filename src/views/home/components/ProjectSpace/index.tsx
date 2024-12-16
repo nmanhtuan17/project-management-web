@@ -5,14 +5,16 @@ import { Label } from "@/components/ui/label";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { Separator } from "@/components/ui/separator";
 import { useCurrentProject } from "@/lib/hooks/useCurrentProject"
-import { ListChecks, UserPlus } from "lucide-react";
+import { ListChecks, UserPlus, Users } from "lucide-react";
 import { RecentTaskItem } from "../RecentTaskItem";
 import { useAppSelector } from "@/redux/store";
+import { useNavigate } from "react-router-dom";
 
 export const ProjectSpace = () => {
   const { currentProject } = useCurrentProject();
   const { recentTasks } = useAppSelector(state => state.task)
   const { members } = useAppSelector(state => state.project)
+  const navigate = useNavigate()
 
   if (!currentProject._id) return (
     <p className="text-lg font-semibold text-muted-foreground">Select project to continue...</p>
@@ -35,13 +37,15 @@ export const ProjectSpace = () => {
           </div>
         </div>
         <div className="space-x-4">
-          <Button>
+          <Button onClick={() => {
+            navigate(`/projects/${currentProject.slug}/details/overview`)
+          }}>
             <ListChecks size={18} className="mr-2" />
-            All Tasks
+            Tasks
           </Button>
           <Button>
-            <UserPlus size={18} className="mr-2" />
-            Invite member
+            <Users size={18} className="mr-2" />
+            Member
           </Button>
         </div>
       </CardHeader>

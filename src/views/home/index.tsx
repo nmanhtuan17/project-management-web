@@ -6,7 +6,7 @@ import {
 } from "@/components/ui/tooltip";
 import { useEffect, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar.tsx";
-import { ArrowUpRight, Download, ListChecks, UserPlus } from "lucide-react";
+import { ArrowUpRight, CalendarClock, Download, Layers, ListChecks, PictureInPicture2, UserPlus } from "lucide-react";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable.tsx";
 import { CalendarDateRangePicker } from "@/components/common/DateRangePicker";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
@@ -88,8 +88,9 @@ export default function HomePage() {
               <div className="flex flex-col flex-1 space-y-4">
                 <div className="grid grid-cols-3 gap-4">
                   <Card className="">
-                    <CardHeader className='pb-3'>
+                    <CardHeader className='flex flex-row items-center justify-between pb-3'>
                       <CardTitle className="text-lg">Unresolve Tasks</CardTitle>
+                      <Layers />
                     </CardHeader>
                     <CardContent>
                       <p className="text-3xl font-bold">
@@ -101,12 +102,13 @@ export default function HomePage() {
                     </CardContent>
                   </Card>
                   <Card className="">
-                    <CardHeader className='pb-3'>
-                      <CardTitle className="text-lg">Unresolve Tasks</CardTitle>
+                    <CardHeader className='flex flex-row items-center justify-between pb-3'>
+                      <CardTitle className="text-lg">Overdue Tasks</CardTitle>
+                      <CalendarClock />
                     </CardHeader>
                     <CardContent>
                       <p className="text-3xl font-bold">
-                        16
+                        2
                       </p>
                       <p className="text-sm text-muted-foreground">
                         Statistics
@@ -114,8 +116,9 @@ export default function HomePage() {
                     </CardContent>
                   </Card>
                   <Card className="">
-                    <CardHeader className='pb-3'>
-                      <CardTitle className="text-lg">Unresolve Tasks</CardTitle>
+                    <CardHeader className='flex flex-row items-center justify-between pb-3'>
+                      <CardTitle className="text-lg">Ongoing Tasks</CardTitle>
+                      <PictureInPicture2 />
                     </CardHeader>
                     <CardContent>
                       <p className="text-3xl font-bold">
