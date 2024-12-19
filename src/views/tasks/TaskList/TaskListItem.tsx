@@ -41,30 +41,32 @@ export const TaskListItem = ({ task }: TaskListItemProp) => {
           {status.label}
         </p>
       </TableCell>
-      <TableCell className="text-xs font-semibold">
-        {task.assignees.length ? task?.assignees?.slice(0, 2)?.map(item => (
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Avatar key={item?._id} className="h-6 w-6">
-                  <AvatarImage
-                    src={item?.user.avatar || ""}
-                    alt={""}
-                  />
-                  <AvatarFallback className="text-xs">{item?.user.fullName?.charAt(0).toUpperCase()}</AvatarFallback>
-                </Avatar>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>{item?.user.fullName}</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        ))
-          :
-          <p className="text-muted-foreground">
-            unassigned
-          </p>
-        }
+      <TableCell className="text-xs font-semibold ">
+        <div className="flex items-center -space-x-2">
+          {task.assignees.length ? task?.assignees?.slice(0, 2)?.map(item => (
+            <TooltipProvider key={item?._id} >
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Avatar className="h-6 w-6">
+                    <AvatarImage
+                      src={item?.user.avatar || ""}
+                      alt={""}
+                    />
+                    <AvatarFallback className="text-xs">{item?.user.fullName?.charAt(0).toUpperCase()}</AvatarFallback>
+                  </Avatar>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{item?.user.fullName}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          ))
+            :
+            <p className="text-muted-foreground">
+              unassigned
+            </p>
+          }
+        </div>
       </TableCell>
       <TableCell className="text-xs font-semibold">{dayjs(task?.time?.to).format('DD/MM/YYYY')}</TableCell>
       <TableCell className="text-xs font-semibold">

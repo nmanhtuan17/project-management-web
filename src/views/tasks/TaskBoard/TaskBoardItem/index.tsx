@@ -27,8 +27,8 @@ export function TaskBoardItem(props: TaskBoardItemProps) {
         setDialogOpen('taskDetail', true, { element: <TaskDetail taskId={task._id} /> })
       }}
       className="shadow-none rounded-lg px-4 py-2 w-[264px]">
-      <p className="text-[14px] line-clamp-2 font-semibold">
-        <type.icon className="w-4 h-4 inline-block font-light mb-[1px]" />
+      <p className="text-[14px] font-semibold text-ellipsis whitespace-nowrap overflow-hidden">
+        <type.icon className="w-4 h-4 inline-block font-light mb-[1px] " />
         {""} {task?.title}
       </p>
       <div className="flex items-center justify-between mt-3">
