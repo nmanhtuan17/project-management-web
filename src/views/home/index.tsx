@@ -27,13 +27,10 @@ export default function HomePage() {
   const dispatch = useAppDispatch();
   const { members } = useAppSelector(state => state.project)
   const { user } = useAppSelector(state => state.auth)
-  const { recentTasks } = useAppSelector(state => state.task)
   const { width } = useWindowSize();
   const isMobileScreen = width < 768;
   const { currentProject, profile, setCurrentProject, setProfile } = useCurrentProject();
 
-  console.log('currentProject-----', currentProject)
-  console.log(profile)
 
   useEffect(() => {
     if (currentProject._id) {
