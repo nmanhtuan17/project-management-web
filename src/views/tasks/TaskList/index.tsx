@@ -8,7 +8,7 @@ export const TaskList = () => {
 
 
   return (
-    <div className="flex flex-1 mt-4">
+    <div className="flex flex-1 mt-4 overflow-y-auto min-h-0">
       <Table>
         <TableHeader>
           <TableRow>

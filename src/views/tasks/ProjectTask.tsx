@@ -25,10 +25,9 @@ export default function ProjectTasks() {
   }, [currentProject._id]);
 
   return (
-
     <ResizablePanelGroup
       direction="horizontal"
-      className="h-full items-stretch"
+      className=" items-stretch"
       onLayout={(sizes: number[]) => {
 
       }}
@@ -69,7 +68,7 @@ export default function ProjectTasks() {
       </ResizablePanel>
       <ResizableHandle />
       <ResizablePanel defaultSize={440} minSize={30}>
-        <div className="p-4 flex flex-col min-h-0 h-screen w-full">
+        <div className="p-4 flex flex-col h-full w-full">
           <div>
             <div className="mb-6">
               <h3 className="text-lg font-medium">Tasks</h3>
