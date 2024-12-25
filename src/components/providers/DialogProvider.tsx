@@ -1,9 +1,10 @@
 import { createContext, ReactNode, useContext, useState } from "react";
 import { Outlet } from "react-router-dom";
 import { AlertDialogProvider } from "./AlertDialogProvider";
-import { CreateProjectDialog } from "@/views/home/components/CreateProjectDialog";
-import { CreateTaskDialog } from "@/views/tasks/components/CreateTaskDialog";
+import { CreateProjectDialog } from "@/views/home/dialogs/CreateProjectDialog";
+import { CreateTaskDialog } from "@/views/tasks/dialogs/CreateTaskDialog";
 import { TaskDetailDialog } from "@/views/tasks/components/TaskDetailDialog";
+import { InviteMemberDialog } from "@/views/member/dialogs/InviteMemberDialog";
 // import { TaskDetail } from "@/views/tasks/TaskDetail";
 
 interface DialogContextType {
@@ -17,6 +18,9 @@ interface DialogContextType {
   taskDetail: {
     open: boolean,
     element?: ReactNode
+  },
+  inviteMember: {
+    open: boolean
   }
   createTaskDetailElemennt?: (element: ReactNode) => void,
   openDialog?: (dialog: Omit<keyof DialogContextType, 'openDialog'>, data?: any) => void,
@@ -32,6 +36,9 @@ const DialogContext = createContext<DialogContextType>({
     open: false
   },
   taskDetail: {
+    open: false
+  },
+  inviteMember: {
     open: false
   }
 });
@@ -50,6 +57,9 @@ export default function DialogProvider(props: DialogProviderProps) {
       open: false
     },
     taskDetail: {
+      open: false
+    },
+    inviteMember: {
       open: false
     }
   });
@@ -82,6 +92,7 @@ export default function DialogProvider(props: DialogProviderProps) {
       <TaskDetailDialog >
         {dialogs.taskDetail.element}
       </TaskDetailDialog>
+      <InviteMemberDialog />
     </DialogContext.Provider>
   </AlertDialogProvider>
 }

@@ -18,6 +18,9 @@ import { ProjectDetail } from '@/views/tasks'
 import ProjectTasks from '@/views/tasks/ProjectTask'
 import TasksBoard from '@/views/tasks/TaskBoard'
 import { TaskList } from '@/views/tasks/TaskList'
+import { MemberPage } from '@/views/member'
+import SettingsProfilePage from '@/views/setting/profile'
+import SettingsLayout from '@/views/setting/layout'
 
 function App() {
 
@@ -39,7 +42,11 @@ function App() {
                         <Route path='list/' element={<TaskList />} />
                         <Route path='kanban/' element={<TasksBoard />} />
                       </Route>
+                      <Route path='members/' element={<MemberPage />} />
                     </Route>
+                  </Route>
+                  <Route path='setting/' element={<SettingsLayout />}>
+                    <Route path='profile' element={<SettingsProfilePage />} />
                   </Route>
                 </Route>
                 <Route path={'mails/'} >

@@ -43,7 +43,9 @@ export const ProjectSpace = () => {
             <ListChecks size={18} className="mr-2" />
             Tasks
           </Button>
-          <Button>
+          <Button onClick={() => {
+            navigate(`/projects/${currentProject.slug}/details/members`)
+          }}>
             <Users size={18} className="mr-2" />
             Member
           </Button>
