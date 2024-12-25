@@ -55,7 +55,7 @@ export function CreateProjectDialog() {
       .catch((res) => {
         toast.error(res.message)
       })
-      
+
   }
 
 

@@ -1,7 +1,7 @@
 import { createContext, ReactNode, useContext, useState } from "react";
 import { Outlet } from "react-router-dom";
 import { AlertDialogProvider } from "./AlertDialogProvider";
-import { CreateProjectDialog } from "@/views/home/dialogs/CreateProjectDialog";
+import { CreateProjectDialog } from "@/components/dialogs/CreateProjectDialog";
 import { CreateTaskDialog } from "@/views/tasks/dialogs/CreateTaskDialog";
 import { TaskDetailDialog } from "@/views/tasks/components/TaskDetailDialog";
 import { InviteMemberDialog } from "@/views/member/dialogs/InviteMemberDialog";

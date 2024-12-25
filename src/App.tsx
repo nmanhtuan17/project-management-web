@@ -14,8 +14,8 @@ import MainLayout from './components/layouts/MainLayout'
 import { Toaster } from 'sonner'
 import { AuthProvider } from '@/components/providers/AuthProvider'
 import MailPage from '@/views/mail'
-import { ProjectDetail } from '@/views/tasks'
-import ProjectTasks from '@/views/tasks/ProjectTask'
+import { ProjectLayout } from '@/views/project'
+import TaskLayout from '@/views/tasks'
 import TasksBoard from '@/views/tasks/TaskBoard'
 import { TaskList } from '@/views/tasks/TaskList'
 import { MemberPage } from '@/views/member'
@@ -35,9 +35,9 @@ function App() {
                 <Route path='projects/'>
                   <Route path=':projectSlug/'>
                     <Route path='' index element={<HomePage />} />
-                    <Route path='details/' element={<ProjectDetail />}>
+                    <Route path='details/' element={<ProjectLayout />}>
                       <Route index path='overview/' element={<div />} />
-                      <Route path='tasks/' element={<ProjectTasks />} >
+                      <Route path='tasks/' element={<TaskLayout />} >
                         <Route index path='performance/' element={<TasksBoard />} />
                         <Route path='list/' element={<TaskList />} />
                         <Route path='kanban/' element={<TasksBoard />} />
