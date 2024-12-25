@@ -1,0 +1,165 @@
+"use client"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useFieldArray, useForm } from "react-hook-form"
+import { z } from "zod"
+
+import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { Textarea } from "@/components/ui/textarea"
+import { toast } from "sonner"
+import { Link } from "react-router-dom"
+import { useAppSelector } from "@/redux/store"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+
+const profileFormSchema = z.object({
+  fullName: z
+    .string()
+    .min(2, {
+      message: "Username must be at least 2 characters.",
+    })
+    .max(30, {
+      message: "Username must not be longer than 30 characters.",
+    }),
+  email: z
+    .string({
+      required_error: "Please select an email to display.",
+    })
+    .email(),
+  internalEmail: z
+    .string({
+      required_error: "Please select an internal email to display.",
+    })
+    .email(),
+  bio: z.string().max(160).min(4),
+})
+
+type ProfileFormValues = z.infer<typeof profileFormSchema>
+
+
+export function ProfileForm() {
+  const { user } = useAppSelector(state => state.auth)
+
+  const defaultValues: Partial<ProfileFormValues> = {
+    fullName: user.fullName,
+    email: user.email ?? '',
+    internalEmail: user.internalEmail ?? 'Please active your internal email',
+    bio: user.bio ?? ''
+  }
+
+  const form = useForm<ProfileFormValues>({
+    resolver: zodResolver(profileFormSchema),
+    defaultValues,
+    mode: "onChange",
+  })
+
+
+
+
+  function onSubmit(data: ProfileFormValues) {
+    // toast({
+    //   title: "You submitted the following values:",
+    //   description: (
+    //     <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+    //       <code className="text-white">{JSON.stringify(data, null, 2)}</code>
+    //     </pre>
+    //   ),
+    // })
+  }
+
+  return (
+    <div className="space-y-4 flex flex-col overflow-y-auto min-h-0">
+      <Avatar className="w-16 h-16">
+        <AvatarImage src={user?.avatar} alt="@shadcn" />
+        <AvatarFallback>CN</AvatarFallback>
+      </Avatar>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <FormField
+            control={form.control}
+            name="fullName"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Fullname</FormLabel>
+                <FormControl>
+                  <Input className="focus-visible:ring-0" placeholder="shadcn" {...field} />
+                </FormControl>
+                <FormDescription>
+                  This is your public display name. It can be your real name or a
+                  pseudonym. You can only change this once every 30 days.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input disabled className="focus-visible:ring-0" placeholder="shadcn" {...field} />
+                </FormControl>
+                <FormDescription>
+                  You can manage verified email addresses in your{" "}
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="internalEmail"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Internal Email</FormLabel>
+                <FormControl>
+                  <Input className="focus-visible:ring-0" placeholder="shadcn" {...field} />
+                </FormControl>
+                <FormDescription>
+                  You can manage verified email addresses in your{" "}
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="bio"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Bio</FormLabel>
+                <FormControl>
+                  <Textarea
+                    placeholder="Tell us a little bit about yourself"
+                    className="resize-none focus-visible:ring-0"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Button type="submit">Update profile</Button>
+        </form>
+      </Form>
+    </div>
+  )
+}

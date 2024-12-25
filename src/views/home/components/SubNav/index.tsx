@@ -37,7 +37,7 @@ export const SubNav = () => {
             </div>
           </div>
         </Link>
-        <Link to={`/projects/${currentProject.slug}/settings/profile`}>
+        <Link to={`/projects/setting/profile`}>
           <div
             className={'aspect-square flex flex-col items-center justify-center group cursor-pointer'}>
             <div

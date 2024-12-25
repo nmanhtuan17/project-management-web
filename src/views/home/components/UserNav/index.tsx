@@ -17,11 +17,14 @@ import {
 import { useAppDispatch, useAppSelector } from "@/redux/store.ts";
 import { setAuth } from "@/redux/slices/auth.slice.ts";
 import { useCurrentProject } from "@/lib/hooks/useCurrentProject";
+import { LogOut, Settings2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export const UserNav = () => {
   const { user } = useAppSelector(state => state.auth)
   const dispatch = useAppDispatch()
   const { reset } = useCurrentProject()
+  const navigate = useNavigate()
 
   return (
     <DropdownMenu>
@@ -45,7 +48,14 @@ export const UserNav = () => {
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => {
+        <DropdownMenuItem className="text-sm" onClick={() => {
+          navigate('projects/setting/profile')
+        }}>
+          <Settings2 />
+          Preferences
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem className="text-sm" onClick={() => {
           dispatch(setAuth({
             loggedIn: false,
             tokens: {},
@@ -53,6 +63,7 @@ export const UserNav = () => {
           }))
           reset()
         }}>
+          <LogOut />
           Log out
         </DropdownMenuItem>
       </DropdownMenuContent>

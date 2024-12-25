@@ -11,10 +11,10 @@ export interface AuthSliceState {
     avatar: string;
     fullName: string;
     email: string;
+    internalEmail?: string;
     emailVerified: boolean;
     googleId: string;
-    role: string;
-    missingPassword?: boolean;
+    bio: string;
   }
 }
 
