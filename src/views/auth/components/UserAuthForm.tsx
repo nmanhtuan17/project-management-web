@@ -13,13 +13,13 @@ import { useAppDispatch, useAppSelector } from "@/redux/store.ts";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import { setAuth } from "@/redux/slices/auth.slice";
+import { useCurrentProject } from "@/lib/hooks/useCurrentProject";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const dispatch = useAppDispatch();
-  const auth = useAppSelector(state => state.auth);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [message, setMessage] = useState<{ show: boolean, title?: string, description?: string }>({
     show: false,
@@ -27,6 +27,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const [showLoginPassword, setShowLoginPassword] = useState(false);
   const navigate = useNavigate();
   const [hide, setHide] = useState<boolean>(true);
+  const { reset } = useCurrentProject();
 
   async function onSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
@@ -78,7 +79,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         accessToken: data.access_token,
         refreshToken: data.refresh_token,
       });
-      const {data: user} = await apiService.callApi('GET', '/users/me');
+      const { data: user } = await apiService.callApi('GET', '/users/me');
       dispatch(setAuth({
         loggedIn: true,
         tokens: {
@@ -87,6 +88,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         },
         user
       }));
+      reset();
       navigate('/')
     }
   }

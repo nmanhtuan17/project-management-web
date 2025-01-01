@@ -155,15 +155,15 @@ export default function HomePage() {
                   key={mem._id}
                 >
                   <Avatar>
-                    <AvatarImage src={mem.user.avatar} />
-                    <AvatarFallback>{mem.user.fullName.split(' ')?.pop()?.charAt(0)?.toUpperCase() || '!'}</AvatarFallback>
+                    <AvatarImage src={mem.user?.avatar} />
+                    <AvatarFallback>{mem.user?.fullName.split(' ')?.pop()?.charAt(0)?.toUpperCase() || '!'}</AvatarFallback>
                   </Avatar>
                   <div>
                     <div className={'font-semibold text-sm'}>
-                      {mem.user.fullName}
+                      {mem.user?.fullName}
                     </div>
                     <div className={'text-xs'}>
-                      {mem.role}
+                      {mem?.role}
                     </div>
                   </div>
                 </div>
@@ -173,16 +173,16 @@ export default function HomePage() {
                     <Tooltip delayDuration={0}>
                       <TooltipTrigger asChild>
                         <Avatar>
-                          <AvatarImage src={mem.user.avatar} />
-                          <AvatarFallback>{mem.user.fullName.split(' ')?.pop()?.charAt(0)?.toUpperCase() || '!'}</AvatarFallback>
+                          <AvatarImage src={mem?.user?.avatar} />
+                          <AvatarFallback>{mem?.user?.fullName.split(' ')?.pop()?.charAt(0)?.toUpperCase() || '!'}</AvatarFallback>
                         </Avatar>
                       </TooltipTrigger>
                       <TooltipContent side="right">
                         <div className={'text-sm'}>
-                          {mem.user.fullName}
+                          {mem?.user?.fullName}
                         </div>
                         <div className={'text-xs'}>
-                          {mem.role}
+                          {mem?.role}
                         </div>
                       </TooltipContent>
                     </Tooltip>

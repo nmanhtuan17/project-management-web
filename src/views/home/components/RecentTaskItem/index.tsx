@@ -40,14 +40,14 @@ export const RecentTaskItem = ({ task }: RecentTaskItemProps) => {
               <TooltipTrigger asChild>
                 <Avatar key={item?._id} className="h-6 w-6">
                   <AvatarImage
-                    src={item?.user.avatar || ""}
+                    src={item?.user?.avatar || ""}
                     alt={""}
                   />
-                  <AvatarFallback className="text-xs">{item?.user.fullName?.charAt(0).toUpperCase()}</AvatarFallback>
+                  <AvatarFallback className="text-xs">{item?.user?.fullName?.charAt(0).toUpperCase()}</AvatarFallback>
                 </Avatar>
               </TooltipTrigger>
               <TooltipContent>
-                <p>{item?.user.fullName}</p>
+                <p>{item?.user?.fullName}</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>

@@ -4,7 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { ProjectDetailNav } from "@/views/tasks/nav/ProjectDetailNav";
-import { CheckCheck, Component, Users } from "lucide-react";
+import { CheckCheck, Component, Settings, Users } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { useCurrentProject } from "@/lib/hooks/useCurrentProject";
 
@@ -58,6 +58,13 @@ export function ProjectLayout(props: any) {
                 icon: Users,
                 variant: pathname.includes('members') ? 'default' : 'ghost',
                 path: `/projects/${currentProject.slug}/details/members`
+              },
+              {
+                title: "Setting",
+                label: "",
+                icon: Settings,
+                variant: pathname.includes('setting') ? 'default' : 'ghost',
+                path: `/projects/${currentProject.slug}/details/setting`
               }
             ]}
           />

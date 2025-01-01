@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils.ts";
 import { BoardTask } from "@/types/task";
 import { useAppDispatch, useAppSelector } from "@/redux/store.ts";
-import { initBoard, setBoard } from "@/redux/slices/task.slice.ts";
+import { initBoard, setBoard, setTasks } from "@/redux/slices/task.slice.ts";
 import { ThemeMode } from "@/enums";
 import { ControlledBoard, moveCard } from '@caldwell619/react-kanban';
 import '@caldwell619/react-kanban/dist/styles.css';
@@ -48,10 +48,19 @@ export default function TasksBoard(props: TasksBoardProps) {
       return card;
     });
     dispatch(setBoard({ columns: [...updatedBoard.columns] }));
-    await apiService.put(`projects/${currentProject._id}/tasks/${updatedTask._id}`, {
+    const updateTaskRes = await apiService.put(`projects/${currentProject._id}/tasks/${updatedTask._id}`, {
       ...updatedTask,
       assignees: updatedTask.assignees.map(i => i._id)
     });
+    const task = updateTaskRes.data.task
+    dispatch(setTasks({
+      tasks: [...tasks.map(t => {
+        if (t._id === task._id) {
+          return task;
+        } else return t;
+      })]
+    }))
+    toast.success(updateTaskRes.message)
   }
 
   const updateColumnTitle = async (columnId: string, title: string) => {
@@ -67,7 +76,6 @@ export default function TasksBoard(props: TasksBoardProps) {
           })
       })
     } else {
-
       toast.error('ACTION NOT PERMITTED')
     }
   }

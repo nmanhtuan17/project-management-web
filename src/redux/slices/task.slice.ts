@@ -125,12 +125,12 @@ export const taskSlice = createSlice({
         state.loading = true;
       })
       .addCase(loadSingleTask.fulfilled, (state, action) => {
-        // const taskIndex = state.tasks.findIndex(t => t._id === action.payload._id);
-        // if (taskIndex >= 0) {
-        //   state.tasks[taskIndex] = action.payload;
-        // } else {
-        //   state.tasks.push(action.payload);
-        // }
+        const taskIndex = state.tasks.findIndex(t => t._id === action.payload._id);
+        if (taskIndex >= 0) {
+          state.tasks[taskIndex] = action.payload;
+        } else {
+          state.tasks.push(action.payload);
+        }
       })
       .addCase(updateTask.fulfilled, (state, action) => {
         const taskIndex = state.tasks.findIndex(t => t._id === action.payload.data.task._id);

@@ -18,6 +18,8 @@ export interface Project {
   type: ProjectTypes;
   memberCount?: number;
   avatar?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface ProjectMember {

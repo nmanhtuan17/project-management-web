@@ -42,6 +42,7 @@ export interface Task {
   archived: boolean;
   attachments: string[] | any[];
   label?: string;
+  __v?: number;
 }
 
 export interface TaskActivity {

@@ -21,6 +21,7 @@ import { TaskList } from '@/views/tasks/TaskList'
 import { MemberPage } from '@/views/member'
 import SettingsProfilePage from '@/views/setting/profile'
 import SettingsLayout from '@/views/setting/layout'
+import { ProjectOverview } from './views/project/ProjectOverview'
 
 function App() {
 
@@ -36,7 +37,7 @@ function App() {
                   <Route path=':projectSlug/'>
                     <Route path='' index element={<HomePage />} />
                     <Route path='details/' element={<ProjectLayout />}>
-                      <Route index path='overview/' element={<div />} />
+                      <Route index path='overview/' element={<ProjectOverview />} />
                       <Route path='tasks/' element={<TaskLayout />} >
                         <Route index path='performance/' element={<TasksBoard />} />
                         <Route path='list/' element={<TaskList />} />
