@@ -1,4 +1,7 @@
-import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import { User } from '@/types/member';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { activeInternalEmail } from '../actions/app.action';
+import { toast } from 'sonner';
 
 export interface AuthSliceState {
   loggedIn: boolean;
@@ -6,16 +9,7 @@ export interface AuthSliceState {
     access_token?: string;
     refresh_token?: string;
   },
-  user?: {
-    _id: string;
-    avatar: string;
-    fullName: string;
-    email: string;
-    internalEmail?: string;
-    emailVerified: boolean;
-    googleId: string;
-    bio: string;
-  }
+  user?: User
 }
 
 const initialState: AuthSliceState = {
@@ -36,7 +30,11 @@ export const authSlice = createSlice({
     }
   },
   extraReducers: (builder) => {
-
+    builder
+      .addCase(activeInternalEmail.fulfilled, (state, action) => {
+        state.user = action.payload.data
+        toast.success(action.payload.message)
+      })
   }
 });
 

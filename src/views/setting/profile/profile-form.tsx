@@ -25,8 +25,10 @@ import {
 import { Textarea } from "@/components/ui/textarea"
 import { toast } from "sonner"
 import { Link } from "react-router-dom"
-import { useAppSelector } from "@/redux/store"
+import { useAppDispatch, useAppSelector } from "@/redux/store"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Separator } from "@/components/ui/separator"
+import { activeInternalEmail } from "@/redux/actions/app.action"
 
 const profileFormSchema = z.object({
   fullName: z
@@ -42,12 +44,11 @@ const profileFormSchema = z.object({
       required_error: "Please select an email to display.",
     })
     .email(),
-  internalEmail: z
+  alias: z
     .string({
       required_error: "Please select an internal email to display.",
-    })
-    .email(),
-  bio: z.string().max(160).min(4),
+    }),
+  bio: z.string().optional(),
 })
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>
@@ -55,11 +56,12 @@ type ProfileFormValues = z.infer<typeof profileFormSchema>
 
 export function ProfileForm() {
   const { user } = useAppSelector(state => state.auth)
+  const dispatch = useAppDispatch()
 
   const defaultValues: Partial<ProfileFormValues> = {
     fullName: user.fullName,
     email: user.email ?? '',
-    internalEmail: user.internalEmail ?? 'Please active your internal email',
+    alias: user.alias,
     bio: user.bio ?? ''
   }
 
@@ -73,6 +75,7 @@ export function ProfileForm() {
 
 
   function onSubmit(data: ProfileFormValues) {
+    console.log(data)
     // toast({
     //   title: "You submitted the following values:",
     //   description: (
@@ -81,6 +84,7 @@ export function ProfileForm() {
     //     </pre>
     //   ),
     // })
+    dispatch(activeInternalEmail({ alias: data.alias }))
   }
 
   return (
@@ -126,15 +130,19 @@ export function ProfileForm() {
           />
           <FormField
             control={form.control}
-            name="internalEmail"
+            name="alias"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Internal Email</FormLabel>
                 <FormControl>
-                  <Input className="focus-visible:ring-0" placeholder="shadcn" {...field} />
+                  <div className="flex border items-center rounded-sm pr-4">
+                    <Input className="focus-visible:ring-0 border-none" placeholder="Please active your internal email" {...field} />
+                    <Separator orientation="vertical" />
+                    <span className="text-sm text-muted-foreground">@tuan.website</span>
+                  </div>
                 </FormControl>
                 <FormDescription>
-                  You can manage verified email addresses in your{" "}
+                  Active internal email to use internal mail system
                 </FormDescription>
                 <FormMessage />
               </FormItem>

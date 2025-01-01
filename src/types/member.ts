@@ -6,4 +6,7 @@ export interface User {
   email: string;
   emailVerified: boolean;
   googleId?: string;
+  alias?: string;
+  internalEmail?: string;
+  bio?: string;
 }
