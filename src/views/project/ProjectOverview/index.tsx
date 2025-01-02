@@ -4,8 +4,11 @@ import { Separator } from "@/components/ui/separator"
 import { useCurrentProject } from "@/lib/hooks/useCurrentProject"
 import { useAppSelector } from "@/redux/store"
 import dayjs from 'dayjs'
-import { Settings } from "lucide-react"
+import { Plus, Settings } from "lucide-react"
 import { useNavigate } from "react-router-dom"
+import { RecentTasks } from "../components/RecentTasks"
+import { Milestones } from "../components/Milestones"
+import { LabelsManage } from "../components"
 
 export const ProjectOverview = () => {
   const { currentProject } = useCurrentProject()
@@ -45,6 +48,17 @@ export const ProjectOverview = () => {
         </div>
       </div>
       <Separator />
+
+      <div className="h-full grid grid-cols-5">
+        <div className="col-span-4 flex flex-col">
+          <Milestones />
+          <Separator />
+          <RecentTasks />
+        </div>
+        <div className="col-span-1 p-4 border-l">
+          <LabelsManage />
+        </div>
+      </div>
     </div>
   )
 }

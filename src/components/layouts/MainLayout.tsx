@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button.tsx";
 // import SpaceApps from "@/views/space/components/apps.tsx";
 import { LoadingSpinner } from "@/components/ui/loading-spinner.tsx";
 import { loadProjects } from "@/redux/actions/project.action";
-import { MainNav, ProjectSwitcher, UserNav, MainNavMobile, SubNav } from "@/views/home/components";
+import { MainNav, ProjectSwitcher, UserNav, MainNavMobile, SubNav } from "@/components/nav";
 import { useCurrentProject } from "@/lib/hooks/useCurrentProject";
 
 export default function MainLayout() {
