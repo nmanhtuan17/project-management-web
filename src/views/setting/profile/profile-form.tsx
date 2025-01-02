@@ -28,7 +28,7 @@ import { Link } from "react-router-dom"
 import { useAppDispatch, useAppSelector } from "@/redux/store"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Separator } from "@/components/ui/separator"
-import { activeInternalEmail } from "@/redux/actions/app.action"
+import { activeInternalEmail, updateProfile } from "@/redux/actions/app.action"
 
 const profileFormSchema = z.object({
   fullName: z
@@ -76,15 +76,7 @@ export function ProfileForm() {
 
   function onSubmit(data: ProfileFormValues) {
     console.log(data)
-    // toast({
-    //   title: "You submitted the following values:",
-    //   description: (
-    //     <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-    //       <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-    //     </pre>
-    //   ),
-    // })
-    dispatch(activeInternalEmail({ alias: data.alias }))
+    dispatch(updateProfile(data))
   }
 
   return (
@@ -136,7 +128,7 @@ export function ProfileForm() {
                 <FormLabel>Internal Email</FormLabel>
                 <FormControl>
                   <div className="flex border items-center rounded-sm pr-4">
-                    <Input className="focus-visible:ring-0 border-none" placeholder="Please active your internal email" {...field} />
+                    <Input disabled className="focus-visible:ring-0 border-none" placeholder="Please active your internal email" {...field} />
                     <Separator orientation="vertical" />
                     <span className="text-sm text-muted-foreground">@tuan.website</span>
                   </div>
