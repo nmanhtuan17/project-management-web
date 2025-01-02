@@ -22,6 +22,7 @@ import { MemberPage } from '@/views/member'
 import SettingsProfilePage from '@/views/setting/profile'
 import SettingsLayout from '@/views/setting/layout'
 import { ProjectOverview } from './views/project/ProjectOverview'
+import { NotificationSettingPage } from '@/views/setting/notification'
 
 function App() {
 
@@ -48,6 +49,7 @@ function App() {
                   </Route>
                   <Route path='setting/' element={<SettingsLayout />}>
                     <Route path='profile' element={<SettingsProfilePage />} />
+                    <Route path='notification' element={<NotificationSettingPage />} />
                   </Route>
                 </Route>
                 <Route path={'mails/'} >

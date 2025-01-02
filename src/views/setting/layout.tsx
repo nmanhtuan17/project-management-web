@@ -14,7 +14,7 @@ const sidebarNavItems = [
   },
   {
     title: "Notifications",
-    href: "/examples/forms/notifications",
+    href: "/projects/setting/notification",
   }
 ]
 

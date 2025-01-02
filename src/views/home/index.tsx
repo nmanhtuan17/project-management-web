@@ -21,6 +21,7 @@ import { RecentTaskItem } from "./components/RecentTaskItem";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { useCurrentProject } from "@/lib/hooks/useCurrentProject";
 import { ProjectSpace } from "./components/ProjectSpace";
+import { ProfileCard } from "./components/ProfileCard";
 
 export default function HomePage() {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -56,21 +57,7 @@ export default function HomePage() {
             </div>
             <div className="flex flex-1 gap-4 pb-4">
               <div className="space-y-4">
-                <Card className="w-[320px]">
-                  <CardContent className="flex flex-col items-center justify-center p-4 pb-0 mt-4">
-                    <Avatar className="w-16 h-16">
-                      <AvatarImage src={user?.avatar} alt="@shadcn" />
-                      <AvatarFallback>CN</AvatarFallback>
-                    </Avatar>
-                    <p className="font-semibold text-lg mt-3">{user?.fullName}</p>
-                    <p className="text-muted-foreground text-sm">{user?.email}</p>
-                    <Separator className="mt-2" />
-                    <Button variant="link" className="w-full">
-                      View profile
-                      <ArrowUpRight size={18} />
-                    </Button>
-                  </CardContent>
-                </Card>
+                <ProfileCard />
                 <Card className="w-[320px]">
                   <CardHeader>
                     <CardTitle>Activities</CardTitle>
