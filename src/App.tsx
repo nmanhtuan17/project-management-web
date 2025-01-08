@@ -21,8 +21,9 @@ import { TaskList } from '@/views/tasks/TaskList'
 import { MemberPage } from '@/views/member'
 import SettingsProfilePage from '@/views/setting/profile'
 import SettingsLayout from '@/views/setting/layout'
-import { ProjectOverview } from './views/project/ProjectOverview'
+import { ProjectOverview } from '@/views/project/overview'
 import { NotificationSettingPage } from '@/views/setting/notification'
+import { ProjectSetting } from '@/views/project/setting'
 
 function App() {
 
@@ -37,7 +38,7 @@ function App() {
                 <Route path='projects/'>
                   <Route path=':projectSlug/'>
                     <Route path='' index element={<HomePage />} />
-                    <Route path='details/' element={<ProjectLayout />}>
+                    <Route path='' element={<ProjectLayout />}>
                       <Route index path='overview/' element={<ProjectOverview />} />
                       <Route path='tasks/' element={<TaskLayout />} >
                         <Route index path='performance/' element={<TasksBoard />} />
@@ -45,6 +46,7 @@ function App() {
                         <Route path='kanban/' element={<TasksBoard />} />
                       </Route>
                       <Route path='members/' element={<MemberPage />} />
+                      <Route path='setting/' element={<ProjectSetting />} />
                     </Route>
                   </Route>
                   <Route path='setting/' element={<SettingsLayout />}>

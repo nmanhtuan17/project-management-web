@@ -14,7 +14,7 @@ export const Milestones = () => {
         </div>
         <Button
           onClick={() => {
-            // navigate(`/projects/${currentProject.slug}/details/setting`)
+            // navigate(`/projects/${currentProject.slug}/setting`)
           }}
           variant="secondary"
           className="px-2 w-8 h-8">

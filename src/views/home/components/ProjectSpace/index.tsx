@@ -38,13 +38,13 @@ export const ProjectSpace = () => {
         </div>
         <div className="space-x-4">
           <Button onClick={() => {
-            navigate(`/projects/${currentProject.slug}/details/overview`)
+            navigate(`/projects/${currentProject.slug}/overview`)
           }}>
             <ListChecks size={18} className="mr-2" />
             Tasks
           </Button>
           <Button onClick={() => {
-            navigate(`/projects/${currentProject.slug}/details/members`)
+            navigate(`/projects/${currentProject.slug}/members`)
           }}>
             <Users size={18} className="mr-2" />
             Member

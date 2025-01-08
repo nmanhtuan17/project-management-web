@@ -43,28 +43,28 @@ export function ProjectLayout(props: any) {
                 label: "",
                 icon: Component,
                 variant: pathname.includes('overview') ? 'default' : 'ghost',
-                path: `/projects/${currentProject.slug}/details/overview`
+                path: `/projects/${currentProject.slug}/overview`
               },
               {
                 title: "Tasks",
                 label: "",
                 icon: CheckCheck,
                 variant: pathname.includes('tasks') ? 'default' : 'ghost',
-                path: `/projects/${currentProject.slug}/details/tasks/performance`
+                path: `/projects/${currentProject.slug}/tasks/performance`
               },
               {
                 title: "Members",
                 label: "",
                 icon: Users,
                 variant: pathname.includes('members') ? 'default' : 'ghost',
-                path: `/projects/${currentProject.slug}/details/members`
+                path: `/projects/${currentProject.slug}/members`
               },
               {
                 title: "Setting",
                 label: "",
                 icon: Settings,
                 variant: pathname.includes('setting') ? 'default' : 'ghost',
-                path: `/projects/${currentProject.slug}/details/setting`
+                path: `/projects/${currentProject.slug}/setting`
               }
             ]}
           />

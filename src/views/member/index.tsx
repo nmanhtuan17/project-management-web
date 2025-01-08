@@ -32,7 +32,7 @@ export function MemberPage() {
         <div className="p-4 flex flex-col min-h-0  w-full">
           <div className="flex justify-between items-center">
             <div className="mb-6">
-              <h3 className="text-lg font-medium">Members</h3>
+              <h3 className="text-lg font-semibold">Members</h3>
               <p className="text-sm text-muted-foreground">
                 Members can be added by project owners
               </p>

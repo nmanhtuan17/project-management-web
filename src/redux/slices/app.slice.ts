@@ -1,6 +1,7 @@
 import { ThemeMode } from "@/enums";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { updateProfile } from "../actions/app.action";
+import { createLabel } from "@/redux/actions/project.action";
 
 export interface AppSliceState {
   loading: boolean;
@@ -31,5 +32,6 @@ export const appSlice = createSlice({
       .addCase(updateProfile.rejected, (state, action) => {
         state.loading = false
       })
+      
   }
 })

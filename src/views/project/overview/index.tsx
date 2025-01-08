@@ -39,7 +39,7 @@ export const ProjectOverview = () => {
           </p>
           <Button
             onClick={() => {
-              navigate(`/projects/${currentProject.slug}/details/setting`)
+              navigate(`/projects/${currentProject.slug}/setting`)
             }}
             variant="secondary"
             className="px-2 w-8 h-8">
@@ -48,7 +48,6 @@ export const ProjectOverview = () => {
         </div>
       </div>
       <Separator />
-
       <div className="h-full grid grid-cols-5">
         <div className="col-span-4 flex flex-col">
           <Milestones />

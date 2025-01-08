@@ -47,21 +47,21 @@ export default function TaskLayout() {
               label: "",
               icon: Gauge,
               variant: pathname.includes('performance') ? 'default' : 'ghost',
-              path: `/projects/${currentProject.slug}/details/tasks/performance`
+              path: `/projects/${currentProject.slug}/tasks/performance`
             },
             {
               title: "List",
               label: "",
               icon: ListChecks,
               variant: pathname.includes('list') ? 'default' : 'ghost',
-              path: `/projects/${currentProject.slug}/details/tasks/list`
+              path: `/projects/${currentProject.slug}/tasks/list`
             },
             {
               title: "Board",
               label: "",
               icon: SquareKanban,
               variant: pathname.includes('kanban') ? 'default' : 'ghost',
-              path: `/projects/${currentProject.slug}/details/tasks/kanban`
+              path: `/projects/${currentProject.slug}/tasks/kanban`
             }
           ]}
         />

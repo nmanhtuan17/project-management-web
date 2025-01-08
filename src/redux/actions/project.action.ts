@@ -1,5 +1,5 @@
 import apiService from "@/services/api.service";
-import { Project, ProjectTypes } from "@/types/project";
+import { Project, ProjectLabel, ProjectTypes } from "@/types/project";
 import { slugify } from "@/utils";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
@@ -28,7 +28,7 @@ export const loadKanbanBoard = createAsyncThunk("project/load-kanban-board", asy
 })
 
 export const createKanbanColumn = createAsyncThunk("project/create-column", async (payload: { projectId: string, title: string }) => {
-  const {projectId, title} = payload;
+  const { projectId, title } = payload;
   return await apiService.post(`projects/${projectId}/column`, {
     id: slugify(title),
     title
@@ -46,4 +46,14 @@ export const updateColumn = createAsyncThunk("project/update-column", async (pay
 export const removeColumn = createAsyncThunk('project/remove-column', async (payload: { projectId: string, columnId: string }) => {
   const { projectId, columnId } = payload;
   return await apiService.delete(`projects/${projectId}/column/${columnId}`, {})
+})
+
+export const createLabel = createAsyncThunk<
+  {
+    data: ProjectLabel,
+    message: string
+  },
+  { projectId: string, payload: ProjectLabel }
+>('project/create-label', async ({ projectId, payload }, thunkApi) => {
+  return await apiService.post(`projects/${projectId}/label`, payload)
 })

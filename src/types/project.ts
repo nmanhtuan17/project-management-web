@@ -28,3 +28,10 @@ export interface ProjectMember {
   project: Project | string;
   role: ProjectRoles;
 }
+
+export interface ProjectLabel {
+  _id: string;
+  title: string;
+  description: string;
+  backgroundColor: string;
+}

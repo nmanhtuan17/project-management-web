@@ -1,19 +1,20 @@
-import { Project, ProjectMember } from '@/types/project';
+import { Project, ProjectLabel, ProjectMember } from '@/types/project';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { loadProjectMembers, loadProjects } from '../actions/project.action';
+import { createLabel, loadProjectMembers, loadProjects } from '../actions/project.action';
+import { toast } from 'sonner';
 
 export interface ProjectSliceState {
-  loaded: boolean;
   loading: boolean;
   projects: Project[];
   members: ProjectMember[];
+  labels: ProjectLabel[];
 }
 
 const initialState: ProjectSliceState = {
-  loaded: false,
   loading: false,
   projects: [],
-  members: []
+  members: [],
+  labels: []
 };
 
 export const projectSlice = createSlice({
@@ -25,17 +26,28 @@ export const projectSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(loadProjects.pending, (state, action) => {
-        state.loaded = true;
+        state.loading = true;
       })
       .addCase(loadProjects.fulfilled, (state, action) => {
-        state.loaded = false
+        state.loading = false
         state.projects = action.payload
       })
       .addCase(loadProjects.rejected, (state, action) => {
-        state.loaded = false
+        state.loading = false
       })
       .addCase(loadProjectMembers.fulfilled, (state, action) => {
         state.members = action.payload
+      })
+      .addCase(createLabel.pending, (state) => {
+        state.loading = true
+      })
+      .addCase(createLabel.fulfilled, (state, action) => {
+        state.loading = false
+        toast.success(action.payload.message)
+      })
+      .addCase(createLabel.rejected, (state, action: PayloadAction<any>) => {
+        state.loading = false
+        toast.error(action.payload.message)
       })
   }
 });

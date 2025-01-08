@@ -5,6 +5,7 @@ import { CreateProjectDialog } from "@/components/dialogs/CreateProjectDialog";
 import { CreateTaskDialog } from "@/views/tasks/dialogs/CreateTaskDialog";
 import { TaskDetailDialog } from "@/views/tasks/components/TaskDetailDialog";
 import { InviteMemberDialog } from "@/views/member/dialogs/InviteMemberDialog";
+import { CreateLabelDialog } from "@/components/dialogs/CreateLabelDialog";
 // import { TaskDetail } from "@/views/tasks/TaskDetail";
 
 interface DialogContextType {
@@ -22,6 +23,10 @@ interface DialogContextType {
   inviteMember: {
     open: boolean
   }
+  createLabel: {
+    open: boolean
+  }
+
   createTaskDetailElemennt?: (element: ReactNode) => void,
   openDialog?: (dialog: Omit<keyof DialogContextType, 'openDialog'>, data?: any) => void,
   closeDialog?: (dialog: Omit<keyof DialogContextType, 'openDialog'>) => void,
@@ -39,6 +44,9 @@ const DialogContext = createContext<DialogContextType>({
     open: false
   },
   inviteMember: {
+    open: false
+  },
+  createLabel: {
     open: false
   }
 });
@@ -60,6 +68,9 @@ export default function DialogProvider(props: DialogProviderProps) {
       open: false
     },
     inviteMember: {
+      open: false
+    },
+    createLabel: {
       open: false
     }
   });
@@ -93,6 +104,7 @@ export default function DialogProvider(props: DialogProviderProps) {
         {dialogs.taskDetail.element}
       </TaskDetailDialog>
       <InviteMemberDialog />
+      <CreateLabelDialog />
     </DialogContext.Provider>
   </AlertDialogProvider>
 }
