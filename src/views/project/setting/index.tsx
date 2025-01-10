@@ -130,14 +130,17 @@ export function ProjectSetting() {
               <div className="rounded-[8px] shadow-sm border p-3 flex gap-2 mt-3">
                 {labels.map(l => {
                   return (
-                    <div key={l._id} className={cn(`bg-[${l.backgroundColor}]`, 'text-xs py-1 px-2 rounded-sm text-white')}>
+                    <div key={l._id}
+                      className={cn('text-xs py-1 px-2 rounded-sm text-white')}
+                      style={{ backgroundColor: l.backgroundColor }}
+                    >
                       {l.title}
                     </div>
                   )
                 })}
                 <div
                   onClick={() => {
-                    openDialog('createLabel')
+                    openDialog('createLabelDialog')
                   }}
                   className="border border-dashed rounded align-middle items-center flex px-2 py-1 cursor-pointer">
                   <Plus size={14} />

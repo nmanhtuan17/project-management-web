@@ -1,12 +1,14 @@
 import { Outlet, useLocation, useParams } from "react-router-dom";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { ProjectDetailNav } from "@/views/tasks/nav/ProjectDetailNav";
 import { CheckCheck, Component, Settings, Users } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { useCurrentProject } from "@/lib/hooks/useCurrentProject";
+import { useAppDispatch } from "@/redux/store";
+import { loadProjectLabels } from "@/redux/actions/project.action";
 
 
 export function ProjectLayout(props: any) {
@@ -14,6 +16,11 @@ export function ProjectLayout(props: any) {
   const { currentProject } = useCurrentProject()
   const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed);
   const { pathname } = useLocation();
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    dispatch(loadProjectLabels(currentProject._id))
+  }, [currentProject]);
 
   return (
     <TooltipProvider delayDuration={0}>

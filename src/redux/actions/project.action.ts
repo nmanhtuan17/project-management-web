@@ -53,7 +53,18 @@ export const createLabel = createAsyncThunk<
     data: ProjectLabel,
     message: string
   },
-  { projectId: string, payload: ProjectLabel }
+  { projectId: string, payload: Partial<ProjectLabel> }
 >('project/create-label', async ({ projectId, payload }, thunkApi) => {
   return await apiService.post(`projects/${projectId}/label`, payload)
+})
+
+export const loadProjectLabels = createAsyncThunk<
+  {
+    data: ProjectLabel[],
+    message: string
+  },
+  string
+>('project/load-labels', async (projectId) => {
+
+  return await apiService.get(`projects/${projectId}/labels`)
 })

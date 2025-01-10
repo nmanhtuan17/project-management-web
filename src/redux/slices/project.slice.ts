@@ -1,6 +1,6 @@
 import { Project, ProjectLabel, ProjectMember } from '@/types/project';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { createLabel, loadProjectMembers, loadProjects } from '../actions/project.action';
+import { createLabel, loadProjectLabels, loadProjectMembers, loadProjects } from '../actions/project.action';
 import { toast } from 'sonner';
 
 export interface ProjectSliceState {
@@ -46,6 +46,17 @@ export const projectSlice = createSlice({
         toast.success(action.payload.message)
       })
       .addCase(createLabel.rejected, (state, action: PayloadAction<any>) => {
+        state.loading = false
+        toast.error(action.payload.message)
+      })
+      .addCase(loadProjectLabels.pending, (state) => {
+        state.loading = true
+      })
+      .addCase(loadProjectLabels.fulfilled, (state, action) => {
+        state.loading = false
+        state.labels = action.payload.data
+      })
+      .addCase(loadProjectLabels.rejected, (state, action: PayloadAction<any>) => {
         state.loading = false
         toast.error(action.payload.message)
       })

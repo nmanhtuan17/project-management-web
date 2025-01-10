@@ -6,18 +6,10 @@ import { z } from "zod";
 import { Input } from "@/components/ui/input.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
-import { toast } from "sonner";
 import { useDialogContext } from "@/components/providers/DialogProvider";
-import { ProjectTypes } from "@/types/project";
-import { createProject as createProjectAction } from "@/redux/actions/project.action";
-import { cn } from "@/lib/utils";
-import { useEffect, useState } from "react";
-import apiService from "@/services/api.service";
-import { Label } from "@radix-ui/react-label";
-import { CheckIcon, Cross1Icon, ReloadIcon } from "@radix-ui/react-icons";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { slugify } from "@/utils";
 import { Textarea } from "@/components/ui/textarea";
+import { createLabel, loadProjectLabels } from "@/redux/actions/project.action";
+import { useCurrentProject } from "@/lib/hooks/useCurrentProject";
 
 const labelFormSchema = z.object({
   title: z.string().min(1, "PLEASE_ENTER_TITLE"),
@@ -29,9 +21,10 @@ type LabelFormValues = z.infer<typeof labelFormSchema>
 
 
 export function CreateLabelDialog() {
-  const { createLabel, setDialogOpen } = useDialogContext();
+  const { createLabelDialog, setDialogOpen } = useDialogContext();
   const { loading } = useAppSelector(state => state.project);
   const dispatch = useAppDispatch();
+  const { currentProject } = useCurrentProject()
 
   const form = useForm<LabelFormValues>({
     resolver: zodResolver(labelFormSchema),
@@ -43,16 +36,22 @@ export function CreateLabelDialog() {
   });
 
   const onSubmit = async (data: LabelFormValues) => {
-    console.log(data)
-
+    dispatch(createLabel({
+      projectId: currentProject._id,
+      payload: data
+    })).then(res => {
+      dispatch(loadProjectLabels(currentProject._id))
+    }).finally(() => {
+      setDialogOpen("createLabelDialog", false)
+    })
   }
 
 
   return (
     <Dialog
-      open={createLabel.open}
+      open={createLabelDialog.open}
       onOpenChange={open => {
-        setDialogOpen("createLabel", open)
+        setDialogOpen("createLabelDialog", open)
       }}
     >
       <DialogContent>

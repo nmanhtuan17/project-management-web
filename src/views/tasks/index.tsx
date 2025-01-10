@@ -7,7 +7,7 @@ import TasksBoard from "@/views/tasks/TaskBoard";
 import TasksListHeader from "@/views/tasks/components/TasksListHeader";
 import { Outlet, useLocation } from "react-router-dom";
 import { ProjectDetailNav } from "@/views/tasks/nav/ProjectDetailNav";
-import { CheckCheck, Component, Gauge, ListChecks, SquareKanban } from "lucide-react";
+import { ChartNoAxesGantt, CheckCheck, Component, Gauge, ListChecks, SquareKanban } from "lucide-react";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
 import { loadTasks } from "@/redux/actions/task.action";
 import { useCurrentProject } from "@/lib/hooks/useCurrentProject";
@@ -48,6 +48,13 @@ export default function TaskLayout() {
               icon: Gauge,
               variant: pathname.includes('performance') ? 'default' : 'ghost',
               path: `/projects/${currentProject.slug}/tasks/performance`
+            },
+            {
+              title: "Timeline",
+              label: "",
+              icon: ChartNoAxesGantt,
+              variant: pathname.includes('timeline') ? 'default' : 'ghost',
+              path: `/projects/${currentProject.slug}/tasks/timeline`
             },
             {
               title: "List",

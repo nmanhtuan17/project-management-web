@@ -23,7 +23,7 @@ interface DialogContextType {
   inviteMember: {
     open: boolean
   }
-  createLabel: {
+  createLabelDialog: {
     open: boolean
   }
 
@@ -46,7 +46,7 @@ const DialogContext = createContext<DialogContextType>({
   inviteMember: {
     open: false
   },
-  createLabel: {
+  createLabelDialog: {
     open: false
   }
 });
@@ -70,7 +70,7 @@ export default function DialogProvider(props: DialogProviderProps) {
     inviteMember: {
       open: false
     },
-    createLabel: {
+    createLabelDialog: {
       open: false
     }
   });
