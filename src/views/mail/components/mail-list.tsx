@@ -17,12 +17,13 @@ export function MailList({ items }: MailListProps) {
   const params = useParams();
   const { loading } = useMailContext();
   const { pathname } = useLocation();
-  const currentEmailLabel = pathname.split("/")[4];
+  const currentEmailLabel = pathname.split("/")[2];
 
+  console.log(items)
 
   return (
     <div className="flex flex-1 flex-col gap-2 p-4 pt-0">
-      {loading ? (
+      {/* {loading ? (
         <div className="flex justify-center items-center h-full w-full">
           <LoadingSpinner size={16} />
         </div>
@@ -60,7 +61,7 @@ export function MailList({ items }: MailListProps) {
             </p>
           )}
         </>
-      )}
+      )} */}
     </div>
   );
 }

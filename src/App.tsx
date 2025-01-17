@@ -42,6 +42,7 @@ function App() {
                       <Route index path='overview/' element={<ProjectOverview />} />
                       <Route path='tasks/' element={<TaskLayout />} >
                         <Route index path='performance/' element={<TasksBoard />} />
+                        <Route path='timeline/' element={<TaskList />} />
                         <Route path='list/' element={<TaskList />} />
                         <Route path='kanban/' element={<TasksBoard />} />
                       </Route>

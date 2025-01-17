@@ -8,6 +8,12 @@ export enum EmailLabel {
   TRASH = 'trash'
 }
 
+export const MessageStreams = {
+  inbox: 'inbounds',
+  sent: 'outbounds'
+}
+
+
 export enum EmailType {
   OUTGOING = 'outgoing',
   INCOMING = 'incoming'
@@ -51,11 +57,6 @@ export interface Email {
   strippedText: string;
   replyTo?: string;
   seen?: boolean;
-  dkimSignature?: string;
-  contentType?: string;
-  raw: any;
-  claimed?: boolean;
-  member?: ProjectMember | string;
   read?: boolean;
   createdAt: Date;
   attachments: EmailAttachment[];

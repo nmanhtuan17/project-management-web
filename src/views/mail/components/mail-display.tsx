@@ -41,9 +41,6 @@ import {
 import dayjs from "dayjs";
 import { Email } from "@/types/mail.ts";
 import { useParams } from "react-router-dom";
-import { useEffect } from "react";
-import useApi from "@/lib/hooks/useApi.tsx";
-import apiService from "@/services/api.service.ts";
 
 export function MailDisplay() {
   const today = new Date();
@@ -51,6 +48,8 @@ export function MailDisplay() {
   const email: any = {}
 
 
+
+  if (!email) return (<div></div>);
   return (
     <div className="flex h-full flex-col">
       <div className="flex items-center p-2">
@@ -215,7 +214,7 @@ export function MailDisplay() {
           </div>
           <Separator />
           <div className="flex-1 whitespace-pre-wrap p-4 text-sm min-h-0 overflow-y-auto ">
-            {email.body} 
+            {email.body}
           </div>
           <Separator className="mt-auto" />
           <div className="p-4">

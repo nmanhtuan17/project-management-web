@@ -1,25 +1,19 @@
-"use client"
-
-import * as React from "react"
-
-import {cn} from "@/lib/utils.ts"
+import { cn } from "@/lib/utils.ts"
 
 interface AccountSwitcherProps {
   isCollapsed: boolean,
 }
 
-import {Select, SelectTrigger, SelectValue, SelectContent, SelectItem} from '@/components/ui/select.tsx'
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select.tsx'
 import { useMailContext } from "@/views/mail";
+import { useAppSelector } from "@/redux/store";
 
-export function AccountSwitcher({
-                                  isCollapsed,
-                                }: AccountSwitcherProps) {
-  const {activeEmail, emailAddresses, setActiveEmail} = useMailContext();
+export function AccountSwitcher({ isCollapsed }: AccountSwitcherProps) {
+
+  const { user } = useAppSelector(state => state.auth)
+
   return (
-    <Select value={activeEmail?._id} onValueChange={(value) => {
-      const selectedEmail = emailAddresses.find(i => i._id === value);
-      setActiveEmail(selectedEmail);
-    }}>
+    <Select value={user.internalEmail}>
       <SelectTrigger
         className={cn(
           "flex items-center gap-2 [&>span]:line-clamp-1 [&>span]:flex [&>span]:w-full [&>span]:items-center [&>span]:gap-1 [&>span]:truncate [&_svg]:h-4 [&_svg]:w-4 [&_svg]:shrink-0",
@@ -30,24 +24,24 @@ export function AccountSwitcher({
       >
         <SelectValue placeholder="Select an account">
           <span className={cn("ml-2", isCollapsed && "hidden")}>
-            {activeEmail?.alias}@{activeEmail?.domainString}
+            {user.internalEmail}
           </span>
         </SelectValue>
       </SelectTrigger>
       <SelectContent>
-        {emailAddresses?.length > 0 ? emailAddresses?.map((email) => (
-          <SelectItem key={email._id} value={email._id}>
+        {user.internalEmail ?
+          (<SelectItem key={user.internalEmail} value={user.internalEmail}>
             <div className="flex items-center gap-3 [&_svg]:h-4 [&_svg]:w-4 [&_svg]:shrink-0 [&_svg]:text-foreground">
-              {email.alias}@{email.domainString}
+              {user.internalEmail}
             </div>
           </SelectItem>
-        )) : (
-          <SelectItem value="nodata" disabled>
-            <div className="flex items-center gap-3 [&_svg]:h-4 [&_svg]:w-4 [&_svg]:shrink-0 [&_svg]:text-foreground">
-              No active mail
-            </div>
-          </SelectItem>
-        )}
+          ) : (
+            <SelectItem value="nodata" disabled>
+              <div className="flex items-center gap-3 [&_svg]:h-4 [&_svg]:w-4 [&_svg]:shrink-0 [&_svg]:text-foreground">
+                No active mail
+              </div>
+            </SelectItem>
+          )}
       </SelectContent>
     </Select>
   )
