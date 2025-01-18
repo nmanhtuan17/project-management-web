@@ -1,4 +1,4 @@
-import {ProjectMember} from "@/types/project";
+import { ProjectMember } from "@/types/project";
 
 export enum EmailLabel {
   INBOX = 'inbox',
@@ -11,12 +11,6 @@ export enum EmailLabel {
 export const MessageStreams = {
   inbox: 'inbounds',
   sent: 'outbounds'
-}
-
-
-export enum EmailType {
-  OUTGOING = 'outgoing',
-  INCOMING = 'incoming'
 }
 
 export enum EmailAddressType {
@@ -40,26 +34,52 @@ export interface EmailAttachment {
   size: number;
 }
 
+export enum EmailStatus {
+  DELIVERED = 'Delivered',
+  OPENED = 'Opened',
+  PROCESSED = 'Processed'
+}
+
+
 export interface Email {
   _id: string;
-  labels?: string[];
-  type: EmailType;
-  messageId: string;
-  from: string;
-  to: string;
-  sender: string;
-  recipient: string;
-  cc: string[];
-  bcc: string[];
-  subject: string;
-  body: string;
-  headers: string[];
-  strippedText: string;
-  replyTo?: string;
-  seen?: boolean;
-  read?: boolean;
-  createdAt: Date;
-  attachments: EmailAttachment[];
+  MessageStream: string;
+  MessageID: string;
+  From: string;
+  FromFull: {
+    Email: string,
+    Name: string,
+    MailboxHash: string
+  }[]
+  To: string | string[];
+  ToFull: {
+    Email: string,
+    Name: string,
+    MailboxHash: string
+  }[]
+  OriginalRecipient: string;
+  Recipients?: string[]
+  Cc?: string[];
+  CcFull?: {
+    Email: string,
+    Name: string,
+    MailboxHash: string
+  }[]
+  Bcc?: string[];
+  BccFull?: {
+    Email: string,
+    Name: string,
+    MailboxHash: string
+  }[]
+  Subject: string;
+  HtmlBody: string;
+  TextBody: string;
+  Headers: string[];
+  StrippedTextReply?: string;
+  ReplyTo?: string;
+  Date: Date;
+  Status: EmailStatus;
+  Attachments: EmailAttachment[];
 }
 
 export interface EmailQueries {

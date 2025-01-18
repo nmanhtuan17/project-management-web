@@ -16,12 +16,14 @@ const initialPagination: Pagination = {
 interface MailContextType {
   loading: boolean;
   emails: Email[];
-  loadMail?: (mailId: string) => void;
+  currentEmailLabel: string;
+  loadMails?: () => void;
 }
 
 const MailContext = createContext<MailContextType>({
   loading: false,
   emails: [],
+  currentEmailLabel: ''
 });
 
 export const useMailContext = () => useContext(MailContext);
@@ -33,7 +35,6 @@ export default function MailPage() {
   const currentEmailLabel = pathname.split("/")[2];
   const { user } = useAppSelector(state => state.auth);
 
-  console.log(MessageStreams[currentEmailLabel])
 
   // useEffect(() => {
   //   if (emailAddresses && emailAddresses.length !== 0) {
@@ -52,9 +53,14 @@ export default function MailPage() {
   };
 
   const handleLoadEmails = async () => {
+    setLoadingEmails(true)
     if (!user.internalEmail) return;
     const res = await apiService.get(`mails/${MessageStreams[currentEmailLabel]}`)
-    setEmails(res.data.Messages)
+    setEmails(res.data.messages.map(email => ({
+      ...email,
+      From: email.From.replace(/[<>]/g, "")
+    })))
+    setLoadingEmails(false)
   };
 
   useEffect(() => {
@@ -67,7 +73,8 @@ export default function MailPage() {
       value={{
         loading: loadingEmails,
         emails,
-        loadMail
+        currentEmailLabel,
+        loadMails: handleLoadEmails,
       }}>
       <div className="flex-col flex flex-1 min-h-0">
         <Mail

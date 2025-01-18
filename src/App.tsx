@@ -24,6 +24,7 @@ import SettingsLayout from '@/views/setting/layout'
 import { ProjectOverview } from '@/views/project/overview'
 import { NotificationSettingPage } from '@/views/setting/notification'
 import { ProjectSetting } from '@/views/project/setting'
+import FloatingWindowProvider from '@/components/providers/FloatingWindowProvider'
 
 function App() {
 
@@ -31,48 +32,50 @@ function App() {
     <ReduxProvider>
       <BrowserRouter>
         <Routes>
-          <Route path='/' element={<DialogProvider />}>
-            <Route path='/' element={<AuthProvider />}>
-              <Route path='/' element={<MainLayout />}>
-                <Route path='' index element={<HomePage />} />
-                <Route path='projects/'>
-                  <Route path=':projectSlug/'>
-                    <Route path='' index element={<HomePage />} />
-                    <Route path='' element={<ProjectLayout />}>
-                      <Route index path='overview/' element={<ProjectOverview />} />
-                      <Route path='tasks/' element={<TaskLayout />} >
-                        <Route index path='performance/' element={<TasksBoard />} />
-                        <Route path='timeline/' element={<TaskList />} />
-                        <Route path='list/' element={<TaskList />} />
-                        <Route path='kanban/' element={<TasksBoard />} />
+          <Route path='/' element={<FloatingWindowProvider />}>
+            <Route path='/' element={<DialogProvider />}>
+              <Route path='/' element={<AuthProvider />}>
+                <Route path='/' element={<MainLayout />}>
+                  <Route path='' index element={<HomePage />} />
+                  <Route path='projects/'>
+                    <Route path=':projectSlug/'>
+                      <Route path='' index element={<HomePage />} />
+                      <Route path='' element={<ProjectLayout />}>
+                        <Route index path='overview/' element={<ProjectOverview />} />
+                        <Route path='tasks/' element={<TaskLayout />} >
+                          <Route index path='performance/' element={<TasksBoard />} />
+                          <Route path='timeline/' element={<TaskList />} />
+                          <Route path='list/' element={<TaskList />} />
+                          <Route path='kanban/' element={<TasksBoard />} />
+                        </Route>
+                        <Route path='members/' element={<MemberPage />} />
+                        <Route path='setting/' element={<ProjectSetting />} />
                       </Route>
-                      <Route path='members/' element={<MemberPage />} />
-                      <Route path='setting/' element={<ProjectSetting />} />
+                    </Route>
+                    <Route path='setting/' element={<SettingsLayout />}>
+                      <Route path='profile' element={<SettingsProfilePage />} />
+                      <Route path='notification' element={<NotificationSettingPage />} />
                     </Route>
                   </Route>
-                  <Route path='setting/' element={<SettingsLayout />}>
-                    <Route path='profile' element={<SettingsProfilePage />} />
-                    <Route path='notification' element={<NotificationSettingPage />} />
+                  <Route path={'mails/'} >
+                    {['inbox', 'sent', 'important', 'drafts', 'trash'].map(path => (
+                      <Route key={path} path="">
+                        <Route path={path} element={<MailPage />} />
+                        <Route path={`${path}/:mailId`} element={<MailPage />} />
+                      </Route>
+                    ))}
                   </Route>
                 </Route>
-                <Route path={'mails/'} >
-                  {['inbox', 'sent', 'important', 'drafts', 'trash'].map(path => (
-                    <Route key={path} path="">
-                      <Route path={path} element={<MailPage />} />
-                      <Route path={`${path}/:mailId`} element={<MailPage />} />
-                    </Route>
-                  ))}
+                <Route path={'boarding/'} element={<BoardingLayout />}>
+                  <Route index element={<Boarding />} />
                 </Route>
+                <Route path={'auth/'} element={<AuthLayout />}>
+                  <Route index path="login" element={<LoginPage />} />
+                  <Route path="register" element={<RegisterPage />} />
+                  <Route path="verify" element={<VerifyPage />} />
+                </Route>
+                <Route path="*" element={<PageNotFound />} />
               </Route>
-              <Route path={'boarding/'} element={<BoardingLayout />}>
-                <Route index element={<Boarding />} />
-              </Route>
-              <Route path={'auth/'} element={<AuthLayout />}>
-                <Route index path="login" element={<LoginPage />} />
-                <Route path="register" element={<RegisterPage />} />
-                <Route path="verify" element={<VerifyPage />} />
-              </Route>
-              <Route path="*" element={<PageNotFound />} />
             </Route>
           </Route>
         </Routes>

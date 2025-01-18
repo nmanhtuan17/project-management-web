@@ -1,6 +1,7 @@
 import { appConfig } from "@/configs/app.config";
 import { setAuth } from "@/redux/slices/auth.slice";
 import { store } from "@/redux/store";
+import { Email } from "@/types/mail";
 import axios, { AxiosRequestConfig } from "axios";
 
 class ApiService {
@@ -37,6 +38,10 @@ class ApiService {
   }
   async delete(endpoint: string, data: any, config: AxiosRequestConfig = {}) {
     return this.callApi('DELETE', endpoint, data, config);
+  }
+
+  async sendMail(data: Partial<Email>) {
+    return this.post('mails/send', data)
   }
 
   getSubTasks(projectId: string, taskId: string) {
