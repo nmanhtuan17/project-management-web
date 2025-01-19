@@ -19,6 +19,7 @@ import useEditor from "@/lib/hooks/useEditor.tsx";
 import { useAppSelector } from '@/redux/store';
 import apiService from '@/services/api.service';
 import { toast } from 'sonner';
+import { EmailInput } from './EmailInput';
 
 interface Props {
   replyTo?: string;
@@ -49,18 +50,19 @@ export function EmailComposer({ replyTo }: Props) {
 
 
   const sendMail = async () => {
-    if (!user || !to || !subject) return;
+    console.log(to)
+    // if (!user || !to || !subject) return;
 
-    const res = await apiService.sendMail({
-      From: user.internalEmail,
-      To: to,
-      Subject: subject,
-      HtmlBody: editor.getHTML(),
-      TextBody: editor.getText()
-    })
-    if (res.message === 'OK') {
-      toast.success('Sent')
-    }
+    // const res = await apiService.sendMail({
+    //   From: user.internalEmail,
+    //   To: to,
+    //   Subject: subject,
+    //   HtmlBody: editor.getHTML(),
+    //   TextBody: editor.getText()
+    // })
+    // if (res.message === 'OK') {
+    //   toast.success('Sent')
+    // }
   }
 
   if (!editor) {
@@ -68,13 +70,14 @@ export function EmailComposer({ replyTo }: Props) {
   }
 
   return <div className={'w-full flex-1 flex flex-col justify-end p-2 divide-y'}>
-    <div className={'flex flex-row gap-2 mb-2'}>
+    <div className={'flex flex-row gap-2 mb-2 items-center'}>
       <div className={'text-muted-foreground text-sm'}>
         To
       </div>
-      <input className={'flex-1 outline-none text-sm bg-transparent placeholder:text-muted-foreground'}
+      {/* <input className={'flex-1 outline-none text-sm bg-transparent placeholder:text-muted-foreground'}
         onChange={(e) => setTo(e.target.value)}
-      />
+      /> */}
+      <EmailInput onChange={(emails) => setTo(emails.join(', '))} />
     </div>
     <div className={'flex flex-row gap-2 pt-2'}>
       <input
