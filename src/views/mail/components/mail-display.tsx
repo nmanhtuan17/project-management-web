@@ -45,6 +45,7 @@ import { useEffect, useState } from "react"
 import apiService from "@/services/api.service"
 import { useMailContext } from ".."
 import { LoadingSpinner } from "@/components/ui/loading-spinner"
+import IframeDocs from "@/components/common/IframeDocs"
 
 export function MailDisplay() {
   const params = useParams();
@@ -138,7 +139,7 @@ export function MailDisplay() {
               </div>
               <Separator />
               <div className="flex-1 whitespace-pre-wrap p-4 text-sm min-h-0 overflow-y-auto ">
-                <div dangerouslySetInnerHTML={{ __html: email.HtmlBody }} />
+                <IframeDocs content={email.HtmlBody} />
               </div>
             </div>
           ) : (

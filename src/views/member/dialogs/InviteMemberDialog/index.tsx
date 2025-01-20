@@ -7,6 +7,7 @@ import { useCurrentProject } from "@/lib/hooks/useCurrentProject";
 import apiService from "@/services/api.service";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 const inviteFormSchema = z.object({
@@ -17,7 +18,7 @@ type InviteFormValues = z.infer<typeof inviteFormSchema>
 
 export const InviteMemberDialog = () => {
   const { inviteMember, setDialogOpen } = useDialogContext()
-  const {currentProject} = useCurrentProject()
+  const { currentProject } = useCurrentProject()
 
   const form = useForm<InviteFormValues>({
     resolver: zodResolver(inviteFormSchema),
@@ -29,7 +30,8 @@ export const InviteMemberDialog = () => {
   const onSubmit = (data: InviteFormValues) => {
     console.log(data)
     apiService.post(`projects/${currentProject._id}/members/invite`, data).then(res => {
-      
+      toast.success(res.message)
+      setDialogOpen('inviteMember', false)
     })
   }
 
