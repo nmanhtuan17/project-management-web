@@ -19,7 +19,7 @@ import { useCurrentProject } from "@/lib/hooks/useCurrentProject";
 export default function MainLayout() {
   const dispatch = useAppDispatch();
   const { loggedIn } = useAppSelector(state => state.auth);
-  const { projects, loaded } = useAppSelector(state => state.project);
+  const { projects } = useAppSelector(state => state.project);
   const { currentProject } = useCurrentProject();
   const [showCreateSpaceModal, setShowCreateSpaceModal] = useState(false);
   const navigate = useNavigate();

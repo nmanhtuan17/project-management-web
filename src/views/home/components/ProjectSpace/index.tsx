@@ -55,11 +55,16 @@ export const ProjectSpace = () => {
       <CardContent>
         <div>
           <Label>Recent Task</Label>
-          <div className="gap-4 mt-2 grid grid-cols-4">
-            {
-              recentTasks.map(task => <RecentTaskItem key={task._id} task={task} />)
-            }
-          </div>
+          {recentTasks.length > 0 ?
+            <div className="gap-4 mt-2 grid grid-cols-4">
+              {
+                recentTasks.map(task => <RecentTaskItem key={task._id} task={task} />)
+
+              }
+            </div>
+            :
+            <p className="text-muted-foreground font-medium">You haven't had any tasks recently.</p>
+          }
         </div>
       </CardContent>
     </Card>

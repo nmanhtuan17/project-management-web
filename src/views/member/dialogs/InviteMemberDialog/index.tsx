@@ -3,9 +3,12 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
+import useApi from "@/lib/hooks/useApi";
 import { useCurrentProject } from "@/lib/hooks/useCurrentProject";
 import apiService from "@/services/api.service";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -19,6 +22,7 @@ type InviteFormValues = z.infer<typeof inviteFormSchema>
 export const InviteMemberDialog = () => {
   const { inviteMember, setDialogOpen } = useDialogContext()
   const { currentProject } = useCurrentProject()
+  const [loading, setLoading] = useState(false)
 
   const form = useForm<InviteFormValues>({
     resolver: zodResolver(inviteFormSchema),
@@ -29,9 +33,13 @@ export const InviteMemberDialog = () => {
 
   const onSubmit = (data: InviteFormValues) => {
     console.log(data)
+    setLoading(true)
     apiService.post(`projects/${currentProject._id}/members/invite`, data).then(res => {
       toast.success(res.message)
       setDialogOpen('inviteMember', false)
+      form.reset()
+    }).finally(() => {
+      setLoading(false)
     })
   }
 
@@ -82,7 +90,13 @@ export const InviteMemberDialog = () => {
                 className="flex-1"
                 type="submit"
               >
-                Send Invitation
+                {loading ?
+                  <div className="flex justify-center items-center w-full h-full">
+                    <LoadingSpinner size={16} />
+                  </div>
+                  :
+                  'Send Invitation'
+                }
               </Button>
             </div>
           </form>

@@ -62,6 +62,7 @@ export const UserNav = () => {
             user: undefined,
           }))
           reset()
+          navigate('/auth/login')
         }}>
           <LogOut />
           Log out

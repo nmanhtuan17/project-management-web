@@ -16,7 +16,7 @@ export const SubNav = () => {
     </PopoverTrigger>
     <PopoverContent>
       <div className={'grid grid-cols-3'}>
-        <Link to={`/projects/${currentProject.slug}/mails/inbox`}
+        <Link to={`/mails/inbox`}
           className={'aspect-square flex flex-col items-center justify-center group cursor-pointer'}>
           <div
             className={'w-10 h-10 bg-muted flex items-center justify-center rounded border group-hover:bg-muted-foreground'}>

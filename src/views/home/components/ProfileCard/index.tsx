@@ -22,7 +22,7 @@ export const ProfileCard = () => {
         <Separator className="mt-2" />
         <Button
           onClick={() => {
-            navigate('projects/setting/profile')
+            navigate('/projects/setting/profile')
           }}
           variant="link"
           className="w-full">

@@ -25,6 +25,7 @@ import { ProjectOverview } from '@/views/project/overview'
 import { NotificationSettingPage } from '@/views/setting/notification'
 import { ProjectSetting } from '@/views/project/setting'
 import FloatingWindowProvider from '@/components/providers/FloatingWindowProvider'
+import { JoinProject } from './views/member/JoinProject'
 
 function App() {
 
@@ -58,7 +59,7 @@ function App() {
                     </Route>
                   </Route>
                   <Route path={'mails/'} >
-                    {['inbox', 'sent', 'important', 'drafts', 'trash'].map(path => (
+                    {['inbox', 'sent', 'trash'].map(path => (
                       <Route key={path} path="">
                         <Route path={path} element={<MailPage />} />
                         <Route path={`${path}/:mailId`} element={<MailPage />} />
@@ -74,6 +75,7 @@ function App() {
                   <Route path="register" element={<RegisterPage />} />
                   <Route path="verify" element={<VerifyPage />} />
                 </Route>
+                <Route path='projects/:projectId/members/join' element={<JoinProject />} />
                 <Route path="*" element={<PageNotFound />} />
               </Route>
             </Route>

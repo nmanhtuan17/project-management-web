@@ -12,6 +12,7 @@ export const AuthProvider = () => {
   const [authLoaded, setAuthLoaded] = useState(false);
   const navigate = useNavigate();
   const {currentProject} = useCurrentProject();
+  
   useEffect(() => {
     if (loggedIn && tokens.access_token) {
       apiService.setCredentials({

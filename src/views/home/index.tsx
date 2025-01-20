@@ -8,7 +8,6 @@ import { useEffect, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar.tsx";
 import { ArrowUpRight, CalendarClock, Download, Layers, ListChecks, PictureInPicture2, UserPlus } from "lucide-react";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable.tsx";
-import { CalendarDateRangePicker } from "@/components/common/DateRangePicker/DateRangePicker";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { cn } from "@/lib/utils";
 import { loadProjectMembers } from "@/redux/actions/project.action";
