@@ -51,14 +51,16 @@ export function EmailComposer({ replyTo }: Props) {
 
   const sendMail = async () => {
     if (!user || !to || !subject) return;
+    console.log(attachments)
+    const formData = new FormData()
+    formData.append('From', user.internalEmail)
+    formData.append('To', to)
+    formData.append('Subject', subject)
+    formData.append('HtmlBody', editor.getHTML())
+    formData.append('TextBody', editor.getText())
+    attachments.forEach((file) => formData.append('files', file));
 
-    const res = await apiService.sendMail({
-      From: user.internalEmail,
-      To: to,
-      Subject: subject,
-      HtmlBody: editor.getHTML(),
-      TextBody: editor.getText()
-    })
+    const res = await apiService.sendMail(formData)
     if (res.message === 'OK') {
       toast.success('Sent')
     }

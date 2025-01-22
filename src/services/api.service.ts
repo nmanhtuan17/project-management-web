@@ -40,8 +40,13 @@ class ApiService {
     return this.callApi('DELETE', endpoint, data, config);
   }
 
-  async sendMail(data: Partial<Email>) {
-    return this.post('mails/send', data)
+  async sendMail(data: any) {
+    return this.post('mails/send', data, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: this.auth.accessToken ? `Bearer ${this.auth.accessToken}` : undefined,
+      }
+    })
   }
 
   getSubTasks(projectId: string, taskId: string) {

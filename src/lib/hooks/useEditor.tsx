@@ -124,25 +124,26 @@ export default function useEditor({ defaultValue, placeholder }: UseEditor) {
     input.accept = '.pdf,.doc,.docx,.txt,image/*';
     input.multiple = true;
     input.onchange = async () => {
-      const files = input.files;
-      if (files) {
-        const promises = Array.from(files).map(file =>
-          new Promise<string>((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = () => {
-              resolve(reader.result as string);
-            };
-            reader.onerror = reject;
-            reader.readAsDataURL(file);
-          })
-        );
-        Promise.all(promises).then(base64Array => {
-          const attachments = base64Array.map(src => ({ src }));
-          setAttachments(attachments);
-        }).catch(error => {
-          console.error('Error reading file:', error);
-        });
-      }
+      // const files = input.files;
+      setAttachments(Array.from(input.files))
+      // if (files) {
+      //   const promises = Array.from(files).map(file =>
+      //     new Promise<string>((resolve, reject) => {
+      //       const reader = new FileReader();
+      //       reader.onload = () => {
+      //         resolve(reader.result as string);
+      //       };
+      //       reader.onerror = reject;
+      //       reader.readAsDataURL(file);
+      //     })
+      //   );
+      //   Promise.all(promises).then(base64Array => {
+      //     const attachments = base64Array.map(src => ({ src }));
+      //     setAttachments(attachments);
+      //   }).catch(error => {
+      //     console.error('Error reading file:', error);
+      //   });
+      // }
     };
     input.click();
   }, [editor]);
