@@ -78,6 +78,7 @@ export interface Email {
   StrippedTextReply?: string;
   ReplyTo?: string;
   Date: Date;
+  ReceivedAt?: string;
   Status: EmailStatus;
   Attachments: EmailAttachment[];
 }

@@ -51,7 +51,7 @@ export function MailList({ items }: MailListProps) {
                     </div>
                     <div
                       className={cn("text-xs", params.mailId === item._id ? "text-foreground" : "text-muted-foreground")}>
-                      {dayjs(new Date(item.Date)).fromNow()}
+                      {dayjs(new Date(item.MessageStream === 'inbound' ? item?.Date : item?.ReceivedAt)).fromNow()}
                     </div>
                   </div>
                   <div className="text-xs font-medium">{item.Subject}</div>
