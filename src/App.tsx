@@ -26,6 +26,7 @@ import { NotificationSettingPage } from '@/views/setting/notification'
 import { ProjectSetting } from '@/views/project/setting'
 import FloatingWindowProvider from '@/components/providers/FloatingWindowProvider'
 import { JoinProject } from './views/member/JoinProject'
+import { TaskPerformance } from '@/views/tasks/TaskPerformance'
 
 function App() {
 
@@ -44,7 +45,7 @@ function App() {
                       <Route path='' element={<ProjectLayout />}>
                         <Route index path='overview/' element={<ProjectOverview />} />
                         <Route path='tasks/' element={<TaskLayout />} >
-                          <Route index path='performance/' element={<TasksBoard />} />
+                          <Route index path='performance/' element={<TaskPerformance />} />
                           <Route path='timeline/' element={<TaskList />} />
                           <Route path='list/' element={<TaskList />} />
                           <Route path='kanban/' element={<TasksBoard />} />

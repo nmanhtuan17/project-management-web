@@ -1,7 +1,4 @@
-import { Select } from "@/components/ui/select.tsx";
-import { MultiSelect } from "@/components/ui/multi-select.tsx";
 import { useEffect, useState } from "react";
-import { TaskStatus, TaskTypes } from "@/types/task.ts";
 import { Label } from "@/components/ui/label.tsx";
 import { TaskTypeSelect } from "@/views/tasks/components/TaskTypeSelect.tsx";
 import { TaskStatusSelect } from "@/views/tasks/components/TaskStatusSelect.tsx";
@@ -9,6 +6,7 @@ import { TaskPrioritySelect } from "@/views/tasks/components/TaskPrioritySelect.
 import { useAppDispatch, useAppSelector } from "@/redux/store.ts";
 import { filterTask } from "@/redux/slices/task.slice.ts";
 import { Button } from "@/components/ui/button";
+import { useTaskStatus } from "@/lib/hooks/useTaskStatus";
 
 export function TaskFilterForm() {
   const { filter } = useAppSelector(state => state.task)
@@ -16,10 +14,12 @@ export function TaskFilterForm() {
   const [statuses, setStatuses] = useState<string[]>(filter.statuses);
   const [types, setTypes] = useState<string[]>(filter.types);
   const [priorities, setPriorities] = useState<any>(filter?.priorities);
+  const {statuses: taskStatuses} = useTaskStatus()
 
   useEffect(() => {
     dispatch(filterTask({ statuses, types, priorities }))
   }, [statuses, types, priorities]);
+
   return <div>
     <div className="space-y-2">
       <div className="flex items-center justify-between">
@@ -55,8 +55,8 @@ export function TaskFilterForm() {
             showAllSelector
             multiple
             selected={statuses}
-            onChange={selected => setStatuses(selected as string[])}
-          />
+            onChange={selected => setStatuses(selected as string[])} 
+            options={taskStatuses} />
         </div>
         <div>
           <Label>
