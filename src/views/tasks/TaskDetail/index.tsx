@@ -108,7 +108,7 @@ type TaskFormValues = z.infer<typeof taskFormSchema>
 export default function TaskDetail(props: TaskDetailProps) {
   const { taskId } = props;
   const dispatch = useAppDispatch();
-  const { currentProject: project } = useCurrentProject();
+  const { currentProject: project, profile } = useCurrentProject();
   const { task, setTask } = useTask(taskId);
   const [getActivities, { data: activities, error, loading }] = useApi<TaskActivity[]>(apiService.getTaskActivities);
   // const [getSubTasks, { data: subTasks }] = useApi<Task[]>(apiService.getSubTasks);
@@ -157,6 +157,8 @@ export default function TaskDetail(props: TaskDetailProps) {
   }
 
   const type = taskConfig.types.find(t => t.value === task?.type);
+
+  console.log(project)
 
   return <TaskDetailContext.Provider value={{
     taskId,

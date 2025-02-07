@@ -37,7 +37,7 @@ export const LabelsManage = () => {
           {labels.map(label => {
             return (
               <div key={label._id}
-                className="rounded-sm px-2 text-white"
+                className="rounded-sm px-2 text-white text-sm font-medium"
                 style={{ backgroundColor: label.backgroundColor }}>
                 {label.title}
               </div>

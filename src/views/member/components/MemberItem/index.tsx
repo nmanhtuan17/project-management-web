@@ -19,7 +19,7 @@ export const MemberItem = ({ member }: MemberItemProps) => {
         </Avatar>
         <div>
           <p className="font-semibold">{member.user.fullName}</p>
-          <p className="text-sm text-muted-foreground">{member.user.email}</p>
+          <p className="text-sm text-muted-foreground">{member.user.internalEmail}</p>
         </div>
       </div>
       <div className="flex items-center justify-between">
