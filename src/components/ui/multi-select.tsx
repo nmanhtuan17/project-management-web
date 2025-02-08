@@ -156,6 +156,8 @@ export function MultiSelectAssignees({
   const { members } = useAppSelector(state => state.project)
   const { currentProject, profile } = useCurrentProject()
 
+  console.log(profile)
+
   return (
     <Popover open={open} onOpenChange={setOpen} {...props}>
       <PopoverTrigger asChild>
@@ -171,7 +173,7 @@ export function MultiSelectAssignees({
             {selected.map((item) => (
               <div key={item}>
                 {members.map(mem => mem._id === item && (
-                  <TooltipProvider key={mem._id}>
+                  <TooltipProvider key={mem._id} delayDuration={300}>
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <Avatar className={'w-7 h-7'}>

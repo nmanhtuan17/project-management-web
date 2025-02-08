@@ -158,7 +158,6 @@ export default function TaskDetail(props: TaskDetailProps) {
 
   const type = taskConfig.types.find(t => t.value === task?.type);
 
-  console.log(project)
 
   return <TaskDetailContext.Provider value={{
     taskId,
@@ -187,9 +186,11 @@ export default function TaskDetail(props: TaskDetailProps) {
                   <FormItem>
                     <FormControl>
                       <div>
-                        <Button variant="secondary" className="cursor-default" onClick={(e) => {
-                          e.preventDefault()
-                        }}>
+                        <Button variant="secondary"
+                          className="cursor-default"
+                          onClick={(e) => {
+                            e.preventDefault()
+                          }}>
                           <type.icon className={'w-4 h-4'} />
                           <div className={'text-sm pl-2'}>
                             {type.label}

@@ -49,6 +49,10 @@ class ApiService {
     })
   }
 
+  async getProjectProfile(projectId: string) {
+    return this.get(`projects/${projectId}/members/profile`)
+  }
+
   getSubTasks(projectId: string, taskId: string) {
     return this.get(`/projects/${projectId}/tasks/${taskId}/sub-tasks`, {});
   }

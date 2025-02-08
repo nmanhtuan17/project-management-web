@@ -35,8 +35,14 @@ export const projectSlice = createSlice({
       .addCase(loadProjects.rejected, (state, action) => {
         state.loading = false
       })
+      .addCase(loadProjectMembers.pending, (state, action) => {
+        state.loading = true
+      })
       .addCase(loadProjectMembers.fulfilled, (state, action) => {
         state.members = action.payload
+      })
+      .addCase(loadProjectMembers.rejected, (state, action) => {
+        state.loading = false
       })
       .addCase(createLabel.pending, (state) => {
         state.loading = true

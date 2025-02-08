@@ -31,6 +31,8 @@ import { useNavigate } from "react-router-dom";
 import { useDialogContext } from "@/components/providers/DialogProvider"
 import { loadKanbanBoard } from "@/redux/actions/project.action"
 import { useCurrentProject } from "@/lib/hooks/useCurrentProject"
+import { Project } from "@/types/project"
+import apiService from "@/services/api.service"
 
 type PopoverTriggerProps = React.ComponentPropsWithoutRef<typeof PopoverTrigger>
 
@@ -53,6 +55,15 @@ export const ProjectSwitcher = ({ className }: ProjectSwitcherProps) => {
     label: 'Teams',
     key: 'team'
   }]
+
+  const onSelectProject = async (project: Project) => {
+    setOpen(false)
+    dispatch(loadKanbanBoard(project._id))
+    setCurrentProject(project)
+    const profile = await apiService.getProjectProfile(project._id)
+    setProfile(profile)
+    navigate('/projects/' + project.slug);
+  }
 
   return (<Popover open={open} onOpenChange={setOpen}>
     <PopoverTrigger asChild>
@@ -92,13 +103,7 @@ export const ProjectSwitcher = ({ className }: ProjectSwitcherProps) => {
               {items.map((project) => (
                 <CommandItem
                   key={project._id}
-                  onSelect={() => {
-                    setOpen(false)
-                    dispatch(loadKanbanBoard(project._id))
-                    navigate('/projects/' + project.slug);
-                    setCurrentProject(project)
-                    setProfile(members.length && members.find(member => member.user._id === user._id))
-                  }}
+                  onSelect={() => onSelectProject(project)}
                   className="text-sm"
                 >
                   <Avatar className="mr-2 h-5 w-5">

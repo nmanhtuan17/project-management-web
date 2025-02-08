@@ -92,7 +92,6 @@ export const CreateTaskDialog = () => {
   });
 
   const onSubmit = (data: CreateTaskFormValues) => {
-    console.log(data)
     apiService.post(`/projects/${currentProject._id}/tasks`, data).then(() => {
       dispatch(loadTasks(currentProject._id));
       setDialogOpen('createTaskDialog', false);
@@ -105,6 +104,7 @@ export const CreateTaskDialog = () => {
     <Dialog
       open={createTaskDialog.open}
       onOpenChange={open => {
+        form.reset()
         setDialogOpen('createTaskDialog', open)
       }}
     >
@@ -343,7 +343,6 @@ export const CreateTaskDialog = () => {
               <Button variant="secondary" onClick={(e) => {
                 e.preventDefault()
                 setDialogOpen('createTaskDialog', false)
-                // form.reset()
               }}>
                 Cancel
               </Button>
