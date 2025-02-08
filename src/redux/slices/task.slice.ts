@@ -9,26 +9,31 @@ export const initBoard = {
     {
       id: 'pending',
       title: 'Todo',
+      backgroundColor: '',
       cards: [],
     },
     {
       id: 'on_going',
       title: 'In Progress',
+      backgroundColor: '',
       cards: [],
     },
     {
       id: 'review',
       title: 'Review',
+      backgroundColor: 'rgba(53, 162, 235, 0.5)',
       cards: [],
     },
     {
       id: 'completed',
       title: 'Completed',
+      backgroundColor: 'rgba(21, 128, 61, 0.5)',
       cards: [],
     },
     {
       id: 'rejected',
       title: 'Rejected',
+      backgroundColor: 'rgba(255, 99, 132, 0.5)',
       cards: [],
     },
   ],
@@ -164,9 +169,11 @@ export const taskSlice = createSlice({
       })
       .addCase(createKanbanColumn.fulfilled, (state, action) => {
         state.loading = false
+        toast.success(action.payload.message)
       })
       .addCase(createKanbanColumn.rejected, (state, action) => {
         state.loading = false
+        toast.error(action.error.message)
       })
 
   }

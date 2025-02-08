@@ -27,11 +27,12 @@ export const loadKanbanBoard = createAsyncThunk("project/load-kanban-board", asy
   return data
 })
 
-export const createKanbanColumn = createAsyncThunk("project/create-column", async (payload: { projectId: string, title: string }) => {
-  const { projectId, title } = payload;
+export const createKanbanColumn = createAsyncThunk("project/create-column", async (payload: { projectId: string, title: string, backgroundColor: string }) => {
+  const { projectId, title, backgroundColor } = payload;
   return await apiService.post(`projects/${projectId}/column`, {
     id: slugify(title),
-    title
+    title,
+    backgroundColor
   })
 })
 

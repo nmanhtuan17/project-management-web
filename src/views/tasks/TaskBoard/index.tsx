@@ -32,6 +32,7 @@ export default function TasksBoard(props: TasksBoardProps) {
   const { currentProject, profile } = useCurrentProject();
   const [visible, setVisible] = useState(false);
   const [title, setTitle] = useState<string>('')
+  const [color, setColor] = useState<string>('#cccccc')
 
   async function handleCardMove(_card: BoardTask, source: any, destination: any) {
     const updatedBoard = moveCard(board, source, destination);
@@ -122,7 +123,6 @@ export default function TasksBoard(props: TasksBoardProps) {
                           <Button
                             onClick={() => {
                               setVisible(true)
-
                             }}
                             variant="secondary" className="m-[5px] justify-center items-center gap-1">
                             <Plus size={18} />
@@ -134,21 +134,31 @@ export default function TasksBoard(props: TasksBoardProps) {
                       </Tooltip>
                     </TooltipProvider >
                     :
-                    <div className="w-[200px] gap-1 items-center">
-                      <Input
-                        className="outline-none focus:outline-[0px] mt-1"
-                        onChange={(e) => {
-                          setTitle(e.target.value)
-                        }}
-                        value={title} />
+                    <div className=" gap-1 items-center">
+                      <div className="flex !flex-row rounded-lg border p-2 mt-1">
+                        <input
+                          className="outline-none focus:outline-[0px] flex-1"
+                          onChange={(e) => {
+                            setTitle(e.target.value)
+                          }}
+                          value={title}
+                        />
+                        <input type="color" className="rounded-md"
+                          onChange={(e) => {
+                            setColor(e.target.value)
+                          }}
+                          value={color}
+                        />
+                      </div>
                       <div className="flex !flex-row mt-2">
                         <span
                           onClick={() => {
                             if (title.length > 0) {
-                              dispatch(createKanbanColumn({ projectId: currentProject._id, title }))
+                              dispatch(createKanbanColumn({ projectId: currentProject._id, title, backgroundColor: color }))
                                 .then(() => {
                                   setVisible(false)
                                   setTitle('')
+                                  setColor('')
                                   dispatch(loadKanbanBoard(currentProject._id))
                                     .then(() => {
                                       dispatch(loadTasks(currentProject._id))
