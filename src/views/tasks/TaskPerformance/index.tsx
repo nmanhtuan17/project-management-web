@@ -1,6 +1,4 @@
-
-
-import React from 'react';
+import { useEffect, useMemo } from 'react';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -11,7 +9,12 @@ import {
   Legend,
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
-import { faker } from '@faker-js/faker'
+import { useAppSelector } from '@/redux/store';
+import useApi from '@/lib/hooks/useApi';
+import { Task } from '@/types/task';
+import apiService from '@/services/api.service';
+import { useCurrentProject } from '@/lib/hooks/useCurrentProject';
+import { useTaskStatus } from '@/lib/hooks/useTaskStatus';
 
 ChartJS.register(
   CategoryScale,
@@ -24,6 +27,14 @@ ChartJS.register(
 
 
 export const TaskPerformance = () => {
+  const { members } = useAppSelector(state => state.project)
+  const [getTasks, { data: tasks }] = useApi<Task[]>(apiService.getTasks)
+  const { currentProject } = useCurrentProject()
+  const { statuses } = useTaskStatus()
+
+  useEffect(() => {
+    getTasks(currentProject._id, {})
+  }, [currentProject])
 
   const options = {
     responsive: true,
@@ -39,29 +50,25 @@ export const TaskPerformance = () => {
     },
   };
 
-  const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+
+  const labels = useMemo(() => members.map(member => member.user.fullName), [members])
 
   const data = {
     labels,
     datasets: [
       {
         label: 'Total',
-        data: labels.map(() => faker.number.int({ min: 0, max: 1000 })),
+        data: members.map((mem) => tasks && tasks.filter(task => task.assignees.find(a => a._id === mem._id)).length),
         backgroundColor: 'rgba(53, 162, 235, 0.5)',
       },
-      {
-        label: 'Completed',
-        data: labels.map(() => faker.number.int({ min: 0, max: 1000 })),
-        backgroundColor: 'rgb(21, 128, 61, 0.5)',
-      },
-      {
-        label: 'Overdue',
-        data: labels.map(() => faker.number.int({ min: 0, max: 1000 })),
-        backgroundColor: 'rgba(255, 99, 132, 0.5)',
-      },
-    ],
+      ...statuses.map((item) => ({
+        label: item.label,
+        data: members.map(() =>
+          tasks ? tasks.filter(task => task.status === item.value).length : 0),
+        backgroundColor: item.backgroundColor,
+      }))]
   };
-  
+
   return (
     <div className='w-full flex-1'>
       <Bar options={options} data={data} className='w-full' />

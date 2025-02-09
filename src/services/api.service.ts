@@ -2,6 +2,7 @@ import { appConfig } from "@/configs/app.config";
 import { setAuth } from "@/redux/slices/auth.slice";
 import { store } from "@/redux/store";
 import { Email } from "@/types/mail";
+import { TaskFilter } from "@/types/task";
 import axios, { AxiosRequestConfig } from "axios";
 
 class ApiService {
@@ -51,6 +52,15 @@ class ApiService {
 
   async getProjectProfile(projectId: string) {
     return this.get(`projects/${projectId}/members/profile`)
+  }
+
+  async getTasks(projectId: string, filter?: TaskFilter) {
+    return this.get(`projects/${projectId}/tasks`, {}, {
+      params: {
+        type: filter?.type ?? 'all',
+        ...filter
+      }
+    })
   }
 
   getSubTasks(projectId: string, taskId: string) {

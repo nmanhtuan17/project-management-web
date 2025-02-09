@@ -25,6 +25,14 @@ export enum TaskActivityType {
   Deployment = 'deployment',
 }
 
+export interface TaskFilter {
+  query?: string
+  type: string
+  priority?: string
+  status?: string
+  assignees?: string
+}
+
 export interface Task {
   _id: string;
   title: string;
@@ -79,5 +87,6 @@ export interface BoardColumn {
   _id?: string;
   id: string;
   title: string;
+  backgroundColor: string;
   cards: BoardTask[];
 }

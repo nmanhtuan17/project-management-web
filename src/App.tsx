@@ -27,6 +27,7 @@ import { ProjectSetting } from '@/views/project/setting'
 import FloatingWindowProvider from '@/components/providers/FloatingWindowProvider'
 import { JoinProject } from './views/member/JoinProject'
 import { TaskPerformance } from '@/views/tasks/TaskPerformance'
+import { TaskTimeline } from '@/views/tasks/TaskTimeline'
 
 function App() {
 
@@ -46,7 +47,7 @@ function App() {
                         <Route index path='overview/' element={<ProjectOverview />} />
                         <Route path='tasks/' element={<TaskLayout />} >
                           <Route index path='performance/' element={<TaskPerformance />} />
-                          <Route path='timeline/' element={<TaskList />} />
+                          <Route path='timeline/' element={<TaskTimeline />} />
                           <Route path='list/' element={<TaskList />} />
                           <Route path='kanban/' element={<TasksBoard />} />
                         </Route>

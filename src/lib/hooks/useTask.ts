@@ -28,7 +28,6 @@ export function useTask(taskId: string): UseTaskType {
       setTask(foundTask);
     } else if (project._id) {
       setLoading(true);
-      // call api
       dispatch(loadSingleTask({ projectId: project._id, taskId })).then(r => {
       }).catch(e => {
         setError(e);

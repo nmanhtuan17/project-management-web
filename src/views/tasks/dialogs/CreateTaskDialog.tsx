@@ -10,7 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useCurrentProject } from "@/lib/hooks/useCurrentProject";
 import { useTaskStatus } from "@/lib/hooks/useTaskStatus";
 import { loadTasks } from "@/redux/actions/task.action";
-import { useAppDispatch } from "@/redux/store";
+import { useAppDispatch, useAppSelector } from "@/redux/store";
 import apiService from "@/services/api.service";
 import { TaskPriority, TaskTypes } from "@/types/task";
 import CreateTaskMemberSelector from "@/views/tasks/components/CreateTaskMemberSelector";
@@ -22,7 +22,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { log, time } from "console";
 import { addDays } from "date-fns";
 import { Dot, File, Plus } from "lucide-react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { DateRange } from "react-day-picker";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -71,7 +71,16 @@ export const CreateTaskDialog = () => {
   const { currentProject } = useCurrentProject()
   const dispatch = useAppDispatch();
   const [createTaskType, setCreateType] = useState<string>("normal");
-  const { statuses } = useTaskStatus();
+  const { board } = useAppSelector(state => state.task)
+  const statuses: { value: string, label: string, backgroundColor: string }[] = useMemo(() => {
+    let statuses = []
+    board.columns.forEach(s => statuses.push({
+      value: s.id,
+      label: s.title,
+      backgroundColor: s.backgroundColor
+    }))
+    return statuses
+  }, [board])
 
 
   const defaultValues: Partial<CreateTaskFormValues> = {
@@ -95,8 +104,9 @@ export const CreateTaskDialog = () => {
     apiService.post(`/projects/${currentProject._id}/tasks`, data).then(() => {
       dispatch(loadTasks(currentProject._id));
       setDialogOpen('createTaskDialog', false);
-      form.reset();
       toast.success('Task Created')
+    }).finally(() => {
+      form.reset();
     })
   }
 
@@ -343,6 +353,7 @@ export const CreateTaskDialog = () => {
               <Button variant="secondary" onClick={(e) => {
                 e.preventDefault()
                 setDialogOpen('createTaskDialog', false)
+                form.reset()
               }}>
                 Cancel
               </Button>
