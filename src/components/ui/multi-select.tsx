@@ -156,8 +156,6 @@ export function MultiSelectAssignees({
   const { members } = useAppSelector(state => state.project)
   const { currentProject, profile } = useCurrentProject()
 
-  console.log(profile)
-
   return (
     <Popover open={open} onOpenChange={setOpen} {...props}>
       <PopoverTrigger asChild>
