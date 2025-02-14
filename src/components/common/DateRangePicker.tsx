@@ -59,7 +59,12 @@ export function CalendarDateRangePicker({
             mode="range"
             defaultMonth={date?.from}
             selected={date}
-            onSelect={onChange}
+            onSelect={(range) => {
+              onChange({
+                from: new Date(range.from),
+                to: new Date(range.to)
+              })
+            }}
             numberOfMonths={2}
           />
         </PopoverContent>

@@ -87,10 +87,10 @@ const taskFormSchema = z.object({
   }),
   assignees: z.string().array().optional(),
   time: z.object({
-    from: z.string({
+    from: z.date({
       required_error: "Please select start date.",
     }),
-    to: z.string({
+    to: z.date({
       required_error: "Please select due date.",
     }),
   }),
@@ -133,8 +133,8 @@ export default function TaskDetail(props: TaskDetailProps) {
     status: statuses[0].value,
     priority: TaskPriority.MEDIUM.toString(),
     time: {
-      from: new Date as unknown as string,
-      to: addDays(new Date(), 1) as unknown as string
+      from: new Date(),
+      to: addDays(new Date(), 1)
     },
     title: '',
     parentTask: ''
@@ -144,6 +144,7 @@ export default function TaskDetail(props: TaskDetailProps) {
     resolver: zodResolver(taskFormSchema),
     defaultValues: defaultValues,
   })
+
 
   const onSubmit = (data: TaskFormValues) => {
     dispatch(updateTask({
