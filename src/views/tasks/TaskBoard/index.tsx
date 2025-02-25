@@ -64,12 +64,13 @@ export default function TasksBoard(props: TasksBoardProps) {
     toast.success(updateTaskRes.message)
   }
 
-  const updateColumnTitle = async (columnId: string, title: string) => {
+  const updateColumnTitle = async (columnId: string, title: string, backgroundColor: string) => {
     if (profile.role === ProjectRoles.OWNER || profile.role === ProjectRoles.MANAGER) {
       dispatch(updateColumn({
         projectId: currentProject._id,
         columnId,
-        title
+        title,
+        backgroundColor
       })).then(() => {
         dispatch(loadKanbanBoard(currentProject._id))
           .then(() => {

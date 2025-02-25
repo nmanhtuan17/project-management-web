@@ -36,11 +36,12 @@ export const createKanbanColumn = createAsyncThunk("project/create-column", asyn
   })
 })
 
-export const updateColumn = createAsyncThunk("project/update-column", async (payload: { projectId: string, columnId: string, title: string }) => {
-  const { projectId, columnId, title } = payload
+export const updateColumn = createAsyncThunk("project/update-column", async (payload: { projectId: string, columnId: string, title: string, backgroundColor: string }) => {
+  const { projectId, columnId, title, backgroundColor } = payload
   return await apiService.put(`projects/${projectId}/column/${columnId}`, {
     id: slugify(title),
-    title
+    title,
+    backgroundColor
   })
 })
 
