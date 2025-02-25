@@ -7,18 +7,11 @@ import {
   Plus,
   File
 } from "lucide-react";
-import { useParams } from "react-router-dom";
 import { createContext, createElement, useContext, useEffect, useState } from "react";
 import apiService from "@/services/api.service.ts";
 import { Task, TaskActivity, TaskPriority, TaskTypes } from "@/types/task";
 import { taskConfig } from "@/configs/task.config.ts";
 import { Button } from "@/components/ui/button.tsx";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem, DropdownMenuSeparator,
-  DropdownMenuTrigger
-} from "@/components/ui/dropdown-menu.tsx";
 import { cn, getGravatar } from "@/lib/utils.ts";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar.tsx";
 import { AvatarImage } from "@radix-ui/react-avatar";

@@ -4,7 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { ProjectDetailNav } from "@/views/tasks/nav/ProjectDetailNav";
-import { CheckCheck, Component, Settings, Users } from "lucide-react";
+import { CheckCheck, Component, Milestone, Settings, Users } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { useCurrentProject } from "@/lib/hooks/useCurrentProject";
 import { useAppDispatch } from "@/redux/store";
@@ -58,6 +58,13 @@ export function ProjectLayout(props: any) {
                 icon: CheckCheck,
                 variant: pathname.includes('tasks') ? 'default' : 'ghost',
                 path: `/projects/${currentProject.slug}/tasks/performance`
+              },
+              {
+                title: "Milestones",
+                label: "",
+                icon: Milestone,
+                variant: pathname.includes('milestones') ? 'default' : 'ghost',
+                path: `/projects/${currentProject.slug}/milestones`
               },
               {
                 title: "Members",

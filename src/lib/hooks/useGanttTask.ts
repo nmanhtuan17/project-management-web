@@ -4,17 +4,6 @@ import { useMemo } from "react"
 
 export const useGattTask = () => {
   const { tasks } = useAppSelector(state => state.task)
-  // {
-  //   start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 1),
-  //   end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 15),
-  //   name: "Some Project",
-  //   id: "ProjectSample",
-  //   progress: 25,
-  //   type: "project",
-  //   hideChildren: false,
-  //   displayOrder: 1,
-  // },
-  console.log(tasks)
 
   const formatedTasks: Task[] = useMemo(() => {
     return tasks.map((task) => ({

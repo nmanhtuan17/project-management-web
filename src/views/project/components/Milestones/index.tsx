@@ -1,7 +1,9 @@
+import { useDialogContext } from "@/components/providers/DialogProvider"
 import { Button } from "@/components/ui/button"
 import { Plus } from "lucide-react"
 
 export const Milestones = () => {
+  const { setDialogOpen } = useDialogContext()
 
   return (
     <div className="flex-1 p-4">
@@ -15,6 +17,7 @@ export const Milestones = () => {
         <Button
           onClick={() => {
             // navigate(`/projects/${currentProject.slug}/setting`)
+            setDialogOpen('createMilestone', true)
           }}
           variant="secondary"
           className="px-2 w-8 h-8">

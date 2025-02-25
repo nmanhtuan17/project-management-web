@@ -6,6 +6,7 @@ import { CreateTaskDialog } from "@/views/tasks/dialogs/CreateTaskDialog";
 import { TaskDetailDialog } from "@/views/tasks/components/TaskDetailDialog";
 import { InviteMemberDialog } from "@/views/member/dialogs/InviteMemberDialog";
 import { CreateLabelDialog } from "@/components/dialogs/CreateLabelDialog";
+import { CreateMilestoneDialog } from "../dialogs/CreateMilestoneDialog";
 // import { TaskDetail } from "@/views/tasks/TaskDetail";
 
 interface DialogContextType {
@@ -24,6 +25,10 @@ interface DialogContextType {
     open: boolean
   }
   createLabelDialog: {
+    open: boolean
+  }
+
+  createMilestone: {
     open: boolean
   }
 
@@ -48,6 +53,9 @@ const DialogContext = createContext<DialogContextType>({
   },
   createLabelDialog: {
     open: false
+  },
+  createMilestone: {
+    open: false
   }
 });
 
@@ -71,6 +79,9 @@ export default function DialogProvider(props: DialogProviderProps) {
       open: false
     },
     createLabelDialog: {
+      open: false
+    },
+    createMilestone: {
       open: false
     }
   });
@@ -105,6 +116,7 @@ export default function DialogProvider(props: DialogProviderProps) {
       </TaskDetailDialog>
       <InviteMemberDialog />
       <CreateLabelDialog />
+      <CreateMilestoneDialog />
     </DialogContext.Provider>
   </AlertDialogProvider>
 }

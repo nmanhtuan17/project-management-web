@@ -51,6 +51,7 @@ function App() {
                           <Route path='list/' element={<TaskList />} />
                           <Route path='kanban/' element={<TasksBoard />} />
                         </Route>
+                        <Route path='milestones/' element={<MemberPage />} />
                         <Route path='members/' element={<MemberPage />} />
                         <Route path='setting/' element={<ProjectSetting />} />
                       </Route>
