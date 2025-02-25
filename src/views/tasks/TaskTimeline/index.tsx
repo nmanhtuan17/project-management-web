@@ -1,7 +1,6 @@
 import { Gantt, Task, EventOption, StylingOption, ViewMode, DisplayOption } from 'gantt-task-react';
 import "gantt-task-react/dist/index.css";
 import { useState } from 'react';
-import { getStartEndDateForProject } from '../helper';
 import { useGattTask } from '@/lib/hooks/useGanttTask';
 import { useDialogContext } from '@/components/providers/DialogProvider';
 import TaskDetail from '../TaskDetail';

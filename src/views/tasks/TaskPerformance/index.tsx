@@ -58,13 +58,14 @@ export const TaskPerformance = () => {
     datasets: [
       {
         label: 'Total',
-        data: members.map((mem) => tasks && tasks.filter(task => task.assignees.find(a => a._id === mem._id)).length),
+        data: members.map((mem) =>
+          tasks && tasks.filter(task => task.assignees.find(a => a._id === mem._id)).length),
         backgroundColor: 'rgba(53, 162, 235, 0.5)',
       },
       ...statuses.map((item) => ({
         label: item.label,
-        data: members.map(() =>
-          tasks ? tasks.filter(task => task.status === item.value).length : 0),
+        data: members.map((mem) =>
+          tasks ? tasks.filter(task => task.status === item.value && task.assignees.find(a => a._id === mem._id)).length : 0),
         backgroundColor: item.backgroundColor,
       }))]
   };

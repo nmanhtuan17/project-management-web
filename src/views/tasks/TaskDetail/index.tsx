@@ -116,6 +116,10 @@ export default function TaskDetail(props: TaskDetailProps) {
     if (task) {
       form.reset({
         ...task as unknown as TaskFormValues,
+        time: {
+          from: new Date(task.time.from),
+          to: new Date(task.time.to)
+        },
         assignees: task.assignees.map(mem => mem._id),
       })
     }
