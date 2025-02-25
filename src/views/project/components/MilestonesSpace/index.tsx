@@ -2,7 +2,7 @@ import { useDialogContext } from "@/components/providers/DialogProvider"
 import { Button } from "@/components/ui/button"
 import { Plus } from "lucide-react"
 
-export const Milestones = () => {
+export const MilestonesSpace = () => {
   const { setDialogOpen } = useDialogContext()
 
   return (

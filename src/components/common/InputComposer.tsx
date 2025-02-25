@@ -14,17 +14,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger } from "@/components/u
 import { FontSizeIcon, Link1Icon, ListBulletIcon } from "@radix-ui/react-icons";
 import { PaperClipIcon } from "@heroicons/react/16/solid";
 import { cn } from "@/lib/utils.ts";
-import { useState } from "react";
+import { forwardRef, useImperativeHandle, useState } from "react";
 import useEditor from "@/lib/hooks/useEditor.tsx";
 import { useAppSelector } from '@/redux/store';
-import apiService from '@/services/api.service';
-import { toast } from 'sonner';
-import { EmailInput } from './EmailInput';
 
 interface Props {
 }
 
-export function InputComposer({ }: Props) {
+export const InputComposer = forwardRef((props, ref) => {
   const [align, setAlign] = useState<string>("left");
   const { user } = useAppSelector(state => state.auth)
 
@@ -45,10 +42,10 @@ export function InputComposer({ }: Props) {
     }
   ] = useEditor({ placeholder: "Enter content..." });
 
-
-  const sendMail = async () => {
-
-  }
+  useImperativeHandle(ref, () => ({
+    getText: () => editor.getText(),
+    getHTML: () => editor.getHTML()
+  }))
 
   if (!editor) {
     return null
@@ -245,4 +242,4 @@ export function InputComposer({ }: Props) {
       </div>
     </div>
   </div>
-}
+})

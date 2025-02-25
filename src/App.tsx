@@ -28,6 +28,7 @@ import FloatingWindowProvider from '@/components/providers/FloatingWindowProvide
 import { JoinProject } from './views/member/JoinProject'
 import { TaskPerformance } from '@/views/tasks/TaskPerformance'
 import { TaskTimeline } from '@/views/tasks/TaskTimeline'
+import { Milestones } from '@/views/milestones'
 
 function App() {
 
@@ -51,7 +52,7 @@ function App() {
                           <Route path='list/' element={<TaskList />} />
                           <Route path='kanban/' element={<TasksBoard />} />
                         </Route>
-                        <Route path='milestones/' element={<MemberPage />} />
+                        <Route path='milestones/' element={<Milestones />} />
                         <Route path='members/' element={<MemberPage />} />
                         <Route path='setting/' element={<ProjectSetting />} />
                       </Route>

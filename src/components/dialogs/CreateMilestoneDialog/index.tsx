@@ -7,10 +7,12 @@ import { FormControl, FormField, FormItem, FormLabel, FormMessage, Form } from "
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useCurrentProject } from "@/lib/hooks/useCurrentProject";
+import useEditor from "@/lib/hooks/useEditor";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { addDays } from "date-fns";
 import { Dot } from "lucide-react";
+import { useRef } from "react";
 import { DateRange } from "react-day-picker";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -35,6 +37,7 @@ export const CreateMilestoneDialog = () => {
   const { loading } = useAppSelector(state => state.project);
   const dispatch = useAppDispatch();
   const { currentProject } = useCurrentProject()
+  const inputRef = useRef(null)
 
   const form = useForm<MileStoneFormValues>({
     resolver: zodResolver(labelFormSchema),
@@ -49,6 +52,7 @@ export const CreateMilestoneDialog = () => {
   });
 
   const onSubmit = async (data: MileStoneFormValues) => {
+    console.log(inputRef.current.getHTML())
     console.log(data)
   }
 
@@ -113,7 +117,7 @@ export const CreateMilestoneDialog = () => {
                 <FormItem className="w-full">
                   <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <InputComposer />
+                    <InputComposer ref={inputRef} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

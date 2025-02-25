@@ -7,7 +7,7 @@ import dayjs from 'dayjs'
 import { Plus, Settings } from "lucide-react"
 import { useNavigate } from "react-router-dom"
 import { RecentTasks } from "../components/RecentTasks"
-import { Milestones } from "../components/Milestones"
+import { MilestonesSpace } from "../components/MilestonesSpace"
 import { LabelsManage } from "../components"
 
 export const ProjectOverview = () => {
@@ -50,7 +50,7 @@ export const ProjectOverview = () => {
       <Separator />
       <div className="h-full grid grid-cols-5">
         <div className="col-span-4 flex flex-col">
-          <Milestones />
+          <MilestonesSpace />
           <Separator />
           <RecentTasks />
         </div>
