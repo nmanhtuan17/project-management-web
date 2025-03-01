@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { MilestonesHeader } from "@/views/milestones/components/MilestonesHeader";
 import { PlusIcon } from "lucide-react";
 import { useEffect } from "react";
+import { MilestonesList } from "./components/MilestonesList";
 
 export const Milestones = () => {
   const { openDialog } = useDialogContext();
@@ -37,7 +38,7 @@ export const Milestones = () => {
       <div className="h-full flex-1 grid grid-cols-5">
         <div className="col-span-3 flex">
           <div className="flex-1">
-
+            <MilestonesList />
           </div>
           <Separator orientation="vertical" />
         </div>
