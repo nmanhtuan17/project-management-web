@@ -3,14 +3,23 @@ import { Button } from "@/components/ui/button";
 import { ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
 import { Separator } from "@/components/ui/separator";
 import { useCurrentProject } from "@/lib/hooks/useCurrentProject";
-import { useAppDispatch } from "@/redux/store";
+import { loadMilestones } from "@/redux/actions/project.action";
+import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { MilestonesHeader } from "@/views/milestones/components/MilestonesHeader";
 import { PlusIcon } from "lucide-react";
+import { useEffect } from "react";
 
 export const Milestones = () => {
   const { openDialog } = useDialogContext();
   const { currentProject } = useCurrentProject();
   const dispatch = useAppDispatch();
+  const { milestones } = useAppSelector(state => state.project)
+
+  useEffect(() => {
+    dispatch(loadMilestones(currentProject._id))
+  }, [])
+
+  console.log(milestones)
 
 
   return (

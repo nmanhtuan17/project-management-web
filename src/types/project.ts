@@ -35,3 +35,14 @@ export interface ProjectLabel {
   description: string;
   backgroundColor: string;
 }
+
+export interface Milestone {
+  _id: string;
+  title: string;
+  description: string;
+  time: {
+    from: Date,
+    to: Date
+  },
+  project: string
+}

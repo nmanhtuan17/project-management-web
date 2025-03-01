@@ -16,6 +16,8 @@ import { useRef } from "react";
 import { DateRange } from "react-day-picker";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { createMilestone as createMilestoneAction } from "@/redux/actions/project.action";
+import { Milestone } from "@/types/project";
 
 const labelFormSchema = z.object({
   title: z.string().min(1, "PLEASE_ENTER_TITLE"),
@@ -52,8 +54,16 @@ export const CreateMilestoneDialog = () => {
   });
 
   const onSubmit = async (data: MileStoneFormValues) => {
-    console.log(inputRef.current.getHTML())
-    console.log(data)
+    const payload = {
+      ...data,
+      description: inputRef.current.getHTML()
+    } as Partial<Milestone>
+    console.log(payload)
+    dispatch(createMilestoneAction({
+      projectId: currentProject._id,
+      milestone: payload
+    }))
+    setDialogOpen("createMilestone", false)
   }
 
   return (

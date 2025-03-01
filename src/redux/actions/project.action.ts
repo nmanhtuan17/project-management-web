@@ -1,5 +1,5 @@
 import apiService from "@/services/api.service";
-import { Project, ProjectLabel, ProjectTypes } from "@/types/project";
+import { Milestone, Project, ProjectLabel, ProjectTypes } from "@/types/project";
 import { slugify } from "@/utils";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
@@ -69,4 +69,18 @@ export const loadProjectLabels = createAsyncThunk<
 >('project/load-labels', async (projectId) => {
 
   return await apiService.get(`projects/${projectId}/labels`)
+})
+
+export const loadMilestones = createAsyncThunk('project/load-milestones', async (projectId: string) => {
+  return await apiService.get(`projects/${projectId}/milestones`)
+})
+
+export const createMilestone = createAsyncThunk<
+  any,
+  {
+    projectId: string,
+    milestone: Partial<Milestone>
+  }
+>('project/create-milestone', async (payload) => {
+  return await apiService.post(`projects/${payload.projectId}/milestones`, payload.milestone)
 })
