@@ -29,7 +29,7 @@ import {
 import { useAppDispatch, useAppSelector } from "@/redux/store.ts";
 import { useNavigate } from "react-router-dom";
 import { useDialogContext } from "@/components/providers/DialogProvider"
-import { loadKanbanBoard } from "@/redux/actions/project.action"
+import { loadKanbanBoard, loadMilestones } from "@/redux/actions/project.action"
 import { useCurrentProject } from "@/lib/hooks/useCurrentProject"
 import { Project } from "@/types/project"
 import apiService from "@/services/api.service"
@@ -59,6 +59,7 @@ export const ProjectSwitcher = ({ className }: ProjectSwitcherProps) => {
   const onSelectProject = async (project: Project) => {
     setOpen(false)
     dispatch(loadKanbanBoard(project._id))
+    dispatch(loadMilestones(project._id))
     setCurrentProject(project)
     const profile = await apiService.getProjectProfile(project._id)
     setProfile(profile)

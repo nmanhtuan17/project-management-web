@@ -1,3 +1,5 @@
+import dayjs from "dayjs";
+
 export const slugify = (str: string) =>
   str
     .toLowerCase()
@@ -6,7 +8,7 @@ export const slugify = (str: string) =>
     .replace(/[\s_-]+/g, '-')
     .replace(/^-+|-+$/g, '');
 
-    
+
 export function getStartEndDateForProject(tasks: any[], projectId: string) {
   const projectTasks = tasks.filter(t => t.project === projectId);
   let start = projectTasks[0].start;
@@ -22,4 +24,16 @@ export function getStartEndDateForProject(tasks: any[], projectId: string) {
     }
   }
   return [start, end];
+}
+
+export const checkTimeExpiration = (time: { from: Date, to: Date }) => {
+  const now = dayjs();
+  const dueDate = dayjs(time.to);
+
+  if (now.isAfter(dueDate)) {
+    return { expired: true, remainingDays: 0 };
+  }
+
+  const remainingDays = dueDate.from(now);
+  return { expired: false, remainingDays };
 }

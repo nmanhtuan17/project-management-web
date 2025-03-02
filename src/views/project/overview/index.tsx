@@ -17,8 +17,8 @@ export const ProjectOverview = () => {
 
 
   return (
-    <div className="h-full">
-      <div className="flex flex-1 p-4 justify-between items-center">
+    <div className="h-full flex flex-col">
+      <div className="flex p-4 justify-between items-center">
         <div className="flex flex-row gap-4 items-center">
           <Avatar className="w-12 h-12 !rounded-lg">
             <AvatarImage src={currentProject.avatar || `https://avatar.vercel.sh/${currentProject.name}.png`} alt="@shadcn" />
@@ -48,7 +48,7 @@ export const ProjectOverview = () => {
         </div>
       </div>
       <Separator />
-      <div className="h-full grid grid-cols-5">
+      <div className="flex-1 grid grid-cols-5">
         <div className="col-span-4 flex flex-col">
           <MilestonesSpace />
           <Separator />

@@ -47,7 +47,7 @@ export const TaskTimeline = () => {
   return (
     <div className='flex-1 mt-4 h-full'>
       <Gantt
-        tasks={tasks}
+        tasks={tasks || []}
         onDateChange={handleTaskChange}
         onExpanderClick={handleExpanderClick}
         onClick={handleClick}

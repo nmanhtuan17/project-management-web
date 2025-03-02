@@ -71,8 +71,8 @@ export const projectSlice = createSlice({
       .addCase(loadMilestones.fulfilled, (state, action) => {
         state.milestones = action.payload.data
       })
-      .addCase(createMilestone.fulfilled,(state, action) => {
-        console.log(action.payload)
+      .addCase(createMilestone.fulfilled, (state, action) => {
+        state.milestones = [...state.milestones, action.payload.data]
       })
   }
 });

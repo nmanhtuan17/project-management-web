@@ -48,8 +48,7 @@ export const CreateMilestoneDialog = () => {
       time: {
         from: new Date(),
         to: addDays(new Date(), 1)
-      },
-      description: ""
+      }
     },
   });
 
@@ -80,65 +79,56 @@ export const CreateMilestoneDialog = () => {
           </DialogTitle>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <FormField
-              control={form.control}
-              name="title"
-              render={({ field }) => (
-                <FormItem className="w-full">
-                  <FormLabel>Title</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter a title..." {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              name={'time'}
-              control={form.control}
-              render={({ field }) => (
-                <FormItem className="flex gap-4 items-center !space-y-0 my-2">
-                  <div className="flex items-center">
-                    <FormLabel className="text-muted-foreground">
-                      Start Date
-                    </FormLabel>
-                    <Dot />
-                    <FormLabel className="text-muted-foreground" >
-                      Due Date
-                    </FormLabel>
-                  </div>
-                  <FormControl>
-                    <CalendarDateRangePicker
-                      variant="ghost"
-                      className="flex-1 w-full"
-                      date={field.value as unknown as DateRange}
-                      onChange={field.onChange}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem className="w-full">
-                  <FormLabel>Description</FormLabel>
-                  <FormControl>
-                    <InputComposer ref={inputRef} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <div className="text-right">
-              <Button loading={loading} type="submit">
-                Create
-              </Button>
+          <FormField
+            control={form.control}
+            name="title"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormLabel>Title</FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter a title..." {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            name={'time'}
+            control={form.control}
+            render={({ field }) => (
+              <FormItem className="flex gap-4 items-center !space-y-0">
+                <div className="flex items-center">
+                  <FormLabel className="text-muted-foreground">
+                    Start Date
+                  </FormLabel>
+                  <Dot />
+                  <FormLabel className="text-muted-foreground" >
+                    Due Date
+                  </FormLabel>
+                </div>
+                <FormControl>
+                  <CalendarDateRangePicker
+                    variant="ghost"
+                    className="flex-1 w-full"
+                    date={field.value as unknown as DateRange}
+                    onChange={field.onChange}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <div>
+            <div className="font-medium text-[14px] my-1">
+              Description
             </div>
-          </form>
+            <InputComposer ref={inputRef} />
+          </div>
+          <div className="text-right">
+            <Button onClick={form.handleSubmit(onSubmit)} loading={loading} type="submit">
+              Create
+            </Button>
+          </div>
         </Form>
       </DialogContent>
     </Dialog>
