@@ -19,9 +19,7 @@ export const TaskTimeline = () => {
   const { height } = useWindowDimensions()
 
   const handleTaskChange = (task: Task) => {
-    console.log("On date change Id:", task);
     const updatedTask = defaultTasks.find(t => t._id === task.id)
-
     dispatch(updateTask({
       task: {
         ...updatedTask,
@@ -36,7 +34,6 @@ export const TaskTimeline = () => {
   };
 
   const handleExpanderClick = (task: Task) => {
-    // setTasks(tasks.map(t => (t.id === task.id ? task : t)));
     console.log("On expander click Id:" + task.id);
   };
 

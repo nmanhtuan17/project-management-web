@@ -51,6 +51,8 @@ export default function TasksBoard(props: TasksBoardProps) {
     dispatch(setBoard({ columns: [...updatedBoard.columns] }));
     const updateTaskRes = await apiService.put(`projects/${currentProject._id}/tasks/${updatedTask._id}`, {
       ...updatedTask,
+      labels: updatedTask.labels && updatedTask.labels.map(item => item._id),
+      milestone: updatedTask.milestone && updatedTask.milestone._id,
       assignees: updatedTask.assignees.map(i => i._id)
     });
     const task = updateTaskRes.data.task

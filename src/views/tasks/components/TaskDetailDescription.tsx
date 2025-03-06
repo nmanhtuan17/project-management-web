@@ -1,7 +1,8 @@
+import { InputComposer } from "@/components/common/InputComposer"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { X } from "lucide-react"
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 
 interface TaskDetailDescriptionProps {
@@ -10,10 +11,16 @@ interface TaskDetailDescriptionProps {
 
 export const TaskDetailDescription = (props: TaskDetailDescriptionProps) => {
   const [isEdit, setEdit] = useState(false)
+  const inputRef = useRef(null)
+
+  useEffect(() => {
+    inputRef.current.setContent(props.value)
+  }, [props.value]);
 
   return (
     <div className="">
-      {isEdit ?
+      <InputComposer ref={inputRef} />
+      {/* {isEdit ?
         <div>
           <Input {...props} />
           <div className="flex justify-end mt-2 gap-2">
@@ -47,7 +54,7 @@ export const TaskDetailDescription = (props: TaskDetailDescriptionProps) => {
             </div>
           }
         </>
-      }
+      } */}
     </div>
   )
 }

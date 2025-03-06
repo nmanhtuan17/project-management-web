@@ -1,4 +1,4 @@
-import { Project, ProjectMember } from "@/types/project";
+import { Milestone, Project, ProjectLabel, ProjectMember } from "@/types/project";
 
 export enum TaskTypes {
   ALL = 'all',
@@ -49,7 +49,8 @@ export interface Task {
   assignees: ProjectMember[];
   archived: boolean;
   attachments: string[] | any[];
-  label?: string;
+  labels?: ProjectLabel[];
+  milestone?: Milestone;
   __v?: number;
 }
 

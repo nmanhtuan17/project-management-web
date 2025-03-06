@@ -1,4 +1,5 @@
 import { CalendarDateRangePicker } from "@/components/common/DateRangePicker";
+import { InputComposer } from "@/components/common/InputComposer";
 import { useDialogContext } from "@/components/providers/DialogProvider"
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
@@ -15,6 +16,8 @@ import apiService from "@/services/api.service";
 import { TaskPriority, TaskTypes } from "@/types/task";
 import CreateTaskMemberSelector from "@/views/tasks/components/CreateTaskMemberSelector";
 import TaskDatePopupPicker from "@/views/tasks/components/TaskDatePopupPicker";
+import { TaskLabelsSelect } from "@/views/tasks/components/TaskLabelsSelect";
+import { TaskMilestoneSelect } from "@/views/tasks/components/TaskMilestoneSelect";
 import { TaskPrioritySelect } from "@/views/tasks/components/TaskPrioritySelect";
 import { TaskStatusSelect } from "@/views/tasks/components/TaskStatusSelect";
 import { TaskTypeSelect } from "@/views/tasks/components/TaskTypeSelect";
@@ -22,7 +25,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { log, time } from "console";
 import { addDays } from "date-fns";
 import { Dot, File, Plus } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { DateRange } from "react-day-picker";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -59,8 +62,8 @@ const createTaskFormSchema = z.object({
   parentTask: z.string().optional(),
   project: z.string().optional(),
   attachments: z.string().array().optional(),
-  phase: z.string().optional(),
-  label: z.string().optional()
+  milestone: z.string().optional(),
+  labels: z.string().array().optional()
 })
 
 type CreateTaskFormValues = z.infer<typeof createTaskFormSchema>
@@ -70,8 +73,9 @@ export const CreateTaskDialog = () => {
   const { createTaskDialog, setDialogOpen } = useDialogContext();
   const { currentProject } = useCurrentProject()
   const dispatch = useAppDispatch();
-  const [createTaskType, setCreateType] = useState<string>("normal");
   const { board } = useAppSelector(state => state.task)
+  const inputRef = useRef(null)
+
   const statuses: { value: string, label: string, backgroundColor: string }[] = useMemo(() => {
     let statuses = []
     board.columns.forEach(s => statuses.push({
@@ -92,7 +96,8 @@ export const CreateTaskDialog = () => {
       to: addDays(new Date(), 1)
     },
     title: '',
-    parentTask: ''
+    parentTask: '',
+    labels: []
   }
 
   const form = useForm({
@@ -101,7 +106,10 @@ export const CreateTaskDialog = () => {
   });
 
   const onSubmit = (data: CreateTaskFormValues) => {
-    apiService.post(`/projects/${currentProject._id}/tasks`, data).then(() => {
+    apiService.post(`/projects/${currentProject._id}/tasks`, {
+      ...data,
+      description: inputRef.current.getHTML()
+    }).then(() => {
       dispatch(loadTasks(currentProject._id));
       setDialogOpen('createTaskDialog', false);
       toast.success('Task Created')
@@ -120,248 +128,245 @@ export const CreateTaskDialog = () => {
     >
       <DialogContent className="w-full max-w-[1280px] min-h-[600px]">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)}>
-            <div className={'grid grid-cols-5 gap-4 p-4'}>
-              <div className={'col-span-3 space-y-4'}>
-                <FormField
-                  control={form.control}
-                  name="title"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>
-                        Title
-                      </FormLabel>
-                      <FormControl>
-                        <Input placeholder="Title..." {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="description"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>
-                        Description
-                      </FormLabel>
-                      <FormControl>
-                        <Textarea placeholder="Task description..." {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
+          <div className={'grid grid-cols-5 gap-4 p-4'}>
+            <div className={'col-span-3 space-y-4'}>
+              <FormField
+                control={form.control}
+                name="title"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      Title
+                    </FormLabel>
+                    <FormControl>
+                      <Input placeholder="Title..." {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      Description
+                    </FormLabel>
+                    <FormControl>
+                      {/* <Textarea placeholder="Task description..." {...field} /> */}
+                      <InputComposer ref={inputRef} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
-              <div className={'col-span-2'}>
-                <div className="border p-3 rounded space-y-2">
-                  <FormField
-                    name={'time'}
-                    control={form.control}
-                    render={({ field }) => (
-                      <FormItem className="flex gap-4 items-center !space-y-0 my-2">
-                        <div className="flex items-center">
-                          <FormLabel className="text-muted-foreground">
-                            Start Date
-                          </FormLabel>
-                          <Dot />
-                          <FormLabel className="text-muted-foreground" >
-                            Due Date
-                          </FormLabel>
-                        </div>
-                        <FormControl>
-                          <CalendarDateRangePicker
-                            variant="ghost"
-                            className="flex-1 w-full"
-                            date={field.value as DateRange}
-                            onChange={field.onChange}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <Separator className="my-4" />
-                  <FormField
-                    control={form.control}
-                    name="assignees"
-                    render={({ field }) => (
-                      <FormItem className={'flex items-center gap-4 !space-y-0'}>
+            <div className={'col-span-2'}>
+              <div className="border p-3 rounded space-y-2">
+                <FormField
+                  name={'time'}
+                  control={form.control}
+                  render={({ field }) => (
+                    <FormItem className="flex gap-4 items-center !space-y-0 my-2">
+                      <div className="flex items-center">
                         <FormLabel className="text-muted-foreground">
-                          Assignees
+                          Start Date
                         </FormLabel>
-                        <FormControl className="col-span-5">
-                          <CreateTaskMemberSelector
-                            members={field.value}
-                            onChange={members => {
-                              field.onChange(members)
-                            }}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <Separator className="my-4" />
-                  <FormField
-                    name={'status'}
-                    control={form.control}
-                    render={({ field }) => (
-                      <FormItem className="grid grid-cols-6 items-center gap-4 !space-y-0">
-                        <FormLabel className="col-span-1 text-muted-foreground">
-                          Status
+                        <Dot />
+                        <FormLabel className="text-muted-foreground" >
+                          Due Date
                         </FormLabel>
-                        <FormControl className="col-span-5">
-                          <TaskStatusSelect
-                            options={statuses}
-                            className="shadow-none border-transparent hover:bg-muted/50"
-                            selected={field.value}
-                            showIcon
-                            onChange={type => {
-                              field.onChange(type);
-                            }}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    name={'type'}
-                    control={form.control}
-                    render={({ field }) => (
-                      <FormItem className="grid grid-cols-6 items-center gap-4 !space-y-0">
-                        <FormLabel className="col-span-1 text-muted-foreground">
-                          Type
-                        </FormLabel>
-                        <FormControl className="col-span-5">
-                          <TaskTypeSelect
-                            className="shadow-none border-transparent hover:bg-muted/50"
-                            selected={field.value}
-                            showIcon
-                            onChange={type => {
-                              field.onChange(type);
-                            }}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    name={'priority'}
-                    control={form.control}
-                    render={({ field }) => (
-                      <FormItem className="grid grid-cols-6 items-center gap-4 !space-y-0">
-                        <FormLabel className="col-span-1 text-muted-foreground">
-                          Priority
-                        </FormLabel>
-                        <FormControl className="col-span-5">
-                          <TaskPrioritySelect
-                            className="shadow-none border-transparent hover:bg-muted/50"
-                            selected={field.value}
-                            showIcon
-                            onChange={type => {
-                              field.onChange(type);
-                            }}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  {/* <FormField
-                    name={'phase'}
-                    control={form.control}
-                    render={({ field }) => (
-                      <FormItem className="grid grid-cols-6 items-center gap-4 !space-y-0">
-                        <FormLabel className="col-span-1 text-muted-foreground">
-                          Phase
-                        </FormLabel>
-                        <FormControl className="col-span-5">
-                          <TaskPrioritySelect
-                            className="shadow-none border-transparent hover:bg-muted/50"
-                            selected={field.value}
-                            showIcon
-                            onChange={type => {
-                              field.onChange(type);
-                            }}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    name={'label'}
-                    control={form.control}
-                    render={({ field }) => (
-                      <FormItem className="grid grid-cols-6 items-center !space-y-0">
-                        <FormLabel className="col-span-1 text-muted-foreground">
-                          Label
-                        </FormLabel>
-                        <FormControl className="col-span-5">
-                          <TaskPrioritySelect
-                            className="shadow-none border-transparent hover:bg-muted/50"
-                            selected={field.value}
-                            showIcon
-                            onChange={type => {
-                              field.onChange(type);
-                            }}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  /> */}
-                </div>
-                <div className="mt-2">
-                  <FormField
-                    name={'attachments'}
-                    control={form.control}
-                    render={({ field }) => (
-                      <FormItem className="flex items-center gap-4 !space-y-0">
-                        <FormLabel className="flex flex-1 items-center gap-2 text-muted-foreground">
-                          <File size={16} />
-                          <span>
-                            Attachments
-                          </span>
-                        </FormLabel>
-                        <FormControl className="">
-                          <Button
-                            className="p-0 w-6 h-6 align-middle items-center"
-                            variant="ghost"
-                            onClick={(e) => {
-                              e.preventDefault()
-                            }}>
-                            <Plus size={16} />
-                          </Button>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
+                      </div>
+                      <FormControl>
+                        <CalendarDateRangePicker
+                          variant="ghost"
+                          className="flex-1 w-full"
+                          date={field.value as DateRange}
+                          onChange={field.onChange}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Separator className="my-4" />
+                <FormField
+                  control={form.control}
+                  name="assignees"
+                  render={({ field }) => (
+                    <FormItem className={'flex items-center gap-4 !space-y-0'}>
+                      <FormLabel className="text-muted-foreground">
+                        Assignees
+                      </FormLabel>
+                      <FormControl className="col-span-5">
+                        <CreateTaskMemberSelector
+                          members={field.value}
+                          onChange={members => {
+                            field.onChange(members)
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Separator className="my-4" />
+                <FormField
+                  name={'status'}
+                  control={form.control}
+                  render={({ field }) => (
+                    <FormItem className="grid grid-cols-6 items-center gap-4 !space-y-0">
+                      <FormLabel className="col-span-1 text-muted-foreground">
+                        Status
+                      </FormLabel>
+                      <FormControl className="col-span-5">
+                        <TaskStatusSelect
+                          options={statuses}
+                          className="shadow-none border-transparent hover:bg-muted/50"
+                          selected={field.value}
+                          showIcon
+                          onChange={type => {
+                            field.onChange(type);
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  name={'type'}
+                  control={form.control}
+                  render={({ field }) => (
+                    <FormItem className="grid grid-cols-6 items-center gap-4 !space-y-0">
+                      <FormLabel className="col-span-1 text-muted-foreground">
+                        Type
+                      </FormLabel>
+                      <FormControl className="col-span-5">
+                        <TaskTypeSelect
+                          className="shadow-none border-transparent hover:bg-muted/50"
+                          selected={field.value}
+                          showIcon
+                          onChange={type => {
+                            field.onChange(type);
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  name={'priority'}
+                  control={form.control}
+                  render={({ field }) => (
+                    <FormItem className="grid grid-cols-6 items-center gap-4 !space-y-0">
+                      <FormLabel className="col-span-1 text-muted-foreground">
+                        Priority
+                      </FormLabel>
+                      <FormControl className="col-span-5">
+                        <TaskPrioritySelect
+                          className="shadow-none border-transparent hover:bg-muted/50"
+                          selected={field.value}
+                          showIcon
+                          onChange={type => {
+                            field.onChange(type);
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Separator className="my-4" />
+                <FormField
+                  name={'milestone'}
+                  control={form.control}
+                  render={({ field }) => (
+                    <FormItem className="grid grid-cols-6 items-center gap-4 !space-y-0">
+                      <FormLabel className="col-span-1 text-muted-foreground">
+                        Milestone
+                      </FormLabel>
+                      <FormControl className="col-span-5">
+                        <TaskMilestoneSelect
+                          className="shadow-none border-transparent hover:bg-muted/50"
+                          selected={field.value}
+                          showIcon
+                          onChange={milestone => {
+                            field.onChange(milestone);
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  name={'labels'}
+                  control={form.control}
+                  render={({ field }) => (
+                    <FormItem className="grid grid-cols-6 items-center !space-y-0">
+                      <FormLabel className="col-span-1 text-muted-foreground">
+                        Labels
+                      </FormLabel>
+                      <FormControl className="col-span-5">
+                        <TaskLabelsSelect
+                          className="shadow-none border-transparent hover:bg-muted/50"
+                          selected={field.value}
+                          showIcon
+                          onChange={labels => {
+                            field.onChange(labels);
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="mt-2">
+                <FormField
+                  name={'attachments'}
+                  control={form.control}
+                  render={({ field }) => (
+                    <FormItem className="flex items-center gap-4 !space-y-0">
+                      <FormLabel className="flex flex-1 items-center gap-2 text-muted-foreground">
+                        <File size={16} />
+                        <span>
+                          Attachments
+                        </span>
+                      </FormLabel>
+                      <FormControl className="">
+                        <Button
+                          className="p-0 w-6 h-6 align-middle items-center"
+                          variant="ghost"
+                          onClick={(e) => {
+                            e.preventDefault()
+                          }}>
+                          <Plus size={16} />
+                        </Button>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </div>
             </div>
-            <div className="absolute bottom-0 right-0 p-6 space-x-2">
-              <Button variant="secondary" onClick={(e) => {
-                e.preventDefault()
-                setDialogOpen('createTaskDialog', false)
-                form.reset()
-              }}>
-                Cancel
-              </Button>
-              <Button type={'submit'}>
-                Save
-              </Button>
-            </div>
-          </form>
+          </div>
+          <div className="absolute bottom-0 right-0 p-6 space-x-2">
+            <Button variant="secondary" onClick={(e) => {
+              e.preventDefault()
+              setDialogOpen('createTaskDialog', false)
+              form.reset()
+            }}>
+              Cancel
+            </Button>
+            <Button type={'submit'} onClick={form.handleSubmit(onSubmit)}>
+              Save
+            </Button>
+          </div>
         </Form>
       </DialogContent>
     </Dialog>

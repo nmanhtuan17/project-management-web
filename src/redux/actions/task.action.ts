@@ -40,6 +40,8 @@ export const loadSingleTask = createAsyncThunk<
 export const updateTask = createAsyncThunk<any, { task: Task, projectId: string }>('task/update', async ({ task, projectId }, thunkApi) => {
   let newTask = {
     ...task,
+    labels: task?.labels && task.labels.map(item => item?._id || item),
+    milestone: task?.milestone && task.milestone?._id || task.milestone,
     attachments: task.attachments.filter(item => !!item).map((attachment: any) => {
       if (typeof attachment !== 'string') {
         return attachment._id;

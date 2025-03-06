@@ -44,7 +44,8 @@ export const InputComposer = forwardRef((props, ref) => {
 
   useImperativeHandle(ref, () => ({
     getText: () => editor.getText(),
-    getHTML: () => editor.getHTML()
+    getHTML: () => editor.getHTML(),
+    setContent: (content: any) => editor.commands.setContent(content)
   }))
 
   if (!editor) {
