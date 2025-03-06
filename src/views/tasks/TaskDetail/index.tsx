@@ -150,7 +150,6 @@ export default function TaskDetail(props: TaskDetailProps) {
   })
 
   const onSubmit = (data: TaskFormValues) => {
-    console.log(data)
     dispatch(updateTask({
       task: {
         ...task,

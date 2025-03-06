@@ -12,18 +12,18 @@ import { Task } from "@/types/task"
 import dayjs from "dayjs"
 import { Ellipsis } from "lucide-react"
 import TaskDetail from "../TaskDetail"
+import { cn } from "@/lib/utils"
 
 interface TaskListItemProp {
   task: Task
 }
 
 export const TaskListItem = ({ task }: TaskListItemProp) => {
-  const {taskDetail, setDialogOpen} = useDialogContext();
+  const { taskDetail, setDialogOpen } = useDialogContext();
   const type = taskConfig.types.find(t => t.value === task?.type);
   const priority = taskConfig.priorities.find(t => t.value === task?.priority);
   const { statuses } = useTaskStatus()
   const status = statuses.find(t => t.value === task?.status);
-  const labels = []
 
   return (
     <TableRow key={task._id}
@@ -35,7 +35,26 @@ export const TaskListItem = ({ task }: TaskListItemProp) => {
         <Badge className="px-2 text-xs" variant="secondary">{type.label}</Badge>
         {"  "} {task?.title}
       </TableCell>
-      <TableCell className="text-xs font-semibold">{task.label ?? 'No label'}</TableCell>
+      <TableCell className="text-xs font-semibold">
+        <div className="flex gap-2">
+          {
+            task.labels.length > 0 ?
+              task.labels.map(label => (
+                <div
+                  key={label._id}
+                  className='self-baseline rounded px-2 py-1'
+                  style={{
+                    background: label.backgroundColor
+                  }}>
+                  {label.title}
+                </div>
+              ))
+              :
+              'No labels'
+          }
+
+        </div>
+      </TableCell>
       <TableCell className="text-xs font-semibold">
         <p className="text-[12px] line-clamp-2 font-semibold">
           {status.label}
@@ -77,25 +96,8 @@ export const TaskListItem = ({ task }: TaskListItemProp) => {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-[160px]">
-            <DropdownMenuItem>Edit</DropdownMenuItem>
-            <DropdownMenuItem>Make a copy</DropdownMenuItem>
-            <DropdownMenuItem>Favorite</DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuSub>
-              <DropdownMenuSubTrigger>Labels</DropdownMenuSubTrigger>
-              <DropdownMenuSubContent>
-                <DropdownMenuRadioGroup value={task.label}>
-                  {labels.map((label) => (
-                    <DropdownMenuRadioItem key={label.value} value={label.value}>
-                      {label.label}
-                    </DropdownMenuRadioItem>
-                  ))}
-                </DropdownMenuRadioGroup>
-              </DropdownMenuSubContent>
-            </DropdownMenuSub>
-            <DropdownMenuSeparator />
             <DropdownMenuItem>
-              Delete
+              Archie
               <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
             </DropdownMenuItem>
           </DropdownMenuContent>
