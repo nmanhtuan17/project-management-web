@@ -73,7 +73,7 @@ export const CreateTaskDialog = () => {
   const { createTaskDialog, setDialogOpen } = useDialogContext();
   const { currentProject } = useCurrentProject()
   const dispatch = useAppDispatch();
-  const { board } = useAppSelector(state => state.task)
+  const { board, tasks } = useAppSelector(state => state.task)
   const inputRef = useRef(null)
 
   const statuses: { value: string, label: string, backgroundColor: string }[] = useMemo(() => {
@@ -86,6 +86,8 @@ export const CreateTaskDialog = () => {
     return statuses
   }, [board])
 
+  const parentTask = useMemo(() => createTaskDialog?.parentTask && tasks.find(task => task._id === createTaskDialog.parentTask),
+    [createTaskDialog?.parentTask])
 
   const defaultValues: Partial<CreateTaskFormValues> = {
     type: TaskTypes.GENERAL,
@@ -108,6 +110,7 @@ export const CreateTaskDialog = () => {
   const onSubmit = (data: CreateTaskFormValues) => {
     apiService.post(`/projects/${currentProject._id}/tasks`, {
       ...data,
+      parentTask: createTaskDialog.parentTask ? createTaskDialog.parentTask : '',
       description: inputRef.current.getHTML()
     }).then(() => {
       dispatch(loadTasks(currentProject._id));
@@ -154,13 +157,20 @@ export const CreateTaskDialog = () => {
                       Description
                     </FormLabel>
                     <FormControl>
-                      {/* <Textarea placeholder="Task description..." {...field} /> */}
                       <InputComposer ref={inputRef} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
+              <div>
+                <span className="text-muted-foreground text-[14px] font-medium">
+                  Parent task
+                </span>
+                <div className="border px-2 py-1 rounded-sm mt-1 bg-gray-200">
+                  {parentTask?.title}
+                </div>
+              </div>
             </div>
 
             <div className={'col-span-2'}>

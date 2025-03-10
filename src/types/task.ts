@@ -52,6 +52,7 @@ export interface Task {
   labels?: ProjectLabel[];
   milestone?: Milestone;
   __v?: number;
+  parentTask: string;
 }
 
 export interface TaskActivity {

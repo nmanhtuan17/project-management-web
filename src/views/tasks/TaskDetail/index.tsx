@@ -5,7 +5,9 @@ import {
   MessageSquareIcon,
   PencilIcon,
   Plus,
-  File
+  File,
+  CircleAlert,
+  Ellipsis
 } from "lucide-react";
 import { createContext, createElement, useContext, useEffect, useState } from "react";
 import apiService from "@/services/api.service.ts";
@@ -44,6 +46,7 @@ import { TaskDetailDescription } from "../components/TaskDetailDescription";
 import { useCurrentProject } from "@/lib/hooks/useCurrentProject";
 import { TaskMilestoneSelect } from "@/views/tasks/components/TaskMilestoneSelect";
 import { TaskLabelsSelect } from "@/views/tasks/components/TaskLabelsSelect";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 interface TaskDetailContextType {
   taskId: string;
@@ -106,8 +109,9 @@ export default function TaskDetail(props: TaskDetailProps) {
   const { currentProject: project, profile } = useCurrentProject();
   const { task, setTask } = useTask(taskId);
   const [getActivities, { data: activities, error, loading }] = useApi<TaskActivity[]>(apiService.getTaskActivities);
-  // const [getSubTasks, { data: subTasks }] = useApi<Task[]>(apiService.getSubTasks);
+  const [getSubTasks, { data: subTasks }] = useApi<Task[]>(apiService.getSubTasks);
   const { statuses } = useTaskStatus()
+  const { setDialogOpen } = useDialogContext()
 
 
   const loadActivities = () => {
@@ -129,6 +133,12 @@ export default function TaskDetail(props: TaskDetailProps) {
       })
     }
   }, [task]);
+
+  useEffect(() => {
+    getSubTasks(project._id, taskId)
+  }, [taskId])
+
+  console.log(subTasks)
 
   const defaultValues: Partial<TaskFormValues> = {
     type: TaskTypes.GENERAL,
@@ -179,7 +189,6 @@ export default function TaskDetail(props: TaskDetailProps) {
       </>
     ) : (
       <Form {...form}>
-
         <div className={'grid grid-cols-5 gap-4 p-4'}>
           <div className={'col-span-3 space-y-4'}>
             <FormField
@@ -221,6 +230,46 @@ export default function TaskDetail(props: TaskDetailProps) {
                 </FormItem>
               )}
             />
+            <div className="flex flex-col flex-1 h-[200px] gap-2 overflow-y-auto">
+              <div className="flex items-center justify-between">
+                <span className="text-muted-foreground text-[14px] font-medium">
+                  Sub tasks
+                </span>
+                <Button
+                  className="p-0 w-6 h-6 align-middle items-center"
+                  variant="ghost"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    setDialogOpen('createTaskDialog', true, { parentTask: taskId })
+                  }}>
+                  <Plus size={16} />
+                </Button>
+              </div>
+              {subTasks && subTasks.map(subTask => (
+                <div
+                  key={subTask._id}
+                  className="border px-2 py-1 rounded-sm flex items-center gap-2 justify-between">
+                  <div className="flex items-center gap-2">
+                    <CircleAlert size={16} />
+                    {subTask.title}
+                  </div>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" className="p-2 outline-none">
+                        <Ellipsis size={16} />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-[80px]">
+                      <DropdownMenuItem onClick={() => {
+                        setDialogOpen('taskDetail', true, { element: <TaskDetail taskId={subTask._id} /> })
+                      }} >
+                        Open task
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+              ))}
+            </div>
           </div>
 
           <div className={'col-span-2'}>

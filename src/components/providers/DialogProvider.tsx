@@ -15,6 +15,7 @@ interface DialogContextType {
   }
   createTaskDialog: {
     open: boolean;
+    parentTask?: string;
   }
 
   taskDetail: {
