@@ -81,6 +81,8 @@ export const createMilestone = createAsyncThunk<
     projectId: string,
     milestone: Partial<Milestone>
   }
->('project/create-milestone', async (payload) => {
-  return await apiService.post(`projects/${payload.projectId}/milestones`, payload.milestone)
+>('project/create-milestone', async (payload, thunkApi) => {
+  const data = await apiService.post(`projects/${payload.projectId}/milestones`, payload.milestone)
+  thunkApi.dispatch(loadMilestones(payload.projectId))
+  return data
 })

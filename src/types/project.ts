@@ -1,4 +1,5 @@
 import { User } from "@/types/member";
+import { Task } from "@/types/task";
 
 export enum ProjectTypes {
   PERSONAL = 'personal',
@@ -45,4 +46,5 @@ export interface Milestone {
     to: Date
   },
   project: string
+  tasks: Task[]
 }

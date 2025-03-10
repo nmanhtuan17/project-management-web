@@ -69,10 +69,13 @@ export const projectSlice = createSlice({
         toast.error(action.payload.message)
       })
       .addCase(loadMilestones.fulfilled, (state, action) => {
-        state.milestones = action.payload.data
+        state.milestones = action.payload.data.map(milestone => ({
+          ...milestone.milestone,
+          tasks: milestone.tasks
+        }))
       })
       .addCase(createMilestone.fulfilled, (state, action) => {
-        state.milestones = [...state.milestones, action.payload.data]
+        // state.milestones = [...state.milestones, action.payload.data]
       })
   }
 });

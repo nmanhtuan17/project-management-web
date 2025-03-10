@@ -33,16 +33,16 @@ export const MilestoneItem = ({ milestone, selectedItem, onClick }: Props) => {
           {expired ? 'overdue' : `Expired ${remainingDays}`}
         </div>
       </div>
-      <div className=" flex-1">
-        <div className="flex flex-1 items-center justify-between text-muted-foreground text-[12px]">
+      <div className=" flex-1 self-end ">
+        <div className="flex flex-1 items-center justify-end text-muted-foreground text-[12px]">
           <span>
-            0 task
+            {milestone.tasks.length} tasks
           </span>
-          <span>
+          {/* <span>
             0% complete
-          </span>
+          </span> */}
         </div>
-        <Progress value={66} />
+        {/* <Progress value={66} /> */}
       </div>
     </div>
   </div>
