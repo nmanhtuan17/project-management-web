@@ -52,6 +52,7 @@ export const TaskPerformance = () => {
 
 
   const labels = useMemo(() => members.map(member => member.user.fullName), [members])
+  console.log(tasks)
 
   const data = {
     labels,

@@ -58,6 +58,7 @@ class ApiService {
     return this.get(`projects/${projectId}/tasks`, {}, {
       params: {
         type: filter?.type ?? 'all',
+        limit: 100,
         ...filter
       }
     })
