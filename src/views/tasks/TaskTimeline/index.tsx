@@ -1,6 +1,6 @@
 import { Gantt, Task, EventOption, StylingOption, ViewMode, DisplayOption } from 'gantt-task-react';
 import "gantt-task-react/dist/index.css";
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useGattTask } from '@/lib/hooks/useGanttTask';
 import { useDialogContext } from '@/components/providers/DialogProvider';
 import TaskDetail from '../TaskDetail';
@@ -10,6 +10,8 @@ import { updateTask } from '@/redux/actions/task.action';
 import { ProjectMember } from '@/types/project';
 import { useWindowDimensions } from '@/lib/hooks/useWindowDimensions';
 
+let timeoutId;
+
 export const TaskTimeline = () => {
   const { tasks: defaultTasks } = useAppSelector(state => state.task)
   const { tasks } = useGattTask()
@@ -17,8 +19,21 @@ export const TaskTimeline = () => {
   const dispatch = useAppDispatch()
   const { currentProject } = useCurrentProject()
   const { height } = useWindowDimensions()
+  const lastUpdatedTask = useRef<any>(null);
+  const [task, setTask] = useState<Task>()
+  const [update, setUpdate] = useState(false)
 
-  const handleTaskChange = (task: Task) => {
+  useEffect(() => {
+    if (update) {
+      timeoutId = setTimeout(() => {
+        handleTaskChange()
+        setUpdate(true)
+      }, 100)
+    }
+    return () => clearTimeout(timeoutId);
+  }, [task, update]);
+
+  const handleTaskChange = () => {
     const updatedTask = defaultTasks.find(t => t._id === task.id)
     dispatch(updateTask({
       task: {
@@ -45,7 +60,10 @@ export const TaskTimeline = () => {
     <div className='flex-1 mt-4 h-full'>
       <Gantt
         tasks={tasks || []}
-        onDateChange={handleTaskChange}
+        onDateChange={(task) => {
+          setTask(task)
+          setUpdate(true)
+        }}
         onExpanderClick={handleExpanderClick}
         onClick={handleClick}
         ganttHeight={height - 300}
