@@ -1,8 +1,10 @@
+import { useDialogContext } from "@/components/providers/DialogProvider";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { taskConfig } from "@/configs/task.config";
 import { Task } from "@/types/task";
+import TaskDetail from "@/views/tasks/TaskDetail";
 import dayjs from "dayjs";
 import { ArrowUpRight, Dot } from "lucide-react";
 
@@ -13,7 +15,8 @@ interface RecentTaskItemProps {
 export const RecentTaskItem = ({ task }: RecentTaskItemProps) => {
   const type = taskConfig.types.find(t => t.value === task?.type);
   const priority = taskConfig.priorities.find(t => t.value === task?.priority);
-  
+  const { setDialogOpen } = useDialogContext()
+
   return (
     <div className="p-6 border rounded-lg col-span-1 gap-2 space-y-1">
       <div className="flex justify-between items-center">
@@ -21,7 +24,11 @@ export const RecentTaskItem = ({ task }: RecentTaskItemProps) => {
           <type.icon className="w-4 h-4 inline-block font-light mb-[1px]" />
           {""} {type?.label}
         </p>
-        <Button variant="link" className="p-0 h-4">
+        <Button
+          variant="link"
+          className="p-0 h-4"
+          onClick={() => setDialogOpen('taskDetail', true, { element: <TaskDetail taskId={task._id} /> })}
+        >
           <ArrowUpRight size={16} />
         </Button>
       </div>

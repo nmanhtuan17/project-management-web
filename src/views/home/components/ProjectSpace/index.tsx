@@ -27,7 +27,7 @@ export const ProjectSpace = () => {
             <AvatarImage src={currentProject.avatar || `https://avatar.vercel.sh/${currentProject.name}.png`} alt="@shadcn" />
             <AvatarFallback className="rounded-lg">{currentProject?.name.charAt(0).toUpperCase()}</AvatarFallback>
           </Avatar>
-          <div className="!mt-0">
+          <div className="!mt-0 cursor-pointer" onClick={() => navigate(`/projects/${currentProject.slug}/overview`)}>
             <p className="text-lg font-bold ">
               {currentProject.name}
             </p>

@@ -26,13 +26,9 @@ interface TasksBoardProps {
 
 export default function TasksBoard(props: TasksBoardProps) {
   const { board, loading, tasks } = useAppSelector(state => state.task)
-  const { user } = useAppSelector(state => state.auth);
   const dispatch = useAppDispatch();
   const { theme } = useAppSelector(state => state.app);
-  const { currentProject, profile } = useCurrentProject();
-  const [visible, setVisible] = useState(false);
-  const [title, setTitle] = useState<string>('')
-  const [color, setColor] = useState<string>('#cccccc')
+  const { currentProject } = useCurrentProject();
 
   async function handleCardMove(_card: BoardTask, source: any, destination: any) {
     const updatedBoard = moveCard(board, source, destination);
@@ -66,40 +62,6 @@ export default function TasksBoard(props: TasksBoardProps) {
     toast.success(updateTaskRes.message)
   }
 
-  const updateColumnTitle = async (columnId: string, title: string, backgroundColor: string) => {
-    if (profile.role === ProjectRoles.OWNER || profile.role === ProjectRoles.MANAGER) {
-      dispatch(updateColumn({
-        projectId: currentProject._id,
-        columnId,
-        title,
-        backgroundColor
-      })).then(() => {
-        dispatch(loadKanbanBoard(currentProject._id))
-          .then(() => {
-            dispatch(loadTasks(currentProject._id))
-          })
-      })
-    } else {
-      toast.error('ACTION NOT PERMITTED')
-    }
-  }
-
-  const handleRemoveColumn = async (columnId: string) => {
-    if (profile.role === ProjectRoles.OWNER || profile.role === ProjectRoles.MANAGER) {
-      dispatch(removeColumn({
-        projectId: currentProject._id,
-        columnId
-      })).then(() => {
-        dispatch(loadKanbanBoard(currentProject._id))
-          .then(() => {
-            dispatch(loadTasks(currentProject._id))
-          })
-      })
-    } else {
-      toast.error('ACTION NOT PERMITTED')
-    }
-  }
-
   return (
     <>
       {loading ? (<div>
@@ -111,83 +73,8 @@ export default function TasksBoard(props: TasksBoardProps) {
             allowAddColumn={true}
             disableColumnDrag
             onCardDragEnd={handleCardMove}
-            renderColumnHeader={(column: any) => (
-              <div key={column.id}>
-                <TaskBoardTitle column={column} handleUpdateTitle={updateColumnTitle} handleRemoveColumn={handleRemoveColumn} />
-              </div>
-            )}
-            renderColumnAdder={() => {
-              return (
-                <div>
-                  {!visible ?
-                    <TooltipProvider delayDuration={500}>
-                      <Tooltip>
-                        <TooltipTrigger>
-                          <Button
-                            onClick={() => {
-                              setVisible(true)
-                            }}
-                            variant="secondary" className="m-[5px] justify-center items-center gap-1">
-                            <Plus size={18} />
-                          </Button>
-                        </TooltipTrigger>
-                        <TooltipContent side={'right'}>
-                          <p>New Column</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider >
-                    :
-                    <div className=" gap-1 items-center">
-                      <div className="flex !flex-row rounded-lg border p-2 mt-1">
-                        <input
-                          className="outline-none focus:outline-[0px] flex-1"
-                          onChange={(e) => {
-                            setTitle(e.target.value)
-                          }}
-                          value={title}
-                        />
-                        <input type="color" className="rounded-md"
-                          onChange={(e) => {
-                            setColor(e.target.value)
-                          }}
-                          value={color}
-                        />
-                      </div>
-                      <div className="flex !flex-row mt-2">
-                        <span
-                          onClick={() => {
-                            if (title.length > 0) {
-                              dispatch(createKanbanColumn({ projectId: currentProject._id, title, backgroundColor: color }))
-                                .then(() => {
-                                  setVisible(false)
-                                  setTitle('')
-                                  setColor('')
-                                  dispatch(loadKanbanBoard(currentProject._id))
-                                    .then(() => {
-                                      dispatch(loadTasks(currentProject._id))
-                                    })
-                                })
-                            }
-                          }}
-                          className="p-2 bg-white rounded-sm cursor-pointer shadow-sm">
-                          <Check size={16} />
-                        </span>
-                        <span
-                          onClick={() => setVisible(false)}
-                          className="p-2 bg-white rounded-sm cursor-pointer">
-                          <X size={16} />
-                        </span>
-
-                      </div>
-                    </div>
-                  }
-                </div>
-              )
-            }}
-            renderCard={(task: BoardTask) => (
-              <TaskBoardItem key={task._id} task={task} />
-            )}
-          >
+            renderColumnHeader={(column: any) => <TaskBoardTitle key={column.id} column={column} />}
+            renderCard={(task: BoardTask) => <TaskBoardItem key={task._id} task={task} />}>
             {board}
           </ControlledBoard >
         </div >

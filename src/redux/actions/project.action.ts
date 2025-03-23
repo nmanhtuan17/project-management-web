@@ -86,3 +86,7 @@ export const createMilestone = createAsyncThunk<
   thunkApi.dispatch(loadMilestones(payload.projectId))
   return data
 })
+
+export const getStatistics = createAsyncThunk('projects/statistic', async () => {
+  return await apiService.get('projects/statistics')
+})

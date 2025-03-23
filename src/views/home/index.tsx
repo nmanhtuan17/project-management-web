@@ -10,7 +10,7 @@ import { ArrowUpRight, CalendarClock, Download, Layers, ListChecks, PictureInPic
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable.tsx";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { cn } from "@/lib/utils";
-import { loadProjectMembers } from "@/redux/actions/project.action";
+import { getStatistics, loadProjectMembers } from "@/redux/actions/project.action";
 import { useWindowSize } from "@/lib/hooks/useWindowSize";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -29,8 +29,7 @@ export default function HomePage() {
   const { user } = useAppSelector(state => state.auth)
   const { width } = useWindowSize();
   const isMobileScreen = width < 768;
-  const { currentProject, profile, setCurrentProject, setProfile } = useCurrentProject();
-
+  const { currentProject, profile } = useCurrentProject();
 
   useEffect(() => {
     if (currentProject._id) {
@@ -69,50 +68,6 @@ export default function HomePage() {
                 </Card>
               </div>
               <div className="flex flex-col flex-1 space-y-4">
-                <div className="grid grid-cols-3 gap-4">
-                  <Card className="">
-                    <CardHeader className='flex flex-row items-center justify-between pb-3'>
-                      <CardTitle className="text-lg">Unresolve Tasks</CardTitle>
-                      <Layers />
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-3xl font-bold">
-                        16
-                      </p>
-                      <p className="text-sm text-muted-foreground">
-                        Statistics
-                      </p>
-                    </CardContent>
-                  </Card>
-                  <Card className="">
-                    <CardHeader className='flex flex-row items-center justify-between pb-3'>
-                      <CardTitle className="text-lg">Overdue Tasks</CardTitle>
-                      <CalendarClock />
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-3xl font-bold">
-                        2
-                      </p>
-                      <p className="text-sm text-muted-foreground">
-                        Statistics
-                      </p>
-                    </CardContent>
-                  </Card>
-                  <Card className="">
-                    <CardHeader className='flex flex-row items-center justify-between pb-3'>
-                      <CardTitle className="text-lg">Ongoing Tasks</CardTitle>
-                      <PictureInPicture2 />
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-3xl font-bold">
-                        16
-                      </p>
-                      <p className="text-sm text-muted-foreground">
-                        Statistics
-                      </p>
-                    </CardContent>
-                  </Card>
-                </div>
                 <ProjectSpace />
               </div>
             </div>

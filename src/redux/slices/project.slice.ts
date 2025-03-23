@@ -1,6 +1,6 @@
 import { Milestone, Project, ProjectLabel, ProjectMember } from '@/types/project';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { createLabel, createMilestone, loadMilestones, loadProjectLabels, loadProjectMembers, loadProjects } from '../actions/project.action';
+import { createLabel, createMilestone, getStatistics, loadMilestones, loadProjectLabels, loadProjectMembers, loadProjects } from '../actions/project.action';
 import { toast } from 'sonner';
 
 export interface ProjectSliceState {
@@ -9,6 +9,7 @@ export interface ProjectSliceState {
   members: ProjectMember[];
   labels: ProjectLabel[];
   milestones: Milestone[];
+  statistics: any[]
 }
 
 const initialState: ProjectSliceState = {
@@ -16,7 +17,8 @@ const initialState: ProjectSliceState = {
   projects: [],
   members: [],
   labels: [],
-  milestones: []
+  milestones: [],
+  statistics: []
 };
 
 export const projectSlice = createSlice({
@@ -76,6 +78,9 @@ export const projectSlice = createSlice({
       })
       .addCase(createMilestone.fulfilled, (state, action) => {
         // state.milestones = [...state.milestones, action.payload.data]
+      })
+      .addCase(getStatistics.fulfilled, (state, action) => {
+        console.log(action.payload.data)
       })
   }
 });
