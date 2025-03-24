@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { createContext, createElement, useContext, useEffect, useState } from "react";
 import apiService from "@/services/api.service.ts";
-import { Task, TaskActivity, TaskPriority, TaskTypes } from "@/types/task";
+import { ETaskStatus, Task, TaskActivity, TaskPriority, TaskTypes } from "@/types/task";
 import { taskConfig } from "@/configs/task.config.ts";
 import { Button } from "@/components/ui/button.tsx";
 import { cn, getGravatar } from "@/lib/utils.ts";
@@ -39,7 +39,6 @@ import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { addDays } from "date-fns";
-import { useTaskStatus } from "@/lib/hooks/useTaskStatus";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { TaskDetailTitle } from "../components/TaskDetailTitle";
 import { TaskDetailDescription } from "../components/TaskDetailDescription";
@@ -110,7 +109,6 @@ export default function TaskDetail(props: TaskDetailProps) {
   const { task, setTask } = useTask(taskId);
   const [getActivities, { data: activities, error, loading }] = useApi<TaskActivity[]>(apiService.getTaskActivities);
   const [getSubTasks, { data: subTasks }] = useApi<Task[]>(apiService.getSubTasks);
-  const { statuses } = useTaskStatus()
   const { setDialogOpen } = useDialogContext()
 
 
@@ -138,11 +136,9 @@ export default function TaskDetail(props: TaskDetailProps) {
     getSubTasks(project._id, taskId)
   }, [taskId])
 
-  console.log(subTasks)
-
   const defaultValues: Partial<TaskFormValues> = {
     type: TaskTypes.GENERAL,
-    status: statuses[0].value,
+    status: ETaskStatus.TODO,
     priority: TaskPriority.MEDIUM.toString(),
     time: {
       from: new Date(),
@@ -332,13 +328,11 @@ export default function TaskDetail(props: TaskDetailProps) {
                     </FormLabel>
                     <FormControl className="col-span-5">
                       <TaskStatusSelect
-                        options={statuses}
                         className="shadow-none border-transparent hover:bg-muted/50"
                         selected={field.value}
                         showIcon
-                        onChange={type => {
-                          field.onChange(type);
-                          console.log(type)
+                        onChange={status => {
+                          field.onChange(status);
                         }}
                       />
                     </FormControl>

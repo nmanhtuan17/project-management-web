@@ -9,11 +9,10 @@ import { ResizablePanelGroup } from "@/components/ui/resizable";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { useCurrentProject } from "@/lib/hooks/useCurrentProject";
-import { useTaskStatus } from "@/lib/hooks/useTaskStatus";
 import { loadTasks } from "@/redux/actions/task.action";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import apiService from "@/services/api.service";
-import { TaskPriority, TaskTypes } from "@/types/task";
+import { ETaskStatus, TaskPriority, TaskTypes } from "@/types/task";
 import CreateTaskMemberSelector from "@/views/tasks/components/CreateTaskMemberSelector";
 import TaskDatePopupPicker from "@/views/tasks/components/TaskDatePopupPicker";
 import { TaskLabelsSelect } from "@/views/tasks/components/TaskLabelsSelect";
@@ -76,22 +75,22 @@ export const CreateTaskDialog = () => {
   const { board, tasks } = useAppSelector(state => state.task)
   const inputRef = useRef(null)
 
-  const statuses: { value: string, label: string, backgroundColor: string }[] = useMemo(() => {
-    let statuses = []
-    board.columns.forEach(s => statuses.push({
-      value: s.id,
-      label: s.title,
-      backgroundColor: s.backgroundColor
-    }))
-    return statuses
-  }, [board])
+  // const statuses: { value: string, label: string, backgroundColor: string }[] = useMemo(() => {
+  //   let statuses = []
+  //   board.columns.forEach(s => statuses.push({
+  //     value: s.id,
+  //     label: s.title,
+  //     backgroundColor: s.backgroundColor
+  //   }))
+  //   return statuses
+  // }, [board])
 
   const parentTask = useMemo(() => createTaskDialog?.parentTask && tasks.find(task => task._id === createTaskDialog.parentTask),
     [createTaskDialog?.parentTask])
 
   const defaultValues: Partial<CreateTaskFormValues> = {
     type: TaskTypes.GENERAL,
-    status: 'pending',
+    status: ETaskStatus.TODO,
     priority: TaskPriority.MEDIUM.toString(),
     time: {
       from: new Date,
@@ -233,7 +232,6 @@ export const CreateTaskDialog = () => {
                       </FormLabel>
                       <FormControl className="col-span-5">
                         <TaskStatusSelect
-                          options={statuses}
                           className="shadow-none border-transparent hover:bg-muted/50"
                           selected={field.value}
                           showIcon

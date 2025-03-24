@@ -43,28 +43,28 @@ export default function TaskLayout() {
           isCollapsed={false}
           links={[
             {
-              title: "Performance",
+              title: "Hiệu suất",
               label: "",
               icon: Gauge,
               variant: pathname.includes('performance') ? 'default' : 'ghost',
               path: `/projects/${currentProject.slug}/tasks/performance`
             },
             {
-              title: "Timeline",
+              title: "Biểu đồ",
               label: "",
               icon: ChartNoAxesGantt,
               variant: pathname.includes('timeline') ? 'default' : 'ghost',
               path: `/projects/${currentProject.slug}/tasks/timeline`
             },
             {
-              title: "List",
+              title: "Danh sách",
               label: "",
               icon: ListChecks,
               variant: pathname.includes('list') ? 'default' : 'ghost',
               path: `/projects/${currentProject.slug}/tasks/list`
             },
             {
-              title: "Board",
+              title: "Kanban",
               label: "",
               icon: SquareKanban,
               variant: pathname.includes('kanban') ? 'default' : 'ghost',

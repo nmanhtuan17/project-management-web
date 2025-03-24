@@ -14,7 +14,7 @@ import useApi from '@/lib/hooks/useApi';
 import { Task } from '@/types/task';
 import apiService from '@/services/api.service';
 import { useCurrentProject } from '@/lib/hooks/useCurrentProject';
-import { useTaskStatus } from '@/lib/hooks/useTaskStatus';
+import { taskConfig } from '@/configs/task.config';
 
 ChartJS.register(
   CategoryScale,
@@ -30,7 +30,6 @@ export const TaskPerformance = () => {
   const { members } = useAppSelector(state => state.project)
   const [getTasks, { data: tasks }] = useApi<Task[]>(apiService.getTasks)
   const { currentProject } = useCurrentProject()
-  const { statuses } = useTaskStatus()
 
   useEffect(() => {
     getTasks(currentProject._id, {})
@@ -63,7 +62,7 @@ export const TaskPerformance = () => {
           tasks && tasks.filter(task => task.assignees.find(a => a._id === mem._id)).length),
         backgroundColor: 'rgba(53, 162, 235, 0.5)',
       },
-      ...statuses.map((item) => ({
+      ...taskConfig.statuses.map((item) => ({
         label: item.label,
         data: members.map((mem) =>
           tasks ? tasks.filter(task => task.status === item.value && task.assignees.find(a => a._id === mem._id)).length : 0),

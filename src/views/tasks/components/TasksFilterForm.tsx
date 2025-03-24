@@ -6,7 +6,6 @@ import { TaskPrioritySelect } from "@/views/tasks/components/TaskPrioritySelect.
 import { useAppDispatch, useAppSelector } from "@/redux/store.ts";
 import { filterTask } from "@/redux/slices/task.slice.ts";
 import { Button } from "@/components/ui/button";
-import { useTaskStatus } from "@/lib/hooks/useTaskStatus";
 
 export function TaskFilterForm() {
   const { filter } = useAppSelector(state => state.task)
@@ -14,7 +13,6 @@ export function TaskFilterForm() {
   const [statuses, setStatuses] = useState<string[]>(filter.statuses);
   const [types, setTypes] = useState<string[]>(filter.types);
   const [priorities, setPriorities] = useState<any>(filter?.priorities);
-  const {statuses: taskStatuses} = useTaskStatus()
 
   useEffect(() => {
     dispatch(filterTask({ statuses, types, priorities }))
@@ -55,8 +53,8 @@ export function TaskFilterForm() {
             showAllSelector
             multiple
             selected={statuses}
-            onChange={selected => setStatuses(selected as string[])} 
-            options={taskStatuses} />
+            onChange={selected => setStatuses(selected as string[])}
+          />
         </div>
         <div>
           <Label>

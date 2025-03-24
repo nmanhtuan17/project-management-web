@@ -1,4 +1,4 @@
-import {CheckIcon} from "@radix-ui/react-icons";
+import { CheckIcon } from "@radix-ui/react-icons";
 import {
   ArrowDownIcon,
   ArrowUpIcon,
@@ -9,8 +9,8 @@ import {
   PlaneTakeoff,
   SquareCheck, TriangleAlertIcon
 } from "lucide-react";
-import {TaskPriority, TaskTypes} from "@/types/task.ts";
-import {ArrowRightIcon, DocumentIcon, ExclamationCircleIcon} from "@heroicons/react/16/solid";
+import { ETaskStatus, TaskPriority, TaskTypes } from "@/types/task.ts";
+import { ArrowRightIcon, DocumentIcon, ExclamationCircleIcon } from "@heroicons/react/16/solid";
 
 export const taskConfig = {
   types: [{
@@ -46,5 +46,22 @@ export const taskConfig = {
     icon: ArrowDownIcon,
     value: TaskPriority.LOW,
     label: 'Low'
-  }]
+  }],
+  statuses: [{
+    label: 'Chưa thực hiện',
+    value: ETaskStatus.TODO,
+    backgroundColor: '#cccccc',
+    icon: ClockIcon
+  }, {
+    label: 'Đang xử lý',
+    value: ETaskStatus.INPROCESS,
+    backgroundColor: '#1c84c6',
+    icon: PlaneTakeoff
+  }, {
+    label: 'Đã hoàn thành',
+    value: ETaskStatus.DONE,
+    backgroundColor: '#93c572',
+    icon: SquareCheck
+  }],
 }
+

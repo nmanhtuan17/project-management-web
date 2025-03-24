@@ -25,6 +25,13 @@ export enum TaskActivityType {
   Deployment = 'deployment',
 }
 
+export enum ETaskStatus {
+  ALL = 'all',
+  TODO = 'to-do',
+  INPROCESS = 'in-process',
+  DONE = 'done'
+}
+
 export interface TaskFilter {
   query?: string
   type: string

@@ -12,6 +12,7 @@ export const TaskList = () => {
       <Table>
         <TableHeader>
           <TableRow>
+            <TableHead></TableHead>
             <TableHead>Title</TableHead>
             <TableHead>Label</TableHead>
             <TableHead>Status</TableHead>

@@ -19,7 +19,6 @@ export const TaskTimeline = () => {
   const dispatch = useAppDispatch()
   const { currentProject } = useCurrentProject()
   const { height } = useWindowDimensions()
-  const lastUpdatedTask = useRef<any>(null);
   const [task, setTask] = useState<Task>()
   const [update, setUpdate] = useState(false)
 
@@ -40,8 +39,8 @@ export const TaskTimeline = () => {
         ...updatedTask,
         assignees: updatedTask.assignees.map(a => a._id) as unknown as ProjectMember[],
         time: {
-          from: task.start,
-          to: task.end
+          from: task?.start,
+          to: task?.end
         }
       },
       projectId: currentProject._id
@@ -58,16 +57,14 @@ export const TaskTimeline = () => {
 
   return (
     <div className='flex-1 mt-4 h-full'>
-      <Gantt
-        tasks={tasks || []}
-        onDateChange={(task) => {
-          setTask(task)
-          setUpdate(true)
-        }}
-        onExpanderClick={handleExpanderClick}
-        onClick={handleClick}
-        ganttHeight={height - 300}
-      />
+      {tasks.length > 0 &&
+        <Gantt
+          tasks={tasks}
+          onDateChange={handleTaskChange}
+          onExpanderClick={handleExpanderClick}
+          onClick={handleClick}
+          ganttHeight={height - 300}
+        />}
     </div>
   )
 }
