@@ -28,10 +28,10 @@ export const TaskListItem = ({ task }: TaskListItemProp) => {
       onClick={() => {
         setDialogOpen('taskDetail', true, { element: <TaskDetail taskId={task._id} /> })
       }}
+      className="cursor-pointer"
     >
       <TableCell className="text-xs font-semibold gap-2 items-center">
-        <Badge className="px-2 text-xs" variant="secondary">{type.label}</Badge>
-        {"  "} {task?.title}
+        {task?.title}
       </TableCell>
       <TableCell className="text-xs font-semibold">
         <div className="flex gap-2">

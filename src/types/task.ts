@@ -28,7 +28,7 @@ export enum TaskActivityType {
 export enum ETaskStatus {
   ALL = 'all',
   TODO = 'to-do',
-  INPROCESS = 'in-process',
+  INPROCESS = 'in-progress',
   DONE = 'done'
 }
 

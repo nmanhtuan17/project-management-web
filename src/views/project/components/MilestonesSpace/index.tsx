@@ -33,7 +33,7 @@ export const MilestonesSpace = () => {
             <div className="flex flex-1 items-center gap-1">
               <Calendar size={12} />
               <div className="text-muted-foreground font-medium text-[12px]">
-                {`${dayjs(milestone.time.from).format('MMMM D, YYYY')} - ${dayjs(milestone.time.to).format('MMMM D, YYYY')}`}
+                {`${dayjs(milestone.time.from).format('D MMMM, YYYY')} - ${dayjs(milestone.time.to).format('D MMMM, YYYY')}`}
               </div>
               <div className={cn("text-muted-foreground font-medium text-[12px] ml-1 rounded-full px-2", expired ? 'bg-red-300 text-white' : 'bg-green-300')}>
                 {expired ? 'quá hạn' : `hết hạn trong ${remainingDays}`}

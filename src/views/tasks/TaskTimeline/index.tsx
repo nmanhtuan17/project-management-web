@@ -26,7 +26,7 @@ export const TaskTimeline = () => {
     if (update) {
       timeoutId = setTimeout(() => {
         handleTaskChange()
-        setUpdate(true)
+        setUpdate(false)
       }, 100)
     }
     return () => clearTimeout(timeoutId);
@@ -60,10 +60,13 @@ export const TaskTimeline = () => {
       {tasks.length > 0 &&
         <Gantt
           tasks={tasks}
-          onDateChange={handleTaskChange}
+          onDateChange={(task) => {
+            setTask(task)
+            setUpdate(true)
+          }}
           onExpanderClick={handleExpanderClick}
-          onClick={handleClick}
           ganttHeight={height - 300}
+          onDoubleClick={handleClick}
         />}
     </div>
   )

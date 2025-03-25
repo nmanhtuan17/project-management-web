@@ -12,12 +12,12 @@ export const TaskList = () => {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Title</TableHead>
-            <TableHead>Label</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Assignees</TableHead>
-            <TableHead>Due Date</TableHead>
-            <TableHead>Action</TableHead>
+            <TableHead>Tên</TableHead>
+            <TableHead>Nhãn</TableHead>
+            <TableHead>Trạng thái</TableHead>
+            <TableHead>Người phụ trách</TableHead>
+            <TableHead>Hạn hoạn thành</TableHead>
+            <TableHead></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
