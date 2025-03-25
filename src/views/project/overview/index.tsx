@@ -29,7 +29,7 @@ export const ProjectOverview = () => {
               {currentProject.name}
             </p>
             <p className="text-sm text-muted-foreground">
-              {members.length} members
+              {members.length} thành viên
             </p>
           </div>
         </div>

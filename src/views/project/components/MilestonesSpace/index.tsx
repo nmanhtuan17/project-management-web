@@ -36,7 +36,7 @@ export const MilestonesSpace = () => {
                 {`${dayjs(milestone.time.from).format('MMMM D, YYYY')} - ${dayjs(milestone.time.to).format('MMMM D, YYYY')}`}
               </div>
               <div className={cn("text-muted-foreground font-medium text-[12px] ml-1 rounded-full px-2", expired ? 'bg-red-300 text-white' : 'bg-green-300')}>
-                {expired ? 'overdue' : `Expired ${remainingDays}`}
+                {expired ? 'quá hạn' : `hết hạn trong ${remainingDays}`}
               </div>
             </div>
           </div>
@@ -51,7 +51,7 @@ export const MilestonesSpace = () => {
         <div className="">
           <p className="text-[14px] font-semibold">Milestones</p>
           <p className="text-sm text-muted-foreground">
-            Use milestones to track issues and merge requests over a fixed period of time
+            Sử dụng các mốc quan trọng để theo dõi các vấn đề và hợp nhất các yêu cầu trong một khoảng thời gian cố định
           </p>
         </div>
         <Button

@@ -46,14 +46,14 @@ export function ProjectLayout(props: any) {
             isCollapsed={isCollapsed}
             links={[
               {
-                title: "Overview",
+                title: "Tổng quan dự án",
                 label: "",
                 icon: Component,
                 variant: pathname.includes('overview') ? 'default' : 'ghost',
                 path: `/projects/${currentProject.slug}/overview`
               },
               {
-                title: "Tasks",
+                title: "Quản lý công việc",
                 label: "",
                 icon: CheckCheck,
                 variant: pathname.includes('tasks') ? 'default' : 'ghost',
@@ -67,14 +67,14 @@ export function ProjectLayout(props: any) {
                 path: `/projects/${currentProject.slug}/milestones`
               },
               {
-                title: "Members",
+                title: "Thành viên",
                 label: "",
                 icon: Users,
                 variant: pathname.includes('members') ? 'default' : 'ghost',
                 path: `/projects/${currentProject.slug}/members`
               },
               {
-                title: "Setting",
+                title: "Cài đặt dự án",
                 label: "",
                 icon: Settings,
                 variant: pathname.includes('setting') ? 'default' : 'ghost',

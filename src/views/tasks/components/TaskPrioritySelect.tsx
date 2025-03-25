@@ -1,9 +1,9 @@
-import {TaskPriority} from "@/types/task.ts";
-import {MultiSelect} from "@/components/ui/multi-select.tsx";
-import {createElement, useEffect, useState} from "react";
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select.tsx";
-import {taskConfig} from "@/configs/task.config.ts";
-import {QuestionMarkIcon} from "@radix-ui/react-icons";
+import { TaskPriority } from "@/types/task.ts";
+import { MultiSelect } from "@/components/ui/multi-select.tsx";
+import { createElement, useEffect, useState } from "react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select.tsx";
+import { taskConfig } from "@/configs/task.config.ts";
+import { QuestionMarkIcon } from "@radix-ui/react-icons";
 
 interface TaskPrioritySelectProps {
   showAllSelector?: boolean;
@@ -21,17 +21,17 @@ export function TaskPrioritySelect(props: TaskPrioritySelectProps) {
     label: 'All',
     value: 'all',
   }, {
-    label: 'Low',
+    label: 'Thấp',
     value: TaskPriority.LOW,
   }, {
-    label: 'Medium',
+    label: 'Trung bình',
     value: TaskPriority.MEDIUM,
   }, {
-    label: 'High',
+    label: 'Gấp',
     value: TaskPriority.HIGH,
   }].filter(item => props.showAllSelector ? true : item.value !== 'all').map(item => {
     item.value = item.value.toString();
-    return item as {label: string, value: string};
+    return item as { label: string, value: string };
   });
 
   useEffect(() => {
@@ -61,11 +61,11 @@ export function TaskPrioritySelect(props: TaskPrioritySelectProps) {
       props.onChange && props.onChange(selected);
     }}>
       <SelectTrigger className={props.className}>
-        <SelectValue placeholder={items as string}/>
+        <SelectValue placeholder={items as string} />
       </SelectTrigger>
       <SelectContent>
         {options.map((option, index) => (
-          <SelectItem value={option.value} key={index}>
+          <SelectItem value={option.value} key={index} >
             <div className={'flex flex-row gap-1 items-center'}>
               {props.showIcon && createElement(taskConfig.priorities.find(t => t.value === parseInt(option.value))?.icon || QuestionMarkIcon as any, {
                 className: 'w-4 h-4',

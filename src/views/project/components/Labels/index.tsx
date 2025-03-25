@@ -14,14 +14,14 @@ export const LabelsManage = () => {
     <div className="space-y-2">
       <div className="flex items-center justify-between">
         <div className="">
-          <p className="text-[14px] font-semibold">Project Labels</p>
+          <p className="text-[14px] font-semibold">Nhãn</p>
           <p className="text-sm text-muted-foreground">
-            Labels to applied to tasks
+            Nhãn được áp dụng cho các công việc
           </p>
         </div>
         {labels.length > 0 &&
           <Button variant="secondary" onClick={() => navigate(`/projects/${currentProject.slug}/setting`)}>
-            View all
+            Chi tiết
           </Button>}
       </div>
       {!labels.length ?
@@ -30,7 +30,7 @@ export const LabelsManage = () => {
           className="w-full"
           onClick={() => openDialog('createLabelDialog')}
         >
-          Add
+          Thêm 
         </Button>
         :
         <div className="flex gap-2 flex-wrap">

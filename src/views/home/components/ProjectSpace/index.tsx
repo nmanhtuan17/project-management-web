@@ -32,7 +32,7 @@ export const ProjectSpace = () => {
               {currentProject.name}
             </p>
             <p className="text-sm text-muted-foreground">
-              {members.length} members
+              {members.length} thành viên
             </p>
           </div>
         </div>
@@ -41,20 +41,20 @@ export const ProjectSpace = () => {
             navigate(`/projects/${currentProject.slug}/overview`)
           }}>
             <ListChecks size={18} className="mr-2" />
-            Tasks
+            Chi tiết
           </Button>
           <Button onClick={() => {
             navigate(`/projects/${currentProject.slug}/members`)
           }}>
             <Users size={18} className="mr-2" />
-            Member
+            Thành viên
           </Button>
         </div>
       </CardHeader>
       <Separator className="my-4" />
       <CardContent>
         <div>
-          <Label>Recent Task</Label>
+          <Label>Công việc gần đây</Label>
           {recentTasks.length > 0 ?
             <div className="gap-4 mt-2 grid grid-cols-4">
               {
@@ -63,7 +63,7 @@ export const ProjectSpace = () => {
               }
             </div>
             :
-            <p className="text-muted-foreground font-medium">You haven't had any tasks recently.</p>
+            <p className="text-muted-foreground font-medium">Bạn chưa có công việc nào.</p>
           }
         </div>
       </CardContent>

@@ -13,7 +13,7 @@ export const MainNav = ({
 
   const links = [{
     path: currentProject._id ? `/projects/${currentProject.slug}` : `/`,
-    label: 'Home'
+    label: 'Trang chủ'
   }, {
     path: `/mails/inbox`,
     label: 'Mails'

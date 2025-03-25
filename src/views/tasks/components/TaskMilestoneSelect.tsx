@@ -38,6 +38,7 @@ export function TaskMilestoneSelect(props: TaskMilestoneSelectProps) {
       <SelectValue placeholder={items as string} />
     </SelectTrigger>
     <SelectContent>
+      {!options.length && <p className="text-xs text-muted-foreground p-2">không có dữ liệu</p>}
       {options.map((option, index) => (
         <SelectItem value={option.value} key={index}>
           <div className={'flex flex-row gap-1 items-center'}>

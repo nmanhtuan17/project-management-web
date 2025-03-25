@@ -49,7 +49,7 @@ export default function RegisterPage() {
   return <form className='space-y-2' onSubmit={onSubmit}>
     <div className="flex flex-col space-y-2">
       <h1 className="text-2xl font-semibold tracking-tight">
-        Create account
+        Đăng ký
       </h1>
     </div>
     <Alert hidden={!message.show} variant={message.error ? 'destructive' : 'default'}>
@@ -59,7 +59,7 @@ export default function RegisterPage() {
     </Alert>
     <div className="grid gap-1">
       <Label className="text-xs font-medium" htmlFor="fullName">
-        Full name
+        Họ tên
       </Label>
       <Input
         id="fullName"
@@ -84,7 +84,7 @@ export default function RegisterPage() {
     </div>
     <div className="grid gap-1">
       <Label className="text-xs font-medium" htmlFor="password">
-        Password
+        Mật khẩu
       </Label>
       <Input
         id="password"
@@ -97,7 +97,7 @@ export default function RegisterPage() {
     </div>
     <div className={'pt-4'}>
       <Button className={'w-full'} disabled={isLoading}>
-        Continue <ArrowRightIcon className={'ml-2 w-4 h-4'} />
+        Tiếp tục <ArrowRightIcon className={'ml-2 w-4 h-4'} />
       </Button>
     </div>
     <div className={'pt-4'}>

@@ -30,7 +30,7 @@ export const MilestonesHeader = () => {
         onClick={() => {
           openDialog("createMilestone");
         }}
-        className="gap-1 w-full sm:w-auto" icon={<PlusIcon />}>New Milestone</Button>
+        className="gap-1 w-full sm:w-auto" icon={<PlusIcon />}>Thêm mới</Button>
     </div>
   )
 }

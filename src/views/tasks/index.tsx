@@ -78,9 +78,9 @@ export default function TaskLayout() {
         <div className="p-4 flex flex-col h-full w-full">
           <div>
             <div className="mb-6">
-              <h3 className="text-lg font-medium">Tasks</h3>
+              <h3 className="text-lg font-medium">Quản lý công việc</h3>
               <p className="text-sm text-muted-foreground">
-                Manage tasks of each project
+                Quản lý công việc trong dự án của bạn
               </p>
             </div>
             <div className="flex items-center justify-between flex-col sm:flex-row gap-2">
@@ -89,7 +89,7 @@ export default function TaskLayout() {
                 onClick={() => {
                   openDialog("createTaskDialog");
                 }}
-                className="gap-1 w-full sm:w-auto" icon={<PlusIcon />}>Create Task</Button>
+                className="gap-1 w-full sm:w-auto" icon={<PlusIcon />}>Thêm công việc</Button>
             </div>
           </div>
           <Outlet />

@@ -1,9 +1,9 @@
-import {TaskTypes} from "@/types/task.ts";
-import {MultiSelect, OptionType} from "@/components/ui/multi-select.tsx";
-import {createElement, useEffect, useState} from "react";
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select.tsx";
-import {taskConfig} from "@/configs/task.config.ts";
-import {QuestionMarkCircleIcon} from "@heroicons/react/16/solid";
+import { TaskTypes } from "@/types/task.ts";
+import { MultiSelect, OptionType } from "@/components/ui/multi-select.tsx";
+import { createElement, useEffect, useState } from "react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select.tsx";
+import { taskConfig } from "@/configs/task.config.ts";
+import { QuestionMarkCircleIcon } from "@heroicons/react/16/solid";
 
 interface TaskTypeSelectProps {
   showAllSelector?: boolean;
@@ -29,10 +29,7 @@ export function TaskTypeSelect(props: TaskTypeSelectProps) {
   }, {
     label: 'Bug',
     value: TaskTypes.BUG,
-  }, {
-    label: 'Incident',
-    value: TaskTypes.INCIDENT,
-  }].filter(item => props.showAllSelector ? true : item.value !== 'all');
+  },].filter(item => props.showAllSelector ? true : item.value !== 'all');
 
   useEffect(() => {
     if (props.selected !== types) setTypes(props.selected);
@@ -64,7 +61,7 @@ export function TaskTypeSelect(props: TaskTypeSelectProps) {
       }}
     >
       <SelectTrigger className={props.className}>
-        <SelectValue placeholder={types as string}/>
+        <SelectValue placeholder={types as string} />
       </SelectTrigger>
       <SelectContent>
         {options.map((option, index) => {
@@ -72,7 +69,7 @@ export function TaskTypeSelect(props: TaskTypeSelectProps) {
           return (
             <SelectItem value={option.value} key={index}>
               <div className={'flex flex-row gap-1 items-center'}>
-                {props.showIcon && <Icon className={'w-4 h-4'}/>} {option.label}
+                {props.showIcon && <Icon className={'w-4 h-4'} />} {option.label}
               </div>
             </SelectItem>
           )

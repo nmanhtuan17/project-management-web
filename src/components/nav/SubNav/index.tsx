@@ -33,7 +33,7 @@ export const SubNav = () => {
               <CheckCheckIcon className={'group-hover:text-muted group-hover:border-none'} />
             </div>
             <div className={'text-sm mt-2'}>
-              Tasks
+              Công việc
             </div>
           </div>
         </Link>
@@ -45,7 +45,7 @@ export const SubNav = () => {
               <SettingsIcon className={'group-hover:text-muted group-hover:border-none'} />
             </div>
             <div className={'text-sm mt-2'}>
-              Settings
+              Cài đặt
             </div>
           </div>
         </Link>

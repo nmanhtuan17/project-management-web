@@ -30,13 +30,13 @@ export const MilestoneItem = ({ milestone, selectedItem, onClick }: Props) => {
           {`${dayjs(milestone.time.from).format('MMMM D, YYYY')} - ${dayjs(milestone.time.to).format('MMMM D, YYYY')}`}
         </div>
         <div className={cn("text-muted-foreground font-medium text-[12px] ml-1 rounded-full px-2", expired ? 'bg-red-300 text-white' : 'bg-green-300')}>
-          {expired ? 'overdue' : `Expired ${remainingDays}`}
+          {expired ? 'quá hạn' : `hết hạn trong ${remainingDays}`}
         </div>
       </div>
       <div className=" flex-1 self-end ">
         <div className="flex flex-1 items-center justify-end text-muted-foreground text-[12px]">
           <span>
-            {milestone.tasks.length} tasks
+            {milestone.tasks.length} công việc
           </span>
           {/* <span>
             0% complete

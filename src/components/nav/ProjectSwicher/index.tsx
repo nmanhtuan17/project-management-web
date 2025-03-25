@@ -49,10 +49,10 @@ export const ProjectSwitcher = ({ className }: ProjectSwitcherProps) => {
   const { currentProject, profile, setCurrentProject, setProfile } = useCurrentProject();
 
   const groups = [{
-    label: 'Personal Projects',
+    label: 'Dự án cá nhân',
     key: 'personal'
   }, {
-    label: 'Teams',
+    label: 'Dự án nhóm',
     key: 'team'
   }]
 
@@ -87,7 +87,7 @@ export const ProjectSwitcher = ({ className }: ProjectSwitcherProps) => {
             {currentProject?.name}
           </span>
         </> :
-          <span className="truncate text-xs">Select project</span>
+          <span className="truncate text-xs">Chọn dự án</span>
         }
         <CaretSortIcon className="ml-auto h-4 w-4 shrink-0 opacity-50" />
       </Button>
@@ -96,7 +96,7 @@ export const ProjectSwitcher = ({ className }: ProjectSwitcherProps) => {
       <Command>
         <CommandList>
           <CommandInput placeholder="Search project..." />
-          <CommandEmpty>No project found.</CommandEmpty>
+          <CommandEmpty>Không có dữ liệu</CommandEmpty>
           {groups.map((group) => {
             const items = projects.filter(s => s.type === group.key);
             if (items.length === 0) return;
@@ -135,7 +135,7 @@ export const ProjectSwitcher = ({ className }: ProjectSwitcherProps) => {
               setDialogOpen("createProject", true);
             }}>
               <PlusCircledIcon className="mr-2 h-5 w-5" />
-              Create Project
+              Tạo dự án
             </CommandItem>
           </CommandGroup>
         </CommandList>

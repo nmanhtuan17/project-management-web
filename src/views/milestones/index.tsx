@@ -27,7 +27,7 @@ export const Milestones = () => {
         <div className="mb-6">
           <h3 className="text-lg font-semibold">Milestones</h3>
           <p className="text-sm text-muted-foreground">
-            A phase defines a part of your project
+            Một giai đoạn xác định một phần của dự án của bạn
           </p>
         </div>
         <MilestonesHeader />

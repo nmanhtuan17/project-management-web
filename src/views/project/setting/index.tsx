@@ -44,9 +44,9 @@ export function ProjectSetting() {
       <div className="p-4 flex flex-col min-h-0 w-full">
         <div className="flex justify-between items-center">
           <div className="">
-            <h3 className="text-lg font-semibold">Settings</h3>
+            <h3 className="text-lg font-semibold">Cài đặt</h3>
             <p className="text-sm text-muted-foreground">
-              Settings for your project
+              Cài đặt dự án của bạn
             </p>
           </div>
         </div>
@@ -64,9 +64,9 @@ export function ProjectSetting() {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Project name</FormLabel>
+                  <FormLabel>Tên dự án</FormLabel>
                   <FormDescription>
-                    Can view and edit project information.
+                    Tên sự án của bạn
                   </FormDescription>
                   <FormControl>
                     <Input className="focus-visible:ring-0" placeholder="shadcn" {...field} />
@@ -96,10 +96,10 @@ export function ProjectSetting() {
               name="type"
               render={({ field: { onChange, value } }) => (
                 <FormItem>
-                  <FormLabel>Project type</FormLabel>
-                  <FormDescription>
+                  <FormLabel>Kiểu dự án</FormLabel>
+                  {/* <FormDescription>
                     Can view and edit project information.
-                  </FormDescription>
+                  </FormDescription> */}
                   <FormControl>
                     <Select value={value} onValueChange={(e) => onChange(e)}>
                       <SelectTrigger>
@@ -108,7 +108,7 @@ export function ProjectSetting() {
                       <SelectContent>
                         {Object.values(ProjectTypes).map((option, index) => (
                           <SelectItem value={option} key={index}>
-                            {option}
+                            {option === ProjectTypes.PERSONAL ? 'Cá nhân' : 'Nhóm'}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -121,10 +121,10 @@ export function ProjectSetting() {
             <div className="">
               <div>
                 <Label>
-                  Project labels
+                  Nhãn
                 </Label>
                 <p className="text-[0.8rem] text-muted-foreground">
-                  Labels can be applied to tasks.
+                  Có thể áp dụng nhãn cho các công việc.
                 </p>
               </div>
               <div className="rounded-[8px] shadow-sm border p-3 flex gap-2 mt-3">
@@ -147,7 +147,7 @@ export function ProjectSetting() {
                 </div>
               </div>
             </div>
-            <Button type="submit">Update</Button>
+            <Button type="submit">Cập nhật</Button>
           </form>
         </Form>
       </div>

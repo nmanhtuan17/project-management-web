@@ -57,7 +57,7 @@ export function CreateLabelDialog() {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            Create Label
+            Tạo mới nhãn
           </DialogTitle>
         </DialogHeader>
         <Form {...form}>
@@ -67,7 +67,7 @@ export function CreateLabelDialog() {
               name="title"
               render={({ field }) => (
                 <FormItem className="w-full">
-                  <FormLabel>Title</FormLabel>
+                  <FormLabel>Tên</FormLabel>
                   <FormControl>
                     <Input placeholder="Enter a title..." {...field} />
                   </FormControl>
@@ -80,7 +80,7 @@ export function CreateLabelDialog() {
               name="description"
               render={({ field }) => (
                 <FormItem className="w-full">
-                  <FormLabel>Description</FormLabel>
+                  <FormLabel>Mô tả</FormLabel>
                   <FormControl>
                     <Textarea placeholder="Enter a description" {...field} />
                   </FormControl>
@@ -94,7 +94,7 @@ export function CreateLabelDialog() {
               render={({ field }) => (
                 <FormItem className={'space-y-1'}>
                   <FormLabel>
-                    Background Color
+                    Background
                   </FormLabel>
                   <FormControl>
                     <Input type="color" {...field} />
@@ -104,7 +104,7 @@ export function CreateLabelDialog() {
             />
             <div className="text-right">
               <Button loading={loading} type="submit">
-                Create
+                Tạo mới
               </Button>
             </div>
           </form>

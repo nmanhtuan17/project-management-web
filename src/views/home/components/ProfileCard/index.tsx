@@ -26,7 +26,7 @@ export const ProfileCard = () => {
           }}
           variant="link"
           className="w-full">
-          View profile
+          Thông tin cá nhân
           <ArrowUpRight size={18} />
         </Button>
       </CardContent>

@@ -1,4 +1,10 @@
 import dayjs from "dayjs";
+import "dayjs/locale/vi";
+import relativeTime from "dayjs/plugin/relativeTime";
+
+dayjs.extend(relativeTime);
+dayjs.locale("vi");
+
 
 export const slugify = (str: string) =>
   str
@@ -31,7 +37,7 @@ export const checkTimeExpiration = (time: { from: Date, to: Date }) => {
   const dueDate = dayjs(time.to);
 
   if (now.isAfter(dueDate)) {
-    return { expired: true, remainingDays: 0 };
+    return { expired: true, remainingDays: "Hết hạn" };
   }
 
   const remainingDays = dueDate.from(now);

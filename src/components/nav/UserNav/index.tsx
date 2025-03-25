@@ -52,7 +52,7 @@ export const UserNav = () => {
           navigate('projects/setting/profile')
         }}>
           <Settings2 />
-          Preferences
+          Cài đặt
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem className="text-sm" onClick={() => {
@@ -65,7 +65,7 @@ export const UserNav = () => {
           navigate('/auth/login')
         }}>
           <LogOut />
-          Log out
+          Đăng xuất
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

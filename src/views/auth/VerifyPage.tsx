@@ -7,16 +7,16 @@ import {
   FormLabel,
   FormMessage
 } from "@/components/ui/form.tsx";
-import {useForm} from "react-hook-form";
-import {Input} from "@/components/ui/input.tsx";
+import { useForm } from "react-hook-form";
+import { Input } from "@/components/ui/input.tsx";
 import * as React from "react";
-import {zodResolver} from "@hookform/resolvers/zod";
-import {z} from "zod";
-import {Button} from "@/components/ui/button.tsx";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { Button } from "@/components/ui/button.tsx";
 import apiService from "@/services/api.service.ts";
-import {toast} from "sonner";
-import {useNavigate} from "react-router-dom";
-import {useState} from "react";
+import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const verifyAccountSchema = z.object({
   email: z.string().email(),
@@ -53,7 +53,7 @@ export default function VerifyPage() {
   const processResend = (e: any) => {
     // TODO: process resend
     e.preventDefault();
-    const {email, captcha} = form.getValues();
+    const { email, captcha } = form.getValues();
     if (!email) {
       form.setError('email', {
         message: 'INVALID_EMAIL'
@@ -74,17 +74,17 @@ export default function VerifyPage() {
     <Form {...form}>
       <div className="flex flex-col space-y-2">
         <h1 className="text-2xl font-semibold tracking-tight">
-          Verify account
+          Xác thực tài khoản
         </h1>
         <p className="text-sm text-muted-foreground">
-          Verify your account to continue...
+          Xác thực tài khoản của bạn để tiếp tục...
         </p>
       </div>
       <form onSubmit={form.handleSubmit(processData)}>
         <FormField
           control={form.control}
           name="email"
-          render={({field}) => (
+          render={({ field }) => (
             <FormItem>
               <FormLabel>
                 Email
@@ -92,31 +92,31 @@ export default function VerifyPage() {
               <FormControl>
                 <Input placeholder="example@gmail.com" {...field} />
               </FormControl>
-              <FormMessage/>
+              <FormMessage />
             </FormItem>
           )}
         />
         <FormField
           control={form.control}
           name="code"
-          render={({field}) => (
+          render={({ field }) => (
             <FormItem>
               <FormLabel>
-                Verification Code
+                Mã xác thực
               </FormLabel>
               <FormControl>
                 <Input placeholder="Code..." {...field} />
               </FormControl>
-              <FormMessage/>
+              <FormMessage />
             </FormItem>
           )}
         />
         <div className={'flex flex-row gap-2 mt-4'}>
           <Button className={'flex-1'} variant={'outline'} onClick={processResend}>
-            Resend
+            Gửi lại mã
           </Button>
           <Button type={'submit'} className={'flex-1'}>
-            Verify
+            Xác thực
           </Button>
         </div>
       </form>

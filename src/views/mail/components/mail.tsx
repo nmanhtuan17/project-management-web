@@ -41,9 +41,9 @@ export function Mail(props: MailProps) {
   const { createWindow } = useFloatingWindowCtx()
 
   const emailLabel = {
-    [EmailLabel.INBOX]: "Inbox",
-    [EmailLabel.SENT]: "Sent",
-    [EmailLabel.TRASH]: "Trash",
+    [EmailLabel.INBOX]: "Hộp thư đến",
+    [EmailLabel.SENT]: "Thư đã gửi",
+    [EmailLabel.TRASH]: "Thùng rác",
   };
 
   return (
@@ -79,7 +79,7 @@ export function Mail(props: MailProps) {
             <Button variant="secondary" className="w-full h-12 gap-2"
               onClick={() => {
                 createWindow({
-                  title: "Compose email",
+                  title: "Soạn thư",
                   children: <EmailComposer />,
                   width: 800,
                   height: 600,
@@ -87,28 +87,28 @@ export function Mail(props: MailProps) {
               }}
             >
               <Pen size={14} />
-              <p>Compose</p>
+              <p>Soạn thư</p>
             </Button>
           </div>
           <Nav
             isCollapsed={isCollapsed}
             links={[
               {
-                title: "Inbox",
+                title: "Hộp thư đến",
                 label: "",
                 icon: Inbox,
                 variant: pathname.includes('inbox') ? 'default' : 'ghost',
                 path: `/mails/inbox`
               },
               {
-                title: "Sent",
+                title: "Thư đã gửi",
                 label: "",
                 icon: Send,
                 variant: pathname.includes('sent') ? 'default' : 'ghost',
                 path: `/mails/sent`
               },
               {
-                title: "Trash",
+                title: "Thùng rác",
                 label: "",
                 icon: Trash2,
                 variant: pathname.includes('trash') ? 'default' : 'ghost',
@@ -144,7 +144,7 @@ export function Mail(props: MailProps) {
                         <RotateCcw className="w-4 h-4" />
                       </Button>
                     </TooltipTrigger>
-                    <TooltipContent>Reload</TooltipContent>
+                    <TooltipContent>Tải lại</TooltipContent>
                   </Tooltip>
                 </form>
               </div>

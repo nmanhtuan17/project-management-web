@@ -32,9 +32,9 @@ export function MemberPage() {
         <div className="p-4 flex flex-col min-h-0  w-full">
           <div className="flex justify-between items-center">
             <div className="mb-6">
-              <h3 className="text-lg font-semibold">Members</h3>
+              <h3 className="text-lg font-semibold">Thành viên</h3>
               <p className="text-sm text-muted-foreground">
-                Members can be added by project owners
+                Thành viên được thêm bởi người quản lý dự án
               </p>
             </div>
             <div className="flex items-center justify-between flex-col sm:flex-row gap-2">
@@ -42,7 +42,7 @@ export function MemberPage() {
                 onClick={() => {
                   openDialog("inviteMember");
                 }}
-                className="gap-1 w-full sm:w-auto" icon={<PlusIcon />}>Invite</Button>
+                className="gap-1 w-full sm:w-auto" icon={<PlusIcon />}>Thêm thành viên</Button>
             </div>
           </div>
           <div className="flex-1 space-y-2">

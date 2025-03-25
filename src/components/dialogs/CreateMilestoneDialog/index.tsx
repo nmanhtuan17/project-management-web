@@ -75,7 +75,7 @@ export const CreateMilestoneDialog = () => {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            New Milestone
+            Tạo mới milestone
           </DialogTitle>
         </DialogHeader>
         <Form {...form}>
@@ -84,7 +84,7 @@ export const CreateMilestoneDialog = () => {
             name="title"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel>Title</FormLabel>
+                <FormLabel>Tiêu đề</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter a title..." {...field} />
                 </FormControl>
@@ -99,11 +99,11 @@ export const CreateMilestoneDialog = () => {
               <FormItem className="flex gap-4 items-center !space-y-0">
                 <div className="flex items-center">
                   <FormLabel className="text-muted-foreground">
-                    Start Date
+                    Ngày bắt đầu
                   </FormLabel>
                   <Dot />
                   <FormLabel className="text-muted-foreground" >
-                    Due Date
+                    Ngày kết thúc
                   </FormLabel>
                 </div>
                 <FormControl>
@@ -120,13 +120,13 @@ export const CreateMilestoneDialog = () => {
           />
           <div>
             <div className="font-medium text-[14px] my-1">
-              Description
+              Mô tả
             </div>
             <InputComposer ref={inputRef} />
           </div>
           <div className="text-right">
             <Button onClick={form.handleSubmit(onSubmit)} loading={loading} type="submit">
-              Create
+              Tạo mới
             </Button>
           </div>
         </Form>

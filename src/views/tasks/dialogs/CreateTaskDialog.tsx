@@ -33,28 +33,28 @@ import { z } from "zod";
 
 const createTaskFormSchema = z.object({
   type: z.enum(Object.values(TaskTypes) as [string, ...string[]], {
-    required_error: "Please select task type.",
+    required_error: "Vui lòng chọn loại công việc",
   }),
   status: z.string({
-    required_error: "Please select task status.",
+    required_error: "Vui lòng chọn trạng thái",
   }),
   priority: z.enum(Object.values(TaskPriority).map(m => m.toString()) as [string, ...string[]], {
-    required_error: "Please select task priority.",
+    required_error: "Vui lòng chọn mức độ ưu tiên",
   }),
   title: z.string({
-    required_error: "Please enter task title",
+    required_error: "Nhập tiêu đề công việc",
   }).min(4, {
-    message: "Task title too short",
+    message: "Tiêu đề quá ngắn, yêu cầu tối thiểu 4 kí tự",
   }).max(100, {
-    message: "Task title too long"
+    message: "Tiêu đề quá dài"
   }),
   assignees: z.string().array().optional(),
   time: z.object({
     from: z.date({
-      required_error: "Please select start date.",
+      required_error: "Chọn ngày bắt đầu",
     }),
     to: z.date({
-      required_error: "Please select due date.",
+      required_error: "Chọn hạn hoàn thành",
     }),
   }),
   description: z.string().optional(),
@@ -114,7 +114,7 @@ export const CreateTaskDialog = () => {
     }).then(() => {
       dispatch(loadTasks(currentProject._id));
       setDialogOpen('createTaskDialog', false);
-      toast.success('Task Created')
+      toast.success('Thêm công việc thành công')
     }).finally(() => {
       form.reset();
     })
@@ -138,10 +138,10 @@ export const CreateTaskDialog = () => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      Title
+                      Tiêu đề
                     </FormLabel>
                     <FormControl>
-                      <Input placeholder="Title..." {...field} />
+                      <Input placeholder="Tiêu đề..." {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -153,7 +153,7 @@ export const CreateTaskDialog = () => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      Description
+                      Mô tả
                     </FormLabel>
                     <FormControl>
                       <InputComposer ref={inputRef} />
@@ -162,14 +162,14 @@ export const CreateTaskDialog = () => {
                   </FormItem>
                 )}
               />
-              <div>
+              {parentTask && <div>
                 <span className="text-muted-foreground text-[14px] font-medium">
                   Parent task
                 </span>
                 <div className="border px-2 py-1 rounded-sm mt-1 bg-gray-200">
                   {parentTask?.title}
                 </div>
-              </div>
+              </div>}
             </div>
 
             <div className={'col-span-2'}>
@@ -180,12 +180,12 @@ export const CreateTaskDialog = () => {
                   render={({ field }) => (
                     <FormItem className="flex gap-4 items-center !space-y-0 my-2">
                       <div className="flex items-center">
-                        <FormLabel className="text-muted-foreground">
-                          Start Date
+                        <FormLabel className="text-muted-foreground text-[12px]">
+                          Ngày bắt đầu
                         </FormLabel>
                         <Dot />
-                        <FormLabel className="text-muted-foreground" >
-                          Due Date
+                        <FormLabel className="text-muted-foreground text-[12px]" >
+                          Hạn hoàn thành
                         </FormLabel>
                       </div>
                       <FormControl>
@@ -206,8 +206,8 @@ export const CreateTaskDialog = () => {
                   name="assignees"
                   render={({ field }) => (
                     <FormItem className={'flex items-center gap-4 !space-y-0'}>
-                      <FormLabel className="text-muted-foreground">
-                        Assignees
+                      <FormLabel className="text-muted-foreground text-[12px]">
+                        Người phụ trách
                       </FormLabel>
                       <FormControl className="col-span-5">
                         <CreateTaskMemberSelector
@@ -227,8 +227,8 @@ export const CreateTaskDialog = () => {
                   control={form.control}
                   render={({ field }) => (
                     <FormItem className="grid grid-cols-6 items-center gap-4 !space-y-0">
-                      <FormLabel className="col-span-1 text-muted-foreground">
-                        Status
+                      <FormLabel className="col-span-1 text-muted-foreground text-[12px]">
+                        Trạng thái
                       </FormLabel>
                       <FormControl className="col-span-5">
                         <TaskStatusSelect
@@ -249,8 +249,8 @@ export const CreateTaskDialog = () => {
                   control={form.control}
                   render={({ field }) => (
                     <FormItem className="grid grid-cols-6 items-center gap-4 !space-y-0">
-                      <FormLabel className="col-span-1 text-muted-foreground">
-                        Type
+                      <FormLabel className="col-span-1 text-muted-foreground text-[12px]">
+                        Phân loại
                       </FormLabel>
                       <FormControl className="col-span-5">
                         <TaskTypeSelect
@@ -271,8 +271,8 @@ export const CreateTaskDialog = () => {
                   control={form.control}
                   render={({ field }) => (
                     <FormItem className="grid grid-cols-6 items-center gap-4 !space-y-0">
-                      <FormLabel className="col-span-1 text-muted-foreground">
-                        Priority
+                      <FormLabel className="col-span-1 text-muted-foreground text-[12px]">
+                        Độ ưu tiên
                       </FormLabel>
                       <FormControl className="col-span-5">
                         <TaskPrioritySelect
@@ -294,7 +294,7 @@ export const CreateTaskDialog = () => {
                   control={form.control}
                   render={({ field }) => (
                     <FormItem className="grid grid-cols-6 items-center gap-4 !space-y-0">
-                      <FormLabel className="col-span-1 text-muted-foreground">
+                      <FormLabel className="col-span-1 text-muted-foreground text-[12px]">
                         Milestone
                       </FormLabel>
                       <FormControl className="col-span-5">
@@ -316,8 +316,8 @@ export const CreateTaskDialog = () => {
                   control={form.control}
                   render={({ field }) => (
                     <FormItem className="grid grid-cols-6 items-center !space-y-0">
-                      <FormLabel className="col-span-1 text-muted-foreground">
-                        Labels
+                      <FormLabel className="col-span-1 text-muted-foreground text-[12px]">
+                        Nhãn
                       </FormLabel>
                       <FormControl className="col-span-5">
                         <TaskLabelsSelect
@@ -343,7 +343,7 @@ export const CreateTaskDialog = () => {
                       <FormLabel className="flex flex-1 items-center gap-2 text-muted-foreground">
                         <File size={16} />
                         <span>
-                          Attachments
+                          Đính kèm
                         </span>
                       </FormLabel>
                       <FormControl className="">
@@ -369,10 +369,10 @@ export const CreateTaskDialog = () => {
               setDialogOpen('createTaskDialog', false)
               form.reset()
             }}>
-              Cancel
+              Hủy
             </Button>
             <Button type={'submit'} onClick={form.handleSubmit(onSubmit)}>
-              Save
+              Lưu
             </Button>
           </div>
         </Form>

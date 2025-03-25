@@ -19,9 +19,9 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { slugify } from "@/utils";
 
 const projectFormSchema = z.object({
-  name: z.string().min(1, "PLEASE_ENTER_NAME"),
+  name: z.string().min(1, "Vui lòng nhập tên dự án"),
   slug: z.string().min(1, "PLEASE_ENTER_SLUG"),
-  type: z.string().min(1, "PLEASE_ENTER_TYPE"),
+  type: z.string().min(1, "Vui lòng chọn kiểu dự án"),
 });
 
 type ProjectFormValues = z.infer<typeof projectFormSchema>
@@ -69,7 +69,7 @@ export function CreateProjectDialog() {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            Create Project
+            Tạo dự án
           </DialogTitle>
         </DialogHeader>
         <Form {...form}>
@@ -79,7 +79,7 @@ export function CreateProjectDialog() {
               name="name"
               render={({ field }) => (
                 <FormItem className="w-full">
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel>Tên dự án</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="Enter a name..."
@@ -153,7 +153,7 @@ export function CreateProjectDialog() {
               render={({ field }) => (
                 <FormItem className={'space-y-1'}>
                   <FormLabel>
-                    Project Type
+                    Kiểu dự án
                   </FormLabel>
                   <FormControl>
                     <RadioGroup
@@ -162,11 +162,11 @@ export function CreateProjectDialog() {
                     >
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="personal" id="personal" />
-                        <Label htmlFor="personal">Personal</Label>
+                        <Label htmlFor="personal">Dự án cá nhân</Label>
                       </div>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="team" id="team" />
-                        <Label htmlFor="team">Team</Label>
+                        <Label htmlFor="team">Dự án nhóm</Label>
                       </div>
                     </RadioGroup>
                   </FormControl>
@@ -175,7 +175,7 @@ export function CreateProjectDialog() {
             />
             <div className="text-right">
               <Button loading={loading} type="submit">
-                Create
+                Thêm mới
               </Button>
             </div>
           </form>

@@ -57,14 +57,14 @@ export default function MainLayout() {
       >
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>It seems like you are not in any project</DialogTitle>
+            <DialogTitle>Bạn chưa tham gia dự án nào</DialogTitle>
             <DialogDescription>
-              Lost in projects? No worries, we had your back.
+              Đừng lo chúng tôi sẽ hộ trợ bạn
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <Button onClick={() => navigate('/project/create')}>
-              Create your project
+              Tạo dự án
             </Button>
           </DialogFooter>
         </DialogContent>

@@ -31,8 +31,6 @@ export const TaskListItem = ({ task }: TaskListItemProp) => {
     >
       <TableCell className="text-xs font-semibold gap-2 items-center">
         <Badge className="px-2 text-xs" variant="secondary">{type.label}</Badge>
-      </TableCell>
-      <TableCell className="text-xs font-semibold gap-2 items-center">
         {"  "} {task?.title}
       </TableCell>
       <TableCell className="text-xs font-semibold">

@@ -23,20 +23,20 @@ export function TaskFilterForm() {
       <div className="flex items-center justify-between">
         <div>
           <h4 className="font-medium leading-none">
-            Task Filter
+            Lọc
           </h4>
           <p className="text-sm text-muted-foreground">
-            Select filter for tasks listing...
+            Lọc công viêc theo các trạng thái...
           </p>
         </div>
         <Button className="inline-flex" size="sm">
-          Save
+          Lọc
         </Button>
       </div>
       <div className={'mt-2'}>
         <div>
           <Label>
-            Type
+            Phân lọai
           </Label>
           <TaskTypeSelect
             showAllSelector
@@ -47,7 +47,7 @@ export function TaskFilterForm() {
         </div>
         <div>
           <Label>
-            Status
+            Trạng thái
           </Label>
           <TaskStatusSelect
             showAllSelector
@@ -58,7 +58,7 @@ export function TaskFilterForm() {
         </div>
         <div>
           <Label>
-            Priority
+            Độ ưu tiên
           </Label>
           <TaskPrioritySelect
             showAllSelector

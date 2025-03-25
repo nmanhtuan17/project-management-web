@@ -9,11 +9,11 @@ export const metadata = {
 
 const sidebarNavItems = [
   {
-    title: "Profile",
+    title: "Thông tin cá nhân",
     href: "/projects/setting/profile",
   },
   {
-    title: "Notifications",
+    title: "Thông báo",
     href: "/projects/setting/notification",
   }
 ]
@@ -27,9 +27,9 @@ export default function SettingsLayout({ }: SettingsLayoutProps) {
     <div className="flex flex-col flex-1">
       <div className="flex flex-col flex-1 space-y-6 p-10">
         <div className="space-y-0.5">
-          <h2 className="text-2xl font-bold tracking-tight">Settings</h2>
+          <h2 className="text-2xl font-bold tracking-tight">Cài đặt</h2>
           <p className="text-muted-foreground">
-            Manage your account settings and set e-mail preferences.
+            Quản lý cài đặt tài khoản và thiết lập tùy chọn email.
           </p>
         </div>
         <Separator className="my-6" />

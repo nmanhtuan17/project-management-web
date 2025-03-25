@@ -17,35 +17,28 @@ export const taskConfig = {
     icon: InfoIcon,
     value: TaskTypes.GENERAL,
     label: 'General'
-  }, {
-    icon: CheckIcon,
-    value: TaskTypes.TASK,
-    label: 'Task'
+  },
+  {
+    icon: BookOpenIcon,
+    value: TaskTypes.ISSUE,
+    label: 'Issue'
   }, {
     icon: BugIcon,
     value: TaskTypes.BUG,
     label: 'Bug'
-  }, {
-    icon: TriangleAlertIcon,
-    value: TaskTypes.INCIDENT,
-    label: 'Incident'
-  }, {
-    icon: BookOpenIcon,
-    value: TaskTypes.ISSUE,
-    label: 'Issue'
   }],
   priorities: [{
     icon: ArrowUpIcon,
     value: TaskPriority.HIGH,
-    label: 'High'
+    label: 'Gấp'
   }, {
     icon: ArrowRightIcon,
     value: TaskPriority.MEDIUM,
-    label: 'Medium'
+    label: 'Trung bình'
   }, {
     icon: ArrowDownIcon,
     value: TaskPriority.LOW,
-    label: 'Low'
+    label: 'Thấp'
   }],
   statuses: [{
     label: 'Chưa thực hiện',

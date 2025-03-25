@@ -145,7 +145,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           }}
           loading={isLoading}
         >
-          Continue with Google
+          Đăng nhập với Google
         </Button>
       </div>
       <div className="relative">
@@ -154,7 +154,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         </div>
         <div className="relative flex justify-center text-xs uppercase">
           <span className="bg-background px-2 text-muted-foreground">
-            Or
+            Hoặc
           </span>
         </div>
       </div>
@@ -177,7 +177,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               </div>
               <div className="grid gap-1">
                 <Label className="sr-only" htmlFor="password">
-                  Password
+                  Mật khẩu
                 </Label>
                 <div className={'flex items-center relative'}>
                   <Input
@@ -208,13 +208,13 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               {isLoading && (
                 <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
               )}
-              Sign In with Email
+              Đăng nhập
             </Button>
           </div>
           <div className="grid gap-2">
             <span className="text-sm text-muted-foreground text-center">
-              You do not have account?
-              <Link to='/auth/register' className="text-sm">Create account</Link>
+              Bạn chưa có tài khoản?
+              <Link to='/auth/register' className="text-sm">Đăng ký</Link>
             </span>
           </div>
         </div>

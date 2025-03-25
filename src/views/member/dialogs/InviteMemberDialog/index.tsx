@@ -53,7 +53,7 @@ export const InviteMemberDialog = () => {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            Invite Member
+            Thêm thành viên
           </DialogTitle>
         </DialogHeader>
         <Form {...form}>
@@ -84,7 +84,7 @@ export const InviteMemberDialog = () => {
                   form.reset()
                 }}
               >
-                Cancel
+                Hủy
               </Button>
               <Button
                 className="flex-1"
@@ -95,7 +95,7 @@ export const InviteMemberDialog = () => {
                     <LoadingSpinner size={16} />
                   </div>
                   :
-                  'Send Invitation'
+                  'Gửi lời mời'
                 }
               </Button>
             </div>

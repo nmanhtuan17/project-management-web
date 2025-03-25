@@ -51,15 +51,15 @@ export default function HomePage() {
         <ResizablePanel>
           <div className="flex flex-col flex-1 px-16 h-full">
             <div className={'py-4 md:py-6'}>
-              <h2 className="text-2xl md:text-3xl font-bold tracking-tight">Dashboard</h2>
+              <h2 className="text-2xl md:text-3xl font-bold tracking-tight">Tổng quan</h2>
             </div>
             <div className="flex flex-1 gap-4 pb-4">
               <div className="space-y-4">
                 <ProfileCard />
                 <Card className="w-[320px]">
                   <CardHeader>
-                    <CardTitle>Activities</CardTitle>
-                    <CardDescription>Your recent activities</CardDescription>
+                    <CardTitle>Hoạt động</CardTitle>
+                    <CardDescription>Các hoạt động gần đây của bạn</CardDescription>
                     <Separator className="mt-2" />
                   </CardHeader>
                   <CardContent className="flex flex-col items-center justify-center p-4 pb-0 mt-4">
@@ -88,7 +88,7 @@ export default function HomePage() {
           >
             <div>
               <div className={'px-4 py-2 font-bold'}>
-                {!isCollapsed && 'Contacts'}
+                {!isCollapsed && 'Thông tin thành viên'}
               </div>
               {members.map(mem => (!isCollapsed ?
                 <div

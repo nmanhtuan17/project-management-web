@@ -26,7 +26,7 @@ export default function TasksListHeader(props: TasksListHeaderProps) {
   return <div className={cn("p-4 flex flex-row gap-1 border-b", className)}>
     <Input
       className={'h-8 text-sm w-48'}
-      placeholder={'Search...'}
+      placeholder={'Tìm kiếm...'}
       onChange={(e) => setValue(e.target.value)}
     />
     <Popover>

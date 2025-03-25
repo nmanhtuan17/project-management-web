@@ -44,7 +44,7 @@ export const TaskPerformance = () => {
       },
       title: {
         display: true,
-        text: 'Task Performance',
+        text: 'Hiệu suất công việc',
       },
     },
   };
@@ -57,7 +57,7 @@ export const TaskPerformance = () => {
     labels,
     datasets: [
       {
-        label: 'Total',
+        label: 'Tổng',
         data: members.map((mem) =>
           tasks && tasks.filter(task => task.assignees.find(a => a._id === mem._id)).length),
         backgroundColor: 'rgba(53, 162, 235, 0.5)',

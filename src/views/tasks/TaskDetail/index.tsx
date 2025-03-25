@@ -67,28 +67,28 @@ interface TaskDetailProps {
 
 const taskFormSchema = z.object({
   type: z.enum(Object.values(TaskTypes) as [string, ...string[]], {
-    required_error: "Please select task type.",
+    required_error: "Vui lòng chọn loại công việc",
   }),
   status: z.string({
-    required_error: "Please select task status.",
+    required_error: "Vui lòng chọn trạng thái",
   }),
   priority: z.enum(Object.values(TaskPriority).map(m => m.toString()) as [string, ...string[]], {
-    required_error: "Please select task priority.",
+    required_error: "Vui lòng chọn mức độ ưu tiên",
   }),
   title: z.string({
-    required_error: "Please enter task title",
+    required_error: "Nhập tiêu đề công việc",
   }).min(4, {
-    message: "Task title too short",
+    message: "Tiêu đề quá ngắn, yêu cầu tối thiểu 4 kí tự",
   }).max(100, {
-    message: "Task title too long"
+    message: "Tiêu đề quá dài"
   }),
   assignees: z.string().array().optional(),
   time: z.object({
     from: z.date({
-      required_error: "Please select start date.",
+      required_error: "Chọn ngày bắt đầu",
     }),
     to: z.date({
-      required_error: "Please select due date.",
+      required_error: "Chọn hạn hoàn thành",
     }),
   }),
   description: z.string().optional(),
@@ -179,7 +179,7 @@ export default function TaskDetail(props: TaskDetailProps) {
         <div className={'flex-1 text-muted-foreground flex flex-col items-center justify-center'}>
           {taskId ? <LoaderCircleIcon /> : <InboxIcon className={'w-10 h-10'} />}
           <div>
-            {taskId ? "Loading..." : "Select a task to continue..."}
+            {taskId ? "Loading..." : "Chọn công việc..."}
           </div>
         </div>
       </>
@@ -217,7 +217,7 @@ export default function TaskDetail(props: TaskDetailProps) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-muted-foreground">
-                    Description
+                    Mô tả
                   </FormLabel>
                   <FormControl>
                     <TaskDetailDescription {...field} />
@@ -229,7 +229,7 @@ export default function TaskDetail(props: TaskDetailProps) {
             <div className="flex flex-col flex-1 h-[200px] gap-2 overflow-y-auto">
               <div className="flex items-center justify-between">
                 <span className="text-muted-foreground text-[14px] font-medium">
-                  Sub tasks
+                  Công việc phụ
                 </span>
                 <Button
                   className="p-0 w-6 h-6 align-middle items-center"
@@ -259,7 +259,7 @@ export default function TaskDetail(props: TaskDetailProps) {
                       <DropdownMenuItem onClick={() => {
                         setDialogOpen('taskDetail', true, { element: <TaskDetail taskId={subTask._id} /> })
                       }} >
-                        Open task
+                        Chi tiết
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
@@ -276,12 +276,12 @@ export default function TaskDetail(props: TaskDetailProps) {
                 render={({ field }) => (
                   <FormItem className="flex gap-4 items-center !space-y-0 my-2">
                     <div className="flex items-center">
-                      <FormLabel className="text-muted-foreground">
-                        Start Date
+                      <FormLabel className="text-muted-foreground text-[12px]">
+                        Ngày bắt đầu
                       </FormLabel>
                       <Dot />
-                      <FormLabel className="text-muted-foreground" >
-                        Due Date
+                      <FormLabel className="text-muted-foreground text-[12px]" >
+                        Hạn hoàn thành
                       </FormLabel>
                     </div>
                     <FormControl>
@@ -302,8 +302,8 @@ export default function TaskDetail(props: TaskDetailProps) {
                 name="assignees"
                 render={({ field }) => (
                   <FormItem className={'flex items-center gap-4 !space-y-0'}>
-                    <FormLabel className="text-muted-foreground">
-                      Assignees
+                    <FormLabel className="text-muted-foreground text-[12px]">
+                      Người phụ trách
                     </FormLabel>
                     <FormControl>
                       <CreateTaskMemberSelector
@@ -323,8 +323,8 @@ export default function TaskDetail(props: TaskDetailProps) {
                 control={form.control}
                 render={({ field }) => (
                   <FormItem className="grid grid-cols-6 items-center gap-4 !space-y-0">
-                    <FormLabel className="col-span-1 text-muted-foreground">
-                      Status
+                    <FormLabel className="col-span-1 text-muted-foreground text-[12px]">
+                      Trạng thái
                     </FormLabel>
                     <FormControl className="col-span-5">
                       <TaskStatusSelect
@@ -345,8 +345,8 @@ export default function TaskDetail(props: TaskDetailProps) {
                 control={form.control}
                 render={({ field }) => (
                   <FormItem className="grid grid-cols-6 items-center gap-4 !space-y-0">
-                    <FormLabel className="col-span-1 text-muted-foreground">
-                      Type
+                    <FormLabel className="col-span-1 text-muted-foreground text-[12px]">
+                      Phân loại
                     </FormLabel>
                     <FormControl className="col-span-5">
                       <TaskTypeSelect
@@ -368,8 +368,8 @@ export default function TaskDetail(props: TaskDetailProps) {
                 control={form.control}
                 render={({ field }) => (
                   <FormItem className="grid grid-cols-6 items-center gap-4 !space-y-0">
-                    <FormLabel className="col-span-1 text-muted-foreground">
-                      Priority
+                    <FormLabel className="col-span-1 text-muted-foreground text-[12px]">
+                      Độ ưu tiên
                     </FormLabel>
                     <FormControl className="col-span-5">
                       <TaskPrioritySelect
@@ -391,7 +391,7 @@ export default function TaskDetail(props: TaskDetailProps) {
                 control={form.control}
                 render={({ field }) => (
                   <FormItem className="grid grid-cols-6 items-center gap-4 !space-y-0">
-                    <FormLabel className="col-span-1 text-muted-foreground">
+                    <FormLabel className="col-span-1 text-muted-foreground text-[12px]">
                       Milestone
                     </FormLabel>
                     <FormControl className="col-span-5">
@@ -413,8 +413,8 @@ export default function TaskDetail(props: TaskDetailProps) {
                 control={form.control}
                 render={({ field }) => (
                   <FormItem className="grid grid-cols-6 items-center !space-y-0">
-                    <FormLabel className="col-span-1 text-muted-foreground">
-                      Labels
+                    <FormLabel className="col-span-1 text-muted-foreground text-[12px]">
+                      Nhãn
                     </FormLabel>
                     <FormControl className="col-span-5">
                       <TaskLabelsSelect
@@ -440,7 +440,7 @@ export default function TaskDetail(props: TaskDetailProps) {
                     <FormLabel className="flex flex-1 items-center gap-2 text-muted-foreground">
                       <File size={16} />
                       <span>
-                        Attachments
+                        Đính kèm
                       </span>
                     </FormLabel>
                     <FormControl className="">
@@ -462,7 +462,7 @@ export default function TaskDetail(props: TaskDetailProps) {
         </div>
         {form.formState.isDirty && <div className="absolute bottom-0 right-0 p-6 space-x-2">
           <Button type={'submit'} onClick={form.handleSubmit(onSubmit)}>
-            Update
+            Cập nhật
           </Button>
         </div>}
       </Form>

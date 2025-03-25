@@ -34,19 +34,16 @@ const profileFormSchema = z.object({
   fullName: z
     .string()
     .min(2, {
-      message: "Username must be at least 2 characters.",
-    })
-    .max(30, {
-      message: "Username must not be longer than 30 characters.",
+      message: "Họ tên yêu cầu tối thiểu 2 ký tự",
     }),
   email: z
     .string({
-      required_error: "Please select an email to display.",
+      required_error: "Hãy chọn email",
     })
     .email(),
   alias: z
     .string({
-      required_error: "Please select an internal email to display.",
+      required_error: "Hãy chọn email nội bộ",
     }),
   bio: z.string().optional(),
 })
@@ -91,13 +88,13 @@ export function ProfileForm() {
             name="fullName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Fullname</FormLabel>
+                <FormLabel>Họ tên</FormLabel>
                 <FormControl>
                   <Input className="focus-visible:ring-0" placeholder="shadcn" {...field} />
                 </FormControl>
                 <FormDescription>
-                  This is your public display name. It can be your real name or a
-                  pseudonym. You can only change this once every 30 days.
+                  Đây là tên hiển thị công khai của bạn. Có thể là tên thật hoặc
+                  bí danh của bạn.
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -113,7 +110,7 @@ export function ProfileForm() {
                   <Input disabled className="focus-visible:ring-0" placeholder="shadcn" {...field} />
                 </FormControl>
                 <FormDescription>
-                  You can manage verified email addresses in your{" "}
+                  Bạn có thể quản lý các địa chỉ email đã xác minh{" "}
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -124,7 +121,7 @@ export function ProfileForm() {
             name="alias"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Internal Email</FormLabel>
+                <FormLabel>Email nội bộ</FormLabel>
                 <FormControl>
                   <div className="flex border items-center rounded-sm pr-4">
                     <Input disabled className="focus-visible:ring-0 border-none" placeholder="Please active your internal email" {...field} />
@@ -133,7 +130,7 @@ export function ProfileForm() {
                   </div>
                 </FormControl>
                 <FormDescription>
-                  Active internal email to use internal mail system
+                  Email nội bộ đang hoạt động để sử dụng hệ thống thư nội bộ
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -144,7 +141,7 @@ export function ProfileForm() {
             name="bio"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Bio</FormLabel>
+                <FormLabel>Tiểu sử</FormLabel>
                 <FormControl>
                   <Textarea
                     placeholder="Tell us a little bit about yourself"
@@ -156,7 +153,7 @@ export function ProfileForm() {
               </FormItem>
             )}
           />
-          <Button type="submit">Update profile</Button>
+          <Button type="submit">Cập nhật</Button>
         </form>
       </Form>
     </div>
