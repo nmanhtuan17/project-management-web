@@ -1,14 +1,21 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import apiService from "@/services/api.service.ts";
 import { RootState } from "@/redux/store.ts";
-import { Task } from "@/types/task";
+import { ETaskStatus, Task, TaskPriority, TaskTypes } from "@/types/task";
 
-export const loadTasks = createAsyncThunk<Task[], string>('task/load', async (projectId, thunkAPI) => {
+export const loadTasks = createAsyncThunk<Task[], {
+  projectId: string,
+  query?: string
+}>('task/load', async ({ projectId, query }, thunkAPI) => {
   const state = thunkAPI.getState() as RootState;
-  const { types, search, statuses, priorities } = state.task.filter;
+  const { types, statuses, priorities, assignees } = state.task.filter;
   const { data } = await apiService.get(`projects/${projectId}/tasks`, {}, {
     params: {
-      type: 'all',
+      query: query || '',
+      type: types?.join(',') || TaskTypes.ALL,
+      status: statuses?.join(',') || ETaskStatus.ALL,
+      priority: priorities?.join(',') || TaskPriority.ALL,
+      assignees: assignees?.join(',') || undefined,
       limit: 100
     }
   })

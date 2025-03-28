@@ -112,7 +112,7 @@ export const CreateTaskDialog = () => {
       parentTask: createTaskDialog.parentTask ? createTaskDialog.parentTask : '',
       description: inputRef.current.getHTML()
     }).then(() => {
-      dispatch(loadTasks(currentProject._id));
+      dispatch(loadTasks({ projectId: currentProject._id }));
       setDialogOpen('createTaskDialog', false);
       toast.success('Thêm công việc thành công')
     }).finally(() => {

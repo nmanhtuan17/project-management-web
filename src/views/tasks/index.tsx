@@ -20,7 +20,7 @@ export default function TaskLayout() {
 
   useEffect(() => {
     if (currentProject._id) {
-      dispatch(loadTasks(currentProject._id));
+      dispatch(loadTasks({projectId: currentProject._id}));
     }
   }, [currentProject._id]);
 
@@ -84,7 +84,7 @@ export default function TaskLayout() {
               </p>
             </div>
             <div className="flex items-center justify-between flex-col sm:flex-row gap-2">
-              <TasksListHeader className="p-0 border-none w-full lg:w-[400px]" />
+              <TasksListHeader className="p-0 border-none w-full " />
               <Button
                 onClick={() => {
                   openDialog("createTaskDialog");

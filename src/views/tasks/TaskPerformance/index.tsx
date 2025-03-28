@@ -28,12 +28,9 @@ ChartJS.register(
 
 export const TaskPerformance = () => {
   const { members } = useAppSelector(state => state.project)
-  const [getTasks, { data: tasks }] = useApi<Task[]>(apiService.getTasks)
+  const {tasks} = useAppSelector(state => state.task)
   const { currentProject } = useCurrentProject()
 
-  useEffect(() => {
-    getTasks(currentProject._id, {})
-  }, [currentProject])
 
   const options = {
     responsive: true,
@@ -51,7 +48,6 @@ export const TaskPerformance = () => {
 
 
   const labels = useMemo(() => members.map(member => member.user.fullName), [members])
-  console.log(tasks)
 
   const data = {
     labels,

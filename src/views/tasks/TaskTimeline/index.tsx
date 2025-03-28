@@ -57,7 +57,7 @@ export const TaskTimeline = () => {
 
   return (
     <div className='flex-1 mt-4 h-full'>
-      {tasks.length > 0 &&
+      {tasks.length > 0 ?
         <Gantt
           tasks={tasks}
           onDateChange={(task) => {
@@ -67,7 +67,8 @@ export const TaskTimeline = () => {
           onExpanderClick={handleExpanderClick}
           ganttHeight={height - 300}
           onDoubleClick={handleClick}
-        />}
+        /> : 
+        <p className='text-muted-foreground text-center'>Không có dữ liệu nào</p>}
     </div>
   )
 }

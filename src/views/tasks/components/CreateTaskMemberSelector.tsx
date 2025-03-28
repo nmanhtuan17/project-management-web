@@ -18,7 +18,8 @@ export default function CreateTaskMemberSelector(props: MemberSelectorProps) {
 
 
   return <MultiSelectAssignees
-    placeholder="Search member..."
+    setToMe={true}
+    placeholder="Tìm kiếm..."
     className={props.className}
     selected={props.members ?? []}
     options={members.map(mem => ({

@@ -142,6 +142,7 @@ export function MultiSelect({
 
 
 interface MultiSelectAssigneesProps extends MultiSelectProps {
+  setToMe?: boolean;
 }
 
 export function MultiSelectAssignees({
@@ -150,6 +151,7 @@ export function MultiSelectAssignees({
   onChange,
   className,
   placeholder,
+  setToMe = false,
   ...props
 }: MultiSelectAssigneesProps) {
   const [open, setOpen] = React.useState(false);
@@ -167,14 +169,14 @@ export function MultiSelectAssignees({
           onClick={() => setOpen(!open)}
         >
           <div className="flex px-1 overflow-hidden items-center flex-wrap -space-x-2">
-            {selected.length === 0 && <span className={'text-muted-foreground'}>Unassigned</span>}
+            {selected.length === 0 && <span className={'text-muted-foreground'}>Chọn...</span>}
             {selected.map((item) => (
               <div key={item}>
                 {members.map(mem => mem._id === item && (
                   <TooltipProvider key={mem._id} delayDuration={300}>
                     <Tooltip>
                       <TooltipTrigger asChild>
-                        <Avatar className={'w-7 h-7'}>
+                        <Avatar className={'w-5 h-5'}>
                           <AvatarImage src={mem?.user?.avatar} />
                           <AvatarFallback className="text-xs">{mem.user.fullName.charAt(0)}</AvatarFallback>
                         </Avatar>
@@ -191,14 +193,14 @@ export function MultiSelectAssignees({
           </div>
         </Button>
       </PopoverTrigger>
-      <Button
+      {setToMe && <Button
         variant="link"
         onClick={(e) => {
           e.preventDefault()
           onChange([profile._id])
         }}
         className="text-muted-foreground"
-      >Assign to me</Button>
+      >Assign to me</Button>}
       <PopoverContent className="w-full p-0" align="start">
         <Command>
           <CommandList>

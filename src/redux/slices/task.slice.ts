@@ -45,7 +45,7 @@ export interface TaskSliceState {
     types?: TaskTypes[],
     statuses?: ETaskStatus[],
     priorities?: TaskPriority[],
-    search?: string;
+    assignees?: string[]
   },
   recentTasks: Task[],
   board: Board;
@@ -56,7 +56,6 @@ const initialState: TaskSliceState = {
   tasks: [],
   recentTasks: [],
   filter: {
-    search: '',
     types: [TaskTypes.ALL],
     statuses: [ETaskStatus.ALL],
     priorities: [TaskPriority.ALL],
@@ -82,9 +81,9 @@ export const taskSlice = createSlice({
         ...action.payload
       }
     },
-    searchTask(state, action) {
-      state.filter.search = action.payload
-    },
+    // searchTask(state, action) {
+    //   state.filter.query = action.payload
+    // },
     setBoard(state, action: PayloadAction<Board>) {
       state.board = action.payload;
     },
@@ -182,6 +181,6 @@ export const taskSlice = createSlice({
 export const {
   setTasks,
   filterTask,
-  searchTask,
+  // searchTask,
   setBoard,
 } = taskSlice.actions;

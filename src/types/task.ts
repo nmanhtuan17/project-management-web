@@ -5,8 +5,6 @@ export enum TaskTypes {
   GENERAL = 'general',
   ISSUE = 'issue',
   BUG = 'bug',
-  TASK = 'task',
-  INCIDENT = 'incident',
 }
 
 export enum TaskPriority {
