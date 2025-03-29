@@ -65,7 +65,7 @@ export interface TaskActivity {
   type: TaskActivityType;
   task: Task | string;
   field?: string;
-  member: ProjectMember | string;
+  member: ProjectMember;
   meta?: any;
   linkedItemId?: string;
   createdAt: string;

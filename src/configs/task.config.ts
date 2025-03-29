@@ -58,3 +58,30 @@ export const taskConfig = {
   }],
 }
 
+export const activitiesConfig = {
+  status: {
+    label: 'Trạng thái',
+    value: {
+      'to-do': 'Chưa thực hiện',
+      'in-progress': 'Đang xử lý',
+      'done': 'Đã hoàn thành'
+    }
+  },
+  priority: {
+    label: 'Độ ưu tiên',
+    value: {
+      1: 'Thấp',
+      2: 'Trung bình',
+      3: 'Gấp'
+    }
+  },
+  type: {
+    label: 'Phân loại',
+    value: {
+      'general': 'General',
+      'issue': 'Issue',
+      'bug': 'Bug'
+    }
+  }
+}
+

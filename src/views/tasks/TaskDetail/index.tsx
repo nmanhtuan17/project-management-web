@@ -12,7 +12,7 @@ import {
 import { createContext, createElement, useContext, useEffect, useState } from "react";
 import apiService from "@/services/api.service.ts";
 import { ETaskStatus, Task, TaskActivity, TaskPriority, TaskTypes } from "@/types/task";
-import { taskConfig } from "@/configs/task.config.ts";
+import { activitiesConfig, taskConfig } from "@/configs/task.config.ts";
 import { Button } from "@/components/ui/button.tsx";
 import { cn, getGravatar } from "@/lib/utils.ts";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar.tsx";
@@ -46,6 +46,7 @@ import { useCurrentProject } from "@/lib/hooks/useCurrentProject";
 import { TaskMilestoneSelect } from "@/views/tasks/components/TaskMilestoneSelect";
 import { TaskLabelsSelect } from "@/views/tasks/components/TaskLabelsSelect";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import dayjs from "dayjs";
 
 interface TaskDetailContextType {
   taskId: string;
@@ -111,6 +112,8 @@ export default function TaskDetail(props: TaskDetailProps) {
   const [getSubTasks, { data: subTasks }] = useApi<Task[]>(apiService.getSubTasks);
   const { setDialogOpen } = useDialogContext()
 
+  console.log(activities)
+
 
   const loadActivities = () => {
     getActivities(project._id, taskId).then(() => { })
@@ -134,6 +137,7 @@ export default function TaskDetail(props: TaskDetailProps) {
 
   useEffect(() => {
     getSubTasks(project._id, taskId)
+    getActivities(project._id, taskId)
   }, [taskId])
 
   const defaultValues: Partial<TaskFormValues> = {
@@ -226,7 +230,7 @@ export default function TaskDetail(props: TaskDetailProps) {
                 </FormItem>
               )}
             />
-            <div className="flex flex-col flex-1 h-[200px] gap-2 overflow-y-auto">
+            <div className="flex flex-col flex-1 h-[100px] gap-2 overflow-y-auto">
               <div className="flex items-center justify-between">
                 <span className="text-muted-foreground text-[14px] font-medium">
                   Công việc phụ
@@ -265,6 +269,40 @@ export default function TaskDetail(props: TaskDetailProps) {
                   </DropdownMenu>
                 </div>
               ))}
+            </div>
+            <div>
+              <div className="mb-3">
+                <span className="text-muted-foreground text-[14px] font-medium">
+                  Hoạt động
+                </span>
+              </div>
+              <div className="flex flex-col flex-1 gap-2 h-[200px] overflow-y-auto">
+                {activities && activities.length > 0 && activities.map(ac => (
+                  <div key={ac._id}>
+                    <div className="flex items-center gap-3">
+                      <Avatar className={'w-4 h-4'}>
+                        <AvatarImage src={ac?.member?.user.avatar} />
+                        <AvatarFallback className="text-xs">{ac.member.user.fullName.charAt(0)}</AvatarFallback>
+                      </Avatar>
+                      <div>
+                        {ac.field === 'assignees' &&
+                          <p className="text-[14px]"> {`Cập nhật mới người phụ trách ${ac.meta.oldValue.join('')} -> ${ac.meta.newValue.join('')}`}</p>
+                        }
+                        {ac.field === 'time' &&
+                          <p className="text-[14px]"> {`Cập nhật thời gian ${dayjs(ac.meta.oldValue.from).format('D/MM/YY')} - ${dayjs(ac.meta.oldValue.to).format('D/MM/YY')} -> ${dayjs(ac.meta.newValue.from).format('D/MM/YY')} - ${dayjs(ac.meta.newValue.to).format('D/MM/YY')}`}</p>
+                        }
+                        {ac.field !== 'time' && ac.field !== 'assignees' &&
+                          <p className="text-[14px]"> {`Cập nhật ${activitiesConfig[ac.field].label} ${activitiesConfig[ac.field].value[ac.meta.oldValue]} -> ${activitiesConfig[ac.field].value[ac.meta.newValue]}`}</p>
+                        }
+                        <p className="text-muted-foreground text-xs">
+                          {dayjs(ac.createdAt).format('D MMMM, YYYY  HH:mm')}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))
+                }
+              </div>
             </div>
           </div>
 
