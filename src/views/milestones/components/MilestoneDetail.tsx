@@ -29,7 +29,7 @@ export const MilestoneDetail = ({ milestone }: Props) => {
       </div>
       <div className="mt-4">
         <div className="font-semibold text-[16px]">
-          Description
+          Mô tả
         </div>
         <IframeDocs content={milestone.description} />
       </div>
