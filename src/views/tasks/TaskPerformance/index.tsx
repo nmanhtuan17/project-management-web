@@ -68,7 +68,6 @@ export const TaskPerformance = () => {
 
   return (
     <div className='w-full flex-1'>
-      {/* <Bar options={options} data={data} className='w-full' /> */}
       <Bar options={options} data={data} className='w-full' />
     </div>
   )
