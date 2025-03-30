@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -28,8 +28,9 @@ ChartJS.register(
 
 export const TaskPerformance = () => {
   const { members } = useAppSelector(state => state.project)
-  const {tasks} = useAppSelector(state => state.task)
+  const { tasks, filter } = useAppSelector(state => state.task)
   const { currentProject } = useCurrentProject()
+  const [chartLabels, setLabels] = useState([])
 
 
   const options = {
@@ -46,28 +47,28 @@ export const TaskPerformance = () => {
     },
   };
 
-
-  const labels = useMemo(() => members.map(member => member.user.fullName), [members])
+  console.log(filter.assignees)
+  const assignees = useMemo(() => filter.assignees.map(a => members.find(m => a === m._id)), [filter.assignees, members])
+  const labels = useMemo(() => assignees.length ? assignees.map(member => member.user.fullName) : (['Tổng']), [assignees])
 
   const data = {
     labels,
     datasets: [
       {
         label: 'Tổng',
-        data: members.map((mem) =>
-          tasks && tasks.filter(task => task.assignees.find(a => a._id === mem._id)).length),
+        data: [tasks.length],
         backgroundColor: 'rgba(53, 162, 235, 0.5)',
       },
       ...taskConfig.statuses.map((item) => ({
         label: item.label,
-        data: members.map((mem) =>
-          tasks ? tasks.filter(task => task.status === item.value && task.assignees.find(a => a._id === mem._id)).length : 0),
+        data: [tasks ? tasks.filter(task => task.status === item.value).length : 0],
         backgroundColor: item.backgroundColor,
       }))]
   };
 
   return (
     <div className='w-full flex-1'>
+      {/* <Bar options={options} data={data} className='w-full' /> */}
       <Bar options={options} data={data} className='w-full' />
     </div>
   )
