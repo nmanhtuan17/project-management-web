@@ -230,7 +230,7 @@ export default function TaskDetail(props: TaskDetailProps) {
                 </FormItem>
               )}
             />
-            <div className="flex flex-col flex-1 h-[100px] gap-2 overflow-y-auto">
+            <div className="flex flex-col flex-1 max-h-[100px] gap-2 overflow-y-auto">
               <div className="flex items-center justify-between">
                 <span className="text-muted-foreground text-[14px] font-medium">
                   Công việc phụ
@@ -248,7 +248,7 @@ export default function TaskDetail(props: TaskDetailProps) {
               {subTasks && subTasks.map(subTask => (
                 <div
                   key={subTask._id}
-                  className="border px-2 py-1 rounded-sm flex items-center gap-2 justify-between">
+                  className="border px-2 py-1 rounded-md flex items-center gap-2 justify-between">
                   <div className="flex items-center gap-2">
                     <CircleAlert size={16} />
                     {subTask.title}
@@ -276,7 +276,7 @@ export default function TaskDetail(props: TaskDetailProps) {
                   Hoạt động
                 </span>
               </div>
-              <div className="flex flex-col flex-1 gap-2 h-[200px] overflow-y-auto">
+              <div className="flex flex-col flex-1 gap-2 max-h-[200px] overflow-y-auto">
                 {activities && activities.length > 0 && activities.map(ac => (
                   <div key={ac._id}>
                     <div className="flex items-center gap-3">

@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button.tsx";
 import { Calendar } from "@/components/ui/calendar.tsx";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover.tsx";
+import dayjs from "dayjs"
 
 
 interface CalendarDateRangePickerProps {
@@ -16,13 +17,16 @@ interface CalendarDateRangePickerProps {
   date?: DateRange
   onChange?: (date: DateRange) => void;
   variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link";
+  min?: Date;
+  max?: Date;
 }
 
 export function CalendarDateRangePicker({
   className,
   date,
   onChange,
-  variant
+  variant,
+  min, max
 }: CalendarDateRangePickerProps) {
 
 
@@ -42,11 +46,11 @@ export function CalendarDateRangePicker({
             {date?.from ? (
               date.to ? (
                 <>
-                  {format(date.from, "LLL dd, y")} -{" "}
-                  {format(date.to, "LLL dd, y")}
+                  {dayjs(date.from).format('D MMMM, YYYY')} -{" "}
+                  {dayjs(date.to).format('D MMMM, YYYY')}
                 </>
               ) : (
-                format(date.from, "LLL dd, y")
+                dayjs(date.from).format('D MMMM, YYYY')
               )
             ) : (
               <span>Pick a date</span>
@@ -59,6 +63,8 @@ export function CalendarDateRangePicker({
             mode="range"
             defaultMonth={date?.from}
             selected={date}
+            fromDate={min}
+            toDate={max}
             onSelect={(range) => {
               onChange({
                 from: new Date(range.from),

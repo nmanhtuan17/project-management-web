@@ -73,17 +73,8 @@ export const CreateTaskDialog = () => {
   const { currentProject } = useCurrentProject()
   const dispatch = useAppDispatch();
   const { board, tasks } = useAppSelector(state => state.task)
+  const { milestones } = useAppSelector(state => state.project)
   const inputRef = useRef(null)
-
-  // const statuses: { value: string, label: string, backgroundColor: string }[] = useMemo(() => {
-  //   let statuses = []
-  //   board.columns.forEach(s => statuses.push({
-  //     value: s.id,
-  //     label: s.title,
-  //     backgroundColor: s.backgroundColor
-  //   }))
-  //   return statuses
-  // }, [board])
 
   const parentTask = useMemo(() => createTaskDialog?.parentTask && tasks.find(task => task._id === createTaskDialog.parentTask),
     [createTaskDialog?.parentTask])
@@ -105,6 +96,8 @@ export const CreateTaskDialog = () => {
     resolver: zodResolver(createTaskFormSchema),
     defaultValues: defaultValues,
   });
+
+  const milestone = useMemo(() => milestones.find(m => m._id === form.watch('milestone')), [form.watch('milestone'), milestones])
 
   const onSubmit = (data: CreateTaskFormValues) => {
     apiService.post(`/projects/${currentProject._id}/tasks`, {
@@ -193,6 +186,8 @@ export const CreateTaskDialog = () => {
                           variant="ghost"
                           className="flex-1 w-full"
                           date={field.value as DateRange}
+                          min={milestone?.time.from}
+                          max={milestone?.time.to}
                           onChange={field.onChange}
                         />
                       </FormControl>
