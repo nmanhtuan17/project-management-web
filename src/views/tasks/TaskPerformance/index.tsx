@@ -47,9 +47,8 @@ export const TaskPerformance = () => {
     },
   };
 
-  console.log(filter.assignees)
-  const assignees = useMemo(() => filter.assignees.map(a => members.find(m => a === m._id)), [filter.assignees, members])
-  const labels = useMemo(() => assignees.length ? assignees.map(member => member.user.fullName) : (['Tổng']), [assignees])
+  const assignees = useMemo(() => filter?.assignees?.map(a => members.find(m => a === m._id)), [filter.assignees, members])
+  const labels = useMemo(() => assignees?.length ? assignees?.map(member => member.user.fullName) : (['Tổng']), [assignees])
 
   const data = {
     labels,

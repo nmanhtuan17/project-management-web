@@ -22,7 +22,7 @@ export function TaskFilterForm({ setOpen }: Props) {
   const [statuses, setStatuses] = useState<string[]>(filter.statuses);
   const [types, setTypes] = useState<string[]>(filter.types);
   const [priorities, setPriorities] = useState<any>(filter?.priorities);
-  const [assignees, setAssignees] = useState<string[]>(filter?.assignees)
+  const [assignees, setAssignees] = useState<string[]>(filter?.assignees || [])
 
   useEffect(() => {
     dispatch(filterTask({ statuses, types, priorities, assignees }))

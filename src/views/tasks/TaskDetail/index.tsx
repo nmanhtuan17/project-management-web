@@ -112,8 +112,6 @@ export default function TaskDetail(props: TaskDetailProps) {
   const [getSubTasks, { data: subTasks }] = useApi<Task[]>(apiService.getSubTasks);
   const { setDialogOpen } = useDialogContext()
 
-  console.log(activities)
-
 
   const loadActivities = () => {
     getActivities(project._id, taskId).then(() => { })
@@ -291,8 +289,14 @@ export default function TaskDetail(props: TaskDetailProps) {
                         {ac.field === 'time' &&
                           <p className="text-[14px]"> {`Cập nhật thời gian ${dayjs(ac.meta.oldValue.from).format('D/MM/YY')} - ${dayjs(ac.meta.oldValue.to).format('D/MM/YY')} -> ${dayjs(ac.meta.newValue.from).format('D/MM/YY')} - ${dayjs(ac.meta.newValue.to).format('D/MM/YY')}`}</p>
                         }
-                        {ac.field !== 'time' && ac.field !== 'assignees' &&
-                          <p className="text-[14px]"> {`Cập nhật ${activitiesConfig[ac.field].label} ${activitiesConfig[ac.field].value[ac.meta.oldValue]} -> ${activitiesConfig[ac.field].value[ac.meta.newValue]}`}</p>
+                        {ac.field === 'labels' &&
+                          <p className="text-[14px]"> {`Cập nhật Nhãn công việc`}</p>
+                        }
+                        {ac.field === 'milestone' &&
+                          <p className="text-[14px]"> {`Cập nhật Milestone`}</p>
+                        }
+                        {ac.field !== 'time' && ac.field !== 'assignees' && ac.field !== 'labels' && ac.field !== 'milestone' &&
+                          <p className="text-[14px]"> {`Cập nhật ${activitiesConfig[ac.field]?.label} ${activitiesConfig[ac.field]?.value[ac.meta.oldValue]} -> ${activitiesConfig[ac.field]?.value[ac.meta.newValue]}`}</p>
                         }
                         <p className="text-muted-foreground text-xs">
                           {dayjs(ac.createdAt).format('D MMMM, YYYY  HH:mm')}

@@ -32,6 +32,8 @@ export default function TasksListHeader(props: TasksListHeaderProps) {
     return () => clearTimeout(timeout);
   }, [value]);
 
+  console.log(filter)
+
   return <div className={cn("p-4 flex flex-row gap-1 border-b items-center", className)}>
     <Input
       className={'h-8 text-sm w-48'}
@@ -54,7 +56,7 @@ export default function TasksListHeader(props: TasksListHeaderProps) {
       </PopoverContent>
     </Popover>
     <div className="flex p-1 rounded-full overflow-hidden items-center flex-wrap -space-x-2 bg-muted">
-      {filter.assignees.length > 0 && filter.assignees.map((item) => (
+      {filter?.assignees && filter.assignees.length > 0 && filter.assignees.map((item) => (
         <div key={item}>
           {members.map(mem => mem._id === item && (
             <TooltipProvider key={mem._id} delayDuration={300}>

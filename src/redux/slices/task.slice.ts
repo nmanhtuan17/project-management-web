@@ -59,6 +59,7 @@ const initialState: TaskSliceState = {
     types: [TaskTypes.ALL],
     statuses: [ETaskStatus.ALL],
     priorities: [TaskPriority.ALL],
+    assignees: []
   },
   board: initBoard,
   loading: true

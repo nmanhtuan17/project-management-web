@@ -43,8 +43,8 @@ export default function AssigneesSelector({
           onClick={() => setOpen(!open)}
         >
           <div className="flex overflow-hidden items-center flex-wrap">
-            {assignees.length === 0 && <span className={'text-muted-foreground text-xs font-semibold'}>Chọn...</span>}
-            {assignees.map((item) => (
+            {assignees?.length === 0 && <span className={'text-muted-foreground text-xs font-semibold'}>Chọn...</span>}
+            {assignees?.map((item) => (
               <div key={item}>
                 {members.map(mem => mem._id === item && (
                   <Badge
