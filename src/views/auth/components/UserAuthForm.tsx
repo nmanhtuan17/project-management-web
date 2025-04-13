@@ -2,7 +2,7 @@ import * as React from "react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/ui/icons";
-import { useGoogleLogin, useGoogleOneTapLogin } from "@react-oauth/google";
+import { GoogleLogin } from "@react-oauth/google";
 import apiService from "@/services/api.service.ts";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert.tsx";
 import { ExclamationTriangleIcon, RocketIcon } from "@radix-ui/react-icons";
@@ -14,6 +14,7 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import { setAuth } from "@/redux/slices/auth.slice";
 import { useCurrentProject } from "@/lib/hooks/useCurrentProject";
+import { toast } from "sonner";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {
 }
@@ -47,27 +48,6 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       });
   }
 
-  // useGoogleOneTapLogin({
-  //   onSuccess: credentialResponse => {
-  //     const {credential} = credentialResponse;
-  //     apiService.authSso('google', {
-  //       access_token: credential,
-  //       redirect_uri: location.origin + '/oauth/google',
-  //     }).then(finalizeLogin).catch(err => {
-  //       setMessage({
-  //         show: true,
-  //         title: 'Error',
-  //         description: err.message,
-  //       });
-  //     }).finally(() => {
-  //       setIsLoading(false);
-  //     });
-  //   },
-  //   onError: () => {
-  //     console.log('Login Failed');
-  //   },
-  // });
-
   const finalizeLogin = async (response: any) => {
     const { data } = response;
     const authRdr = localStorage.getItem('auth_rdr');
@@ -93,33 +73,6 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     }
   }
 
-  // const googleLogin = useGoogleLogin({
-  //   flow: 'auth-code',
-  //   redirect_uri: location.origin + '/oauth/google',
-  //   onSuccess: tokenResponse => {
-  //     const code = tokenResponse.code;
-  //     setIsLoading(true);
-  //     apiService.authSso('google', {
-  //       code,
-  //       redirect_uri: 'postmessage'
-  //     }).then(finalizeLogin).catch(err => {
-  //       setMessage({
-  //         show: true,
-  //         title: 'Error',
-  //         description: err.message,
-  //       });
-  //     }).finally(() => {
-  //       setIsLoading(false);
-  //     });
-  //   },
-  //   onError() {
-  //     setIsLoading(false);
-  //   },
-  //   onNonOAuthError() {
-  //     setIsLoading(false);
-  //   }
-  // });
-
   useEffect(() => {
     if (message.show) setTimeout(() => {
       setMessage({
@@ -127,6 +80,17 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       })
     }, 5000);
   }, [message.show]);
+
+  const handleLoginSuccess = async (credentialResponse) => {
+    try {
+      const res = await apiService.post('http://localhost:3000/auth/google-login', {
+        token: credentialResponse.credential,
+      });
+      finalizeLogin(res)
+    } catch (error) {
+      toast.error('Lỗi khi đăng nhập với Google')
+    }
+  };
 
   return (
     <div className={cn("grid gap-6", className)} {...props}>
@@ -136,17 +100,13 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         <AlertDescription>{message.description}</AlertDescription>
       </Alert>
       <div className={'grid gap-2'}>
-        <Button
-          icon={<Icons.google className="mr-2 h-4 w-4" />}
-          variant="outline" type="button"
-          onClick={() => {
-            setIsLoading(true);
-            // googleLogin();
-          }}
-          loading={isLoading}
-        >
-          Đăng nhập với Google
-        </Button>
+        <GoogleLogin
+          onSuccess={handleLoginSuccess}
+          onError={() => {
+            toast.error('Đăng nhập thất bại')
+          }} >
+
+        </GoogleLogin>
       </div>
       <div className="relative">
         <div className="absolute inset-0 flex items-center">
