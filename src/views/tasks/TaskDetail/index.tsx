@@ -30,7 +30,7 @@ import { TaskPrioritySelect } from "../components/TaskPrioritySelect";
 import { CalendarDateRangePicker } from "@/components/common/DateRangePicker";
 import { DateRange } from "react-day-picker";
 import TaskActivities from "../components/TaskActivities";
-import { updateTask } from "@/redux/actions/task.action";
+import { loadTasks, updateTask } from "@/redux/actions/task.action";
 import { useTask } from "@/lib/hooks/useTask";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import CreateTaskMemberSelector from "../components/CreateTaskMemberSelector";
@@ -45,8 +45,9 @@ import { TaskDetailDescription } from "../components/TaskDetailDescription";
 import { useCurrentProject } from "@/lib/hooks/useCurrentProject";
 import { TaskMilestoneSelect } from "@/views/tasks/components/TaskMilestoneSelect";
 import { TaskLabelsSelect } from "@/views/tasks/components/TaskLabelsSelect";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuShortcut, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import dayjs from "dayjs";
+import { toast } from "sonner";
 
 interface TaskDetailContextType {
   taskId: string;
@@ -170,6 +171,18 @@ export default function TaskDetail(props: TaskDetailProps) {
 
   const type = taskConfig.types.find(t => t.value === task?.type);
 
+  const handleArchivedTask = async () => {
+    try {
+      const res = await apiService.delete(`projects/${project._id}/tasks/${task._id}`, {})
+      dispatch(loadTasks({ projectId: project._id }))
+      setDialogOpen('taskDetail', false)
+      toast.success(res.message)
+    } catch (error) {
+      setDialogOpen('taskDetail', false)
+      toast.error(error.message)
+    }
+  }
+
   return <TaskDetailContext.Provider value={{
     taskId,
     task,
@@ -196,16 +209,31 @@ export default function TaskDetail(props: TaskDetailProps) {
                 <FormItem>
                   <FormControl>
                     <div>
-                      <Button variant="secondary"
-                        className="cursor-default"
-                        onClick={(e) => {
-                          e.preventDefault()
-                        }}>
-                        <type.icon className={'w-4 h-4'} />
-                        <div className={'text-sm pl-2'}>
-                          {type.label}
-                        </div>
-                      </Button>
+                      <div className="flex justify-between items-center">
+                        <Button variant="secondary"
+                          className="cursor-default"
+                          onClick={(e) => {
+                            e.preventDefault()
+                          }}>
+                          <type.icon className={'w-4 h-4'} />
+                          <div className={'text-sm pl-2'}>
+                            {type.label}
+                          </div>
+                        </Button>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" className="p-2 outline-none">
+                              <Ellipsis size={16} />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end" className="w-[160px]">
+                            <DropdownMenuItem className="text-red-600 focus:text-red-600" onSelect={handleArchivedTask}>
+                              Hủy
+                              <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </div>
                       <TaskDetailTitle {...field} />
                     </div>
                   </FormControl>

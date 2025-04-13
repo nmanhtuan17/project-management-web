@@ -12,6 +12,11 @@ import dayjs from "dayjs"
 import { Ellipsis } from "lucide-react"
 import TaskDetail from "../TaskDetail"
 import { cn } from "@/lib/utils"
+import apiService from "@/services/api.service"
+import { useCurrentProject } from "@/lib/hooks/useCurrentProject"
+import { useAppDispatch } from "@/redux/store"
+import { loadTasks } from "@/redux/actions/task.action"
+import { toast } from "sonner"
 
 interface TaskListItemProp {
   task: Task
@@ -19,18 +24,33 @@ interface TaskListItemProp {
 
 export const TaskListItem = ({ task }: TaskListItemProp) => {
   const { taskDetail, setDialogOpen } = useDialogContext();
+  const { currentProject } = useCurrentProject()
+  const dispatch = useAppDispatch()
   const type = taskConfig.types.find(t => t.value === task?.type);
   const priority = taskConfig.priorities.find(t => t.value === task?.priority);
   const status = taskConfig.statuses.find(t => t.value === task?.status);
 
+  const handleArchivedTask = async () => {
+    try {
+      const res = await apiService.delete(`projects/${currentProject._id}/tasks/${task._id}`, {})
+      toast.success(res.message)
+      dispatch(loadTasks({ projectId: currentProject._id }))
+    } catch (error) {
+      toast.error(error.message)
+    }
+  }
+
   return (
     <TableRow key={task._id}
-      onClick={() => {
+      onDoubleClick={() => {
         setDialogOpen('taskDetail', true, { element: <TaskDetail taskId={task._id} /> })
       }}
       className="cursor-pointer"
     >
-      <TableCell className="text-xs font-semibold gap-2 items-center">
+      <TableCell onClick={() => {
+        setDialogOpen('taskDetail', true, { element: <TaskDetail taskId={task._id} /> })
+      }}
+        className="text-xs font-semibold gap-2 items-center hover:underline">
         {task?.title}
       </TableCell>
       <TableCell className="text-xs font-semibold">
@@ -96,8 +116,8 @@ export const TaskListItem = ({ task }: TaskListItemProp) => {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-[160px]">
-            <DropdownMenuItem>
-              Archie
+            <DropdownMenuItem onSelect={handleArchivedTask}>
+              Hủy
               <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
             </DropdownMenuItem>
           </DropdownMenuContent>
