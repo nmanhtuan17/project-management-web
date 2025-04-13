@@ -32,8 +32,6 @@ export default function TasksListHeader(props: TasksListHeaderProps) {
     return () => clearTimeout(timeout);
   }, [value]);
 
-  console.log(filter)
-
   return <div className={cn("p-4 flex flex-row gap-1 border-b items-center", className)}>
     <Input
       className={'h-8 text-sm w-48'}
