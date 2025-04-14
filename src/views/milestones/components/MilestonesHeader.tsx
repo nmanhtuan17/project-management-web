@@ -2,11 +2,15 @@ import { useDialogContext } from "@/components/providers/DialogProvider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { FunnelIcon } from "@heroicons/react/16/solid";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { PlusIcon } from "lucide-react";
 
-export const MilestonesHeader = () => {
+interface Props {
+  onChangeText: (text: string) => void;
+  onSelectChange: (val: string) => void;
+}
+
+export const MilestonesHeader = ({ onChangeText, onSelectChange }: Props) => {
   const { openDialog } = useDialogContext();
 
   return (
@@ -14,17 +18,20 @@ export const MilestonesHeader = () => {
       <div className="flex gap-1 items-center">
         <Input className={'h-8 text-sm w-48'}
           placeholder="Search milestone..."
+          onChange={e => onChangeText(e.target.value)}
         />
-        <Popover>
-          <PopoverTrigger>
-            <Button variant={'outline'} size={'lg'} className={'p-0 h-8 text-muted-foreground aspect-square'}>
-              <FunnelIcon className={'w-4 h-4'} />
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent>
-            {/* <TaskFilterForm /> */}
-          </PopoverContent>
-        </Popover>
+        <Select onValueChange={onSelectChange}>
+          <SelectTrigger className="w-[180px] h-8">
+            <SelectValue placeholder="Status" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectItem value="all">All</SelectItem>
+              <SelectItem value="open">Open</SelectItem>
+              <SelectItem value="closed">Closed</SelectItem>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
       </div>
       <Button
         onClick={() => {

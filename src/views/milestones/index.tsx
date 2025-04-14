@@ -14,6 +14,8 @@ export const Milestones = () => {
   const { currentProject } = useCurrentProject();
   const dispatch = useAppDispatch();
   const [selectedMilestone, setSelectedMilestone] = useState<Milestone | undefined>();
+  const [query, setQuery] = useState('')
+  const [status, setStatus] = useState('all')
 
 
   useLayoutEffect(() => {
@@ -30,7 +32,10 @@ export const Milestones = () => {
             Một giai đoạn xác định một phần của dự án của bạn
           </p>
         </div>
-        <MilestonesHeader />
+        <MilestonesHeader
+          onChangeText={(text) => setQuery(text)}
+          onSelectChange={(s) => setStatus(s)}
+        />
       </div>
       <Separator />
       <div className="grid grid-cols-5 flex-1 overflow-y-auto">

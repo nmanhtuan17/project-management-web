@@ -29,20 +29,22 @@ export const MilestoneItem = ({ milestone, selectedItem, onClick }: Props) => {
         <div className="text-muted-foreground font-medium text-[12px]">
           {`${dayjs(milestone.time.from).format('D MMMM, YYYY')} - ${dayjs(milestone.time.to).format('D MMMM, YYYY')}`}
         </div>
-        <div className={cn("text-muted-foreground font-medium text-[12px] ml-1 rounded-full px-2", expired ? 'bg-red-300 text-white' : 'bg-green-300')}>
-          {expired ? 'quá hạn' : `hết hạn trong ${remainingDays}`}
-        </div>
+        {milestone?.closed ?
+          <div className={cn("text-muted-foreground font-medium text-[12px] ml-1 rounded-full px-2", 'bg-orange-400')}>
+            Đã đóng
+          </div>
+          :
+          <div className={cn("text-muted-foreground font-medium text-[12px] ml-1 rounded-full px-2", expired ? 'bg-red-300 text-white' : 'bg-green-300')}>
+            {expired ? 'quá hạn' : `hết hạn trong ${remainingDays}`}
+          </div>
+        }
       </div>
-      <div className=" flex-1 self-end ">
+      <div className="self-end ">
         <div className="flex flex-1 items-center justify-end text-muted-foreground text-[12px]">
           <span>
             {milestone.tasks.length} công việc
           </span>
-          {/* <span>
-            0% complete
-          </span> */}
         </div>
-        {/* <Progress value={66} /> */}
       </div>
     </div>
   </div>

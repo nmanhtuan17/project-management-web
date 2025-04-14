@@ -47,4 +47,5 @@ export interface Milestone {
   },
   project: string
   tasks: Task[]
+  closed: boolean
 }

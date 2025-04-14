@@ -9,7 +9,6 @@ interface Props {
 }
 export const MilestonesList = ({ selectItem, selectedMilestone }: Props) => {
   const { milestones } = useAppSelector(state => state.project)
-  console.log(milestones)
   return (
     <ScrollArea className="flex-1">
       <div className="flex flex-1 flex-col p-4 gap-3">
