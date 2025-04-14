@@ -14,11 +14,6 @@ export function MemberPage() {
   const dispatch = useAppDispatch();
   const { members } = useAppSelector(state => state.project)
 
-  useEffect(() => {
-    if (currentProject._id) {
-      dispatch(loadTasks(currentProject._id));
-    }
-  }, [currentProject._id]);
 
   return (
     <ResizablePanelGroup
