@@ -1,5 +1,5 @@
 import apiService from "@/services/api.service";
-import { Milestone, Project, ProjectLabel, ProjectTypes } from "@/types/project";
+import { Milestone, MilestoneFilter, Project, ProjectLabel, ProjectTypes } from "@/types/project";
 import { slugify } from "@/utils";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
@@ -27,29 +27,6 @@ export const loadKanbanBoard = createAsyncThunk("project/load-kanban-board", asy
   return data
 })
 
-export const createKanbanColumn = createAsyncThunk("project/create-column", async (payload: { projectId: string, title: string, backgroundColor: string }) => {
-  const { projectId, title, backgroundColor } = payload;
-  return await apiService.post(`projects/${projectId}/column`, {
-    id: slugify(title),
-    title,
-    backgroundColor
-  })
-})
-
-export const updateColumn = createAsyncThunk("project/update-column", async (payload: { projectId: string, columnId: string, title: string, backgroundColor: string }) => {
-  const { projectId, columnId, title, backgroundColor } = payload
-  return await apiService.put(`projects/${projectId}/column/${columnId}`, {
-    id: slugify(title),
-    title,
-    backgroundColor
-  })
-})
-
-export const removeColumn = createAsyncThunk('project/remove-column', async (payload: { projectId: string, columnId: string }) => {
-  const { projectId, columnId } = payload;
-  return await apiService.delete(`projects/${projectId}/column/${columnId}`, {})
-})
-
 export const createLabel = createAsyncThunk<
   {
     data: ProjectLabel,
@@ -71,8 +48,16 @@ export const loadProjectLabels = createAsyncThunk<
   return await apiService.get(`projects/${projectId}/labels`)
 })
 
-export const loadMilestones = createAsyncThunk('project/load-milestones', async (projectId: string) => {
-  return await apiService.get(`projects/${projectId}/milestones`)
+export const loadMilestones = createAsyncThunk<any,
+  { projectId: string, filter: MilestoneFilter }
+>('project/load-milestones', async (payload) => {
+  console.log(payload)
+  return await apiService.get(`projects/${payload.projectId}/milestones`, {}, {
+    params: {
+      closed: payload.filter.closed ?? undefined,
+      query: payload.filter.query ?? ''
+    }
+  })
 })
 
 export const createMilestone = createAsyncThunk<
@@ -83,7 +68,7 @@ export const createMilestone = createAsyncThunk<
   }
 >('project/create-milestone', async (payload, thunkApi) => {
   const data = await apiService.post(`projects/${payload.projectId}/milestones`, payload.milestone)
-  thunkApi.dispatch(loadMilestones(payload.projectId))
+  thunkApi.dispatch(loadMilestones({ projectId: payload.projectId, filter: { query: '' } }))
   return data
 })
 

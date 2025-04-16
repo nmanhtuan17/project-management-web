@@ -99,7 +99,6 @@ class ApiService {
     if (this.auth.accessToken) {
       let tokenData = JSON.parse(atob(this.auth.accessToken.split('.')[1]));
       if (tokenData.exp <= ~~(new Date().getTime() / 1000)) {
-        // refresh
         const { data: tokenResponse } = await this.callApi('POST', '/auth/jwt/refresh', {
           refresh_token: this.auth.refreshToken,
         }, {}, true);

@@ -59,7 +59,7 @@ export const ProjectSwitcher = ({ className }: ProjectSwitcherProps) => {
   const onSelectProject = async (project: Project) => {
     setOpen(false)
     dispatch(loadKanbanBoard(project._id))
-    dispatch(loadMilestones(project._id))
+    dispatch(loadMilestones({ projectId: project._id, filter: { query: '' } }))
     setCurrentProject(project)
     const profile = await apiService.getProjectProfile(project._id)
     setProfile(profile)

@@ -1,6 +1,5 @@
 import { Separator } from "@/components/ui/separator";
 import { useCurrentProject } from "@/lib/hooks/useCurrentProject";
-import { loadMilestones } from "@/redux/actions/project.action";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { MilestonesHeader } from "@/views/milestones/components/MilestonesHeader";
 import { useEffect, useLayoutEffect, useState } from "react";
@@ -8,6 +7,8 @@ import { MilestonesList } from "./components/MilestonesList";
 import { Milestone } from "@/types/project";
 import { MilestoneDetail } from "@/views/milestones/components/MilestoneDetail";
 import { useLocation } from "react-router-dom";
+import useDebounce from "@/lib/hooks/useDebouce";
+import { loadMilestones } from "@/redux/actions/project.action";
 
 export const Milestones = () => {
   const location = useLocation()
@@ -16,12 +17,25 @@ export const Milestones = () => {
   const [selectedMilestone, setSelectedMilestone] = useState<Milestone | undefined>();
   const [query, setQuery] = useState('')
   const [status, setStatus] = useState('all')
+  const deb = useDebounce(query, 300)
 
+  useEffect(() => {
+    handleLoadMilestones()
+  }, [deb, status]);
 
   useLayoutEffect(() => {
     setSelectedMilestone(location.state?.milestone)
   }, [location.state])
 
+  const handleLoadMilestones = () => {
+    let closed;
+    if (status === 'all') closed = undefined;
+    if (status === 'open') closed = false;
+    if (status === 'closed') closed = true;
+    console.log(deb)
+
+    dispatch(loadMilestones({ projectId: currentProject._id, filter: { query: deb, closed } }))
+  }
 
   return (
     <div className="h-full flex flex-col">

@@ -9,15 +9,7 @@ import apiService from "@/services/api.service.ts";
 import { LoadingSpinner } from "@/components/ui/loading-spinner.tsx";
 import TaskBoardTitle from "@/views/tasks/TaskBoard/TaskBoardTitle";
 import { TaskBoardItem } from "@/views/tasks/TaskBoard/TaskBoardItem";
-import { Button } from "@/components/ui/button";
-import { Check, Plus, X } from "lucide-react";
-import { createKanbanColumn, loadKanbanBoard, removeColumn, updateColumn } from "@/redux/actions/project.action";
-import { loadTasks, updateTask } from "@/redux/actions/task.action";
-import { ProjectRoles } from "@/types/project";
 import { toast } from "sonner";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { useState } from "react";
-import { Input } from "@/components/ui/input";
 import { useCurrentProject } from "@/lib/hooks/useCurrentProject";
 
 interface TasksBoardProps {

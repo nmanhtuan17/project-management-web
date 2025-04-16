@@ -27,7 +27,7 @@ export const useGattTask = () => {
       dependencies: []
     };
 
-    const milestoneTasks = milestones.map(milestone => ({
+    const milestoneTasks = milestones.filter(m => !m.closed).map(milestone => ({
       id: milestone._id,
       name: milestone.title,
       start: new Date(milestone.time.to),

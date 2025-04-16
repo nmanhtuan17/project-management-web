@@ -7,6 +7,7 @@ import { TaskDetailDialog } from "@/views/tasks/components/TaskDetailDialog";
 import { InviteMemberDialog } from "@/views/member/dialogs/InviteMemberDialog";
 import { CreateLabelDialog } from "@/components/dialogs/CreateLabelDialog";
 import { CreateMilestoneDialog } from "../dialogs/CreateMilestoneDialog";
+import { ConfirmDialog } from "@/components/dialogs/ConfirmDialog";
 // import { TaskDetail } from "@/views/tasks/TaskDetail";
 
 interface DialogContextType {
@@ -32,7 +33,10 @@ interface DialogContextType {
   createMilestone: {
     open: boolean
   }
-
+  confirmDialog: {
+    open: boolean,
+    element?: ReactNode
+  },
   createTaskDetailElemennt?: (element: ReactNode) => void,
   openDialog?: (dialog: Omit<keyof DialogContextType, 'openDialog'>, data?: any) => void,
   closeDialog?: (dialog: Omit<keyof DialogContextType, 'openDialog'>) => void,
@@ -56,6 +60,9 @@ const DialogContext = createContext<DialogContextType>({
     open: false
   },
   createMilestone: {
+    open: false
+  },
+  confirmDialog: {
     open: false
   }
 });
@@ -83,6 +90,9 @@ export default function DialogProvider(props: DialogProviderProps) {
       open: false
     },
     createMilestone: {
+      open: false
+    },
+    confirmDialog: {
       open: false
     }
   });
@@ -118,6 +128,9 @@ export default function DialogProvider(props: DialogProviderProps) {
       <InviteMemberDialog />
       <CreateLabelDialog />
       <CreateMilestoneDialog />
+      <ConfirmDialog>
+        {dialogs.confirmDialog.element}
+      </ConfirmDialog>
     </DialogContext.Provider>
   </AlertDialogProvider>
 }

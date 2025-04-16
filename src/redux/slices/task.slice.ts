@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Board, ETaskStatus, Task, TaskPriority, TaskTypes } from "@/types/task";
 import { loadRecentTask, loadSingleTask, loadTasks, updateTask } from "@/redux/actions/task.action.ts";
 import { toast } from "sonner";
-import { createKanbanColumn, loadKanbanBoard } from '@/redux/actions/project.action';
+import { loadKanbanBoard } from '@/redux/actions/project.action';
 
 export const initBoard = {
   columns: [
@@ -163,17 +163,6 @@ export const taskSlice = createSlice({
       })
       .addCase(loadKanbanBoard.rejected, (state, action) => {
         state.loading = false
-      })
-      .addCase(createKanbanColumn.pending, (state, action) => {
-        state.loading = true
-      })
-      .addCase(createKanbanColumn.fulfilled, (state, action) => {
-        state.loading = false
-        toast.success(action.payload.message)
-      })
-      .addCase(createKanbanColumn.rejected, (state, action) => {
-        state.loading = false
-        toast.error(action.error.message)
       })
 
   }

@@ -49,3 +49,8 @@ export interface Milestone {
   tasks: Task[]
   closed: boolean
 }
+
+export interface MilestoneFilter {
+  query?: string
+  closed?: boolean
+}
