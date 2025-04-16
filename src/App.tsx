@@ -29,6 +29,7 @@ import { JoinProject } from './views/member/JoinProject'
 import { TaskPerformance } from '@/views/tasks/TaskPerformance'
 import { TaskTimeline } from '@/views/tasks/TaskTimeline'
 import { Milestones } from '@/views/milestones'
+import ChangePassword from '@/views/setting/components/change-password/change-password'
 
 function App() {
 
@@ -59,6 +60,7 @@ function App() {
                     </Route>
                     <Route path='setting/' element={<SettingsLayout />}>
                       <Route path='profile' element={<SettingsProfilePage />} />
+                      <Route path='change-password' element={<ChangePassword />} />
                       <Route path='notification' element={<NotificationSettingPage />} />
                     </Route>
                   </Route>

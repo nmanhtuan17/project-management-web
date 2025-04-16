@@ -13,6 +13,10 @@ const sidebarNavItems = [
     href: "/projects/setting/profile",
   },
   {
+    title: "Đổi mật khẩu",
+    href: "/projects/setting/change-password",
+  },
+  {
     title: "Thông báo",
     href: "/projects/setting/notification",
   }
