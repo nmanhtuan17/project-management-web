@@ -171,10 +171,13 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               Đăng nhập
             </Button>
           </div>
-          <div className="grid gap-2">
+          <div className="flex justify-between gap-2">
             <span className="text-sm text-muted-foreground text-center">
               Bạn chưa có tài khoản?
               <Link to='/auth/register' className="text-sm">Đăng ký</Link>
+            </span>
+            <span className="text-sm text-muted-foreground text-center">
+              <Link to='/auth/reset-password' className="text-sm">Quên mật khẩu?</Link>
             </span>
           </div>
         </div>

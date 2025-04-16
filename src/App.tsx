@@ -30,6 +30,7 @@ import { TaskPerformance } from '@/views/tasks/TaskPerformance'
 import { TaskTimeline } from '@/views/tasks/TaskTimeline'
 import { Milestones } from '@/views/milestones'
 import ChangePassword from '@/views/setting/components/change-password/change-password'
+import ResetPasswordPage from '@/views/auth/ResetPassword'
 
 function App() {
 
@@ -80,6 +81,7 @@ function App() {
                   <Route index path="login" element={<LoginPage />} />
                   <Route path="register" element={<RegisterPage />} />
                   <Route path="verify" element={<VerifyPage />} />
+                  <Route path="reset-password" element={<ResetPasswordPage />} />
                 </Route>
                 <Route path='projects/:projectId/members/join' element={<JoinProject />} />
                 <Route path="*" element={<PageNotFound />} />
