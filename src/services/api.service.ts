@@ -41,6 +41,18 @@ class ApiService {
     return this.callApi('DELETE', endpoint, data, config);
   }
 
+
+  async getAttachments(project: string) {
+    return this.get(`projects/${project}/attachment`)
+  }
+
+  async uploadAttachment(project: string, attachment: FormData) {
+    return this.post(`projects/${project}/attachment`, attachment)
+  }
+  async deleteAttachment(project: string, attachment: string) {
+    return this.delete(`projects/${project}/attachment/${attachment}`, {})
+  }
+
   async sendMail(data: any) {
     return this.post('mails/send', data, {
       headers: {

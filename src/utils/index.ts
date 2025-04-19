@@ -43,3 +43,11 @@ export const checkTimeExpiration = (time: { from: Date, to: Date }) => {
   const remainingDays = dueDate.from(now);
   return { expired: false, remainingDays };
 }
+
+export function formatFileSize(bytes: number) {
+  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+  if (bytes === 0) return '0 Bytes';
+  const i = Math.floor(Math.log(bytes) / Math.log(1024));
+  const size = bytes / Math.pow(1024, i);
+  return size.toFixed(2) + ' ' + sizes[i];
+}

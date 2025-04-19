@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom"
 import { RecentTasks } from "../components/RecentTasks"
 import { MilestonesSpace } from "../components/MilestonesSpace"
 import { LabelsManage } from "../components"
+import { ProjectDocument } from "../components/ProjectDocument"
 
 export const ProjectOverview = () => {
   const { currentProject } = useCurrentProject()
@@ -50,9 +51,9 @@ export const ProjectOverview = () => {
       <Separator />
       <div className="flex-1 grid grid-cols-5">
         <div className="col-span-4 flex flex-col">
-          <MilestonesSpace />
+          <ProjectDocument />
           <Separator />
-          <RecentTasks />
+          <MilestonesSpace />
         </div>
         <div className="col-span-1 p-4 border-l">
           <LabelsManage />

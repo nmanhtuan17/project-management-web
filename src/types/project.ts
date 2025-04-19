@@ -54,3 +54,12 @@ export interface MilestoneFilter {
   query?: string
   closed?: boolean
 }
+
+export interface ProjectAttachment {
+  _id: string;
+  name: string;
+  member: ProjectMember;
+  url: string;
+  contentType: string;
+  size: number;
+}

@@ -1,5 +1,5 @@
 import apiService from "@/services/api.service";
-import { Milestone, MilestoneFilter, Project, ProjectLabel, ProjectTypes } from "@/types/project";
+import { Milestone, MilestoneFilter, Project, ProjectAttachment, ProjectLabel, ProjectTypes } from "@/types/project";
 import { slugify } from "@/utils";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
@@ -74,4 +74,28 @@ export const createMilestone = createAsyncThunk<
 
 export const getStatistics = createAsyncThunk('projects/statistic', async () => {
   return await apiService.get('projects/statistics')
+})
+
+export const getAttachments = createAsyncThunk<
+  { data: ProjectAttachment[], message: string },
+  string
+>('project/attachments', async (project) => {
+  return await apiService.getAttachments(project)
+})
+
+export const uploadAttachment = createAsyncThunk<
+  { data: ProjectAttachment, message: string },
+  { project: string, attachment: FormData }
+>('project/attachment-upload', async ({ project, attachment }, thunkAPI) => {
+  const res = await apiService.uploadAttachment(project, attachment)
+  thunkAPI.dispatch(getAttachments(project))
+  return res
+})
+export const deleteAttachment = createAsyncThunk<
+  { message: string },
+  { project: string, attachment: string }
+>('project/attachment-delete', async ({ project, attachment }, thunkAPI) => {
+  const res = await apiService.deleteAttachment(project, attachment)
+  thunkAPI.dispatch(getAttachments(project))
+  return res
 })

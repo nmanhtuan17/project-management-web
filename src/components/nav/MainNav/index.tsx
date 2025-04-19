@@ -16,7 +16,7 @@ export const MainNav = ({
     label: 'Trang chủ'
   }, {
     path: `/mails/inbox`,
-    label: 'Mails'
+    label: 'Email'
   }]
 
   return (

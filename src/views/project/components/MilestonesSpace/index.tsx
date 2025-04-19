@@ -8,6 +8,7 @@ import { checkTimeExpiration } from "@/utils"
 import { MilestonesList } from "@/views/milestones/components/MilestonesList"
 import dayjs from "dayjs"
 import { Calendar, Plus } from "lucide-react"
+import { useMemo } from "react"
 import { useNavigate } from "react-router-dom"
 
 export const MilestonesSpace = () => {
@@ -16,11 +17,14 @@ export const MilestonesSpace = () => {
   const navigate = useNavigate()
   const { currentProject } = useCurrentProject()
 
+  const filterMilestones = useMemo(() => milestones.filter(m => !m.closed), [milestones])
+
   const renderItem = (milestone: Milestone) => {
     const { expired, remainingDays } = checkTimeExpiration(milestone.time);
 
     return (
       <div
+        key={milestone._id}
         onClick={() => {
           navigate(`/projects/${currentProject.slug}/milestones`, { state: { milestone: milestone } })
         }}
@@ -65,7 +69,7 @@ export const MilestonesSpace = () => {
       </div>
       <div className="flex flex-1 min-h-0 overflow-y-auto">
         <div className="flex flex-1 flex-col p-4 gap-3">
-          {milestones.map(m => renderItem(m)
+          {filterMilestones.map(m => renderItem(m)
           )}
         </div>
       </div>
