@@ -28,7 +28,9 @@ import { Link } from "react-router-dom"
 import { useAppDispatch, useAppSelector } from "@/redux/store"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Separator } from "@/components/ui/separator"
-import { activeInternalEmail, updateProfile } from "@/redux/actions/app.action"
+import { activeInternalEmail, updateProfile, updateProfileAvatar } from "@/redux/actions/app.action"
+import { Camera } from "lucide-react"
+import { useRef, useState } from "react"
 
 const profileFormSchema = z.object({
   fullName: z
@@ -52,8 +54,12 @@ type ProfileFormValues = z.infer<typeof profileFormSchema>
 
 
 export function ProfileForm() {
+  const { loading } = useAppSelector(state => state.app)
   const { user } = useAppSelector(state => state.auth)
   const dispatch = useAppDispatch()
+  const inputRef = useRef(null)
+  const [file, setFile] = useState<File>()
+  const [imageData, setImageData] = useState(null);
 
   const defaultValues: Partial<ProfileFormValues> = {
     fullName: user.fullName,
@@ -73,14 +79,38 @@ export function ProfileForm() {
 
   function onSubmit(data: ProfileFormValues) {
     dispatch(updateProfile(data))
+    if (!!file) {
+      dispatch(updateProfileAvatar(file))
+      setFile(undefined)
+    }
   }
 
   return (
     <div className="space-y-4 flex flex-col overflow-y-auto min-h-0">
-      <Avatar className="w-16 h-16">
-        <AvatarImage src={user?.avatar} alt="@shadcn" />
-        <AvatarFallback>CN</AvatarFallback>
-      </Avatar>
+      <div className="self-baseline relative">
+        <Avatar className="w-16 h-16">
+          <AvatarImage src={imageData || user?.avatar} alt="@shadcn" />
+          <AvatarFallback>CN</AvatarFallback>
+        </Avatar>
+        <Button
+          variant="ghost"
+          className="absolute -bottom-2 z-10 -right-2 rounded-full w-8 h-8 p-2 bg-slate-300"
+          onClick={() => inputRef.current.click()}
+        >
+          <Camera />
+          <input ref={inputRef} onChange={(e) => {
+            setFile(e.target.files[0])
+            const file = e.target.files[0];
+            if (file) {
+              const reader = new FileReader();
+              reader.onload = (e) => {
+                setImageData(e.target.result);
+              };
+              reader.readAsDataURL(file);
+            }
+          }} type="file" className="hidden" />
+        </Button>
+      </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField
@@ -109,9 +139,6 @@ export function ProfileForm() {
                 <FormControl>
                   <Input disabled className="focus-visible:ring-0" placeholder="shadcn" {...field} />
                 </FormControl>
-                <FormDescription>
-                  Bạn có thể quản lý các địa chỉ email đã xác minh{" "}
-                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -153,7 +180,7 @@ export function ProfileForm() {
               </FormItem>
             )}
           />
-          <Button type="submit">Cập nhật</Button>
+          <Button loading={loading} disabled={form.formState.isDirty || file ? false : true} type="submit">Cập nhật</Button>
         </form>
       </Form>
     </div>

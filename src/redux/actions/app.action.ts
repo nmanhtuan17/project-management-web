@@ -13,3 +13,12 @@ export const updateProfile = createAsyncThunk<
 >('profile/update', async (payload) => {
   return await apiService.post('users', payload)
 })
+
+export const updateProfileAvatar = createAsyncThunk<
+  any,
+  File
+>('profile/avatar', async (file) => {
+  const formdata = new FormData()
+  formdata.append('avatar', file)
+  return await apiService.post('users/avatar', formdata)
+})

@@ -1,6 +1,6 @@
 import { ThemeMode } from "@/enums";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { updateProfile } from "../actions/app.action";
+import { updateProfile, updateProfileAvatar } from "../actions/app.action";
 import { createLabel } from "@/redux/actions/project.action";
 
 export interface AppSliceState {
@@ -30,6 +30,15 @@ export const appSlice = createSlice({
         state.loading = false
       })
       .addCase(updateProfile.rejected, (state, action) => {
+        state.loading = false
+      })
+      .addCase(updateProfileAvatar.pending, (state, action) => {
+        state.loading = true
+      })
+      .addCase(updateProfileAvatar.fulfilled, (state, action) => {
+        state.loading = false
+      })
+      .addCase(updateProfileAvatar.rejected, (state, action) => {
         state.loading = false
       })
       

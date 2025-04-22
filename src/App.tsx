@@ -77,7 +77,6 @@ function App() {
                     <Route path='setting/' element={<SettingsLayout />}>
                       <Route path='profile' element={<SettingsProfilePage />} />
                       <Route path='change-password' element={<ChangePassword />} />
-                      <Route path='notification' element={<NotificationSettingPage />} />
                     </Route>
                   </Route>
                   <Route path={'mails/'} >
