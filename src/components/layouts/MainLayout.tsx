@@ -15,6 +15,7 @@ import { LoadingSpinner } from "@/components/ui/loading-spinner.tsx";
 import { loadProjects } from "@/redux/actions/project.action";
 import { MainNav, ProjectSwitcher, UserNav, MainNavMobile, SubNav } from "@/components/nav";
 import { useCurrentProject } from "@/lib/hooks/useCurrentProject";
+import { Bell } from "lucide-react";
 
 export default function MainLayout() {
   const dispatch = useAppDispatch();
@@ -43,7 +44,9 @@ export default function MainLayout() {
           {!!currentProject && <MainNav className="mx-6 hidden sm:flex" />}
           <div className="ml-auto flex items-center space-x-4">
             {/* <ThemeSwitcher/> */}
-            {!!currentProject && <SubNav />}
+            <Button variant="ghost" className="p-2">
+              <Bell size={18} />
+            </Button>
             <UserNav />
           </div>
         </div>

@@ -76,6 +76,12 @@ class ApiService {
     })
   }
 
+  async registerDevice(token: string) {
+    return this.post('notification/register', {
+      fcmToken: token
+    })
+  }
+
   getSubTasks(projectId: string, taskId: string) {
     return this.get(`/projects/${projectId}/tasks/${taskId}/sub-tasks`, {});
   }

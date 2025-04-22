@@ -15,6 +15,7 @@ import { Eye, EyeOff } from "lucide-react";
 import { setAuth } from "@/redux/slices/auth.slice";
 import { useCurrentProject } from "@/lib/hooks/useCurrentProject";
 import { toast } from "sonner";
+import { requestForToken } from "@/configs/firebase.config";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {
 }
@@ -60,6 +61,8 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         refreshToken: data.refresh_token,
       });
       const { data: user } = await apiService.callApi('GET', '/users/me');
+      const token = await requestForToken()
+      await apiService.registerDevice(token)
       dispatch(setAuth({
         loggedIn: true,
         tokens: {

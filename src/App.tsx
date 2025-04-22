@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import ReduxProvider from '@/components/providers/ReduxProvider'
 import PageNotFound from '@/views/404'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
@@ -31,8 +31,23 @@ import { TaskTimeline } from '@/views/tasks/TaskTimeline'
 import { Milestones } from '@/views/milestones'
 import ChangePassword from '@/views/setting/components/change-password/change-password'
 import ResetPasswordPage from '@/views/auth/ResetPassword'
+import { messaging, requestForToken } from '@/configs/firebase.config'
+import { onMessage } from 'firebase/messaging'
 
 function App() {
+
+  useEffect(() => {
+    Notification.requestPermission();
+  }, [])
+
+  useEffect(() => {
+    onMessage(messaging, ({ notification, data }) => {
+      new Notification(notification.title, {
+        body: notification.body,
+        icon: notification.icon,
+      });
+    });
+  }, [])
 
   return (
     <ReduxProvider>
