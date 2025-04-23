@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button.tsx";
 import { PlusIcon } from "@radix-ui/react-icons";
 import { useAppDispatch, useAppSelector } from "@/redux/store.ts";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDialogContext } from "@/components/providers/DialogProvider";
 import { ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
 import { loadTasks } from "@/redux/actions/task.action";
@@ -19,7 +19,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { ProjectTypes } from "@/types/project";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
-import { Plus } from "lucide-react";
+import { Camera, Plus } from "lucide-react";
 
 
 export function ProjectSetting() {
@@ -27,10 +27,13 @@ export function ProjectSetting() {
   const { currentProject } = useCurrentProject();
   const { labels } = useAppSelector(state => state.project)
   const dispatch = useAppDispatch();
+  const inputRef = useRef(null)
+  const [file, setFile] = useState<File>()
+  const [imageData, setImageData] = useState(null);
+
   const form = useForm({
     defaultValues: {
       name: currentProject.name,
-      slug: currentProject.slug,
       type: currentProject.type,
     }
   })
@@ -53,10 +56,30 @@ export function ProjectSetting() {
       </div>
       <Separator />
       <div className="space-y-4 flex flex-col flex-1 overflow-y-auto min-h-0 p-4">
-        <Avatar className="w-16 h-16">
-          <AvatarImage src={currentProject?.avatar} alt="@shadcn" />
-          <AvatarFallback>CN</AvatarFallback>
-        </Avatar>
+        <div className="self-baseline relative">
+          <Avatar className="w-16 h-16">
+            <AvatarImage src={imageData || currentProject?.avatar} alt="@shadcn" />
+            <AvatarFallback>CN</AvatarFallback>
+          </Avatar>
+          <Button
+            variant="ghost"
+            className="absolute -bottom-2 z-10 -right-2 rounded-full w-8 h-8 p-2 bg-slate-300"
+            onClick={() => inputRef.current.click()}
+          >
+            <Camera />
+            <input ref={inputRef} onChange={(e) => {
+              setFile(e.target.files[0])
+              const file = e.target.files[0];
+              if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                  setImageData(e.target.result);
+                };
+                reader.readAsDataURL(file);
+              }
+            }} type="file" className="hidden" />
+          </Button>
+        </div>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
@@ -77,29 +100,10 @@ export function ProjectSetting() {
             />
             <FormField
               control={form.control}
-              name="slug"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Project slug</FormLabel>
-                  <FormDescription>
-                    Can view and edit project information.
-                  </FormDescription>
-                  <FormControl>
-                    <Input disabled className="focus-visible:ring-0" placeholder="shadcn" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
               name="type"
               render={({ field: { onChange, value } }) => (
                 <FormItem>
                   <FormLabel>Kiểu dự án</FormLabel>
-                  {/* <FormDescription>
-                    Can view and edit project information.
-                  </FormDescription> */}
                   <FormControl>
                     <Select value={value} onValueChange={(e) => onChange(e)}>
                       <SelectTrigger>
@@ -147,7 +151,7 @@ export function ProjectSetting() {
                 </div>
               </div>
             </div>
-            <Button type="submit">Cập nhật</Button>
+            <Button disabled={form.formState.isDirty || file ? false : true} type="submit">Cập nhật</Button>
           </form>
         </Form>
       </div>
