@@ -303,7 +303,7 @@ export default function TaskDetail(props: TaskDetailProps) {
                 </span>
               </div>
               <div className="flex flex-col flex-1 gap-2 max-h-[200px] overflow-y-auto">
-                {activities && activities.length > 0 && activities.map(ac => (
+                {activities && activities.length > 0 && activities.reverse().map(ac => (
                   <div key={ac._id}>
                     <div className="flex items-center gap-3">
                       <Avatar className={'w-4 h-4'}>
