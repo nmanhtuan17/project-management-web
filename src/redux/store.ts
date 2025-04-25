@@ -7,13 +7,17 @@ import { persistReducer, persistStore } from 'redux-persist';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import storage from 'redux-persist/lib/storage';
 import { appMiddleware } from './middleware/app.middleware';
-import { taskSlice, TaskSliceState } from '@/redux/slices/task.slice';
+import { filterTask, taskSlice, TaskSliceState } from '@/redux/slices/task.slice';
 
 const reducers = combineReducers({
   app: appSlice.reducer,
   auth: authSlice.reducer,
   project: projectSlice.reducer,
-  task: taskSlice.reducer
+  task: persistReducer({
+    key: 'tasks',
+    storage,
+    blacklist: ['filter']
+  }, taskSlice.reducer)
 })
 
 const persistedReducer = persistReducer({

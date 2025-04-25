@@ -33,6 +33,7 @@ import { loadKanbanBoard, loadMilestones } from "@/redux/actions/project.action"
 import { useCurrentProject } from "@/lib/hooks/useCurrentProject"
 import { Project } from "@/types/project"
 import apiService from "@/services/api.service"
+import { resetFilter } from "@/redux/slices/task.slice"
 
 type PopoverTriggerProps = React.ComponentPropsWithoutRef<typeof PopoverTrigger>
 
@@ -60,6 +61,7 @@ export const ProjectSwitcher = ({ className }: ProjectSwitcherProps) => {
     setOpen(false)
     dispatch(loadKanbanBoard(project._id))
     dispatch(loadMilestones({ projectId: project._id, filter: { query: '' } }))
+    dispatch(resetFilter())
     setCurrentProject(project)
     const profile = await apiService.getProjectProfile(project._id)
     setProfile(profile)

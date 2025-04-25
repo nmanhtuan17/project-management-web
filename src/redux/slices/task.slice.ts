@@ -82,6 +82,9 @@ export const taskSlice = createSlice({
         ...action.payload
       }
     },
+    resetFilter(state) {
+      state.filter = initialState.filter;
+    },
     // searchTask(state, action) {
     //   state.filter.query = action.payload
     // },
@@ -171,6 +174,7 @@ export const taskSlice = createSlice({
 export const {
   setTasks,
   filterTask,
+  resetFilter,
   // searchTask,
   setBoard,
 } = taskSlice.actions;
