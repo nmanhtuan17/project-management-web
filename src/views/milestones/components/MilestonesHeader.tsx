@@ -20,13 +20,12 @@ export const MilestonesHeader = ({ onChangeText, onSelectChange }: Props) => {
           placeholder="Search milestone..."
           onChange={e => onChangeText(e.target.value)}
         />
-        <Select defaultValue="all" onValueChange={onSelectChange}>
+        <Select defaultValue="open" onValueChange={onSelectChange}>
           <SelectTrigger className="w-[180px] h-8">
             <SelectValue placeholder="Trạng thái" />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              <SelectItem value="all">Tất cả</SelectItem>
               <SelectItem value="open">Đang thực hiện</SelectItem>
               <SelectItem value="closed">Đã đóng</SelectItem>
             </SelectGroup>

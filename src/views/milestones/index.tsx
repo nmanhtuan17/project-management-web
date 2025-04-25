@@ -29,10 +29,8 @@ export const Milestones = () => {
 
   const handleLoadMilestones = () => {
     let closed;
-    if (status === 'all') closed = undefined;
     if (status === 'open') closed = false;
     if (status === 'closed') closed = true;
-    console.log(deb)
 
     dispatch(loadMilestones({ projectId: currentProject._id, filter: { query: deb, closed } }))
   }

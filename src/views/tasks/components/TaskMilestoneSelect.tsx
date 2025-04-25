@@ -35,7 +35,7 @@ export function TaskMilestoneSelect(props: TaskMilestoneSelectProps) {
       props.onChange && props.onChange(selected);
     }}>
     <SelectTrigger className={props.className}>
-      <SelectValue placeholder={items as string} />
+      <SelectValue placeholder={'Chọn...'} className={'text-muted-foreground'} />
     </SelectTrigger>
     <SelectContent>
       {!options.length && <p className="text-xs text-muted-foreground p-2">không có dữ liệu</p>}

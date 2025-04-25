@@ -51,10 +51,9 @@ export const loadProjectLabels = createAsyncThunk<
 export const loadMilestones = createAsyncThunk<any,
   { projectId: string, filter: MilestoneFilter }
 >('project/load-milestones', async (payload) => {
-  console.log(payload)
   return await apiService.get(`projects/${payload.projectId}/milestones`, {}, {
     params: {
-      closed: payload.filter.closed ?? undefined,
+      closed: payload.filter.closed ?? false,
       query: payload.filter.query ?? ''
     }
   })

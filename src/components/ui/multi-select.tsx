@@ -77,11 +77,11 @@ export function MultiSelect({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className={cn('w-full justify-between', "h-auto", 'px-2', className)}
+          className={cn('w-full justify-between', "h-auto", 'px-3', className)}
           onClick={() => setOpen(!open)}
         >
           <div className="flex gap-1 overflow-hidden items-center flex-wrap">
-            {selected.length === 0 && <span className={'text-muted-foreground'}>Select...</span>}
+            {selected.length === 0 && <span className={'text-muted-foreground'}>Chọn...</span>}
             {selected.map((item) => (
               <Badge
                 variant="secondary"
@@ -108,7 +108,7 @@ export function MultiSelect({
               </Badge>
             ))}
           </div>
-          <ChevronDown className="h-4 w-4 shrink-0 opacity-50" />
+          <ChevronDown size={13} className="shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-full p-0" side="right" align="start">
