@@ -86,7 +86,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 
   const handleLoginSuccess = async (credentialResponse) => {
     try {
-      const res = await apiService.post('http://localhost:3000/auth/google-login', {
+      const res = await apiService.post('auth/google-login', {
         token: credentialResponse.credential,
       });
       finalizeLogin(res)
