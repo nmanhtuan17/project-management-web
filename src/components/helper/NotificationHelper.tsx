@@ -38,7 +38,7 @@ export const NotificationHelper = () => {
         <div>
           <p className="text-md font-semibold">Thông báo</p>
           <Separator />
-          <div className="flex flex-col gap-2 mt-2">
+          <div className="flex flex-col gap-2 mt-2 overflow-y-auto max-h-[600px]">
             {notifications.map((notification) => (
               <div
                 key={notification.id}
@@ -53,13 +53,13 @@ export const NotificationHelper = () => {
                 }}
               >
                 <div>
-                  <div className="flex items-center gap-2">
+                  <div className="items-center gap-2">
                     {notification.type === 'task' && <p>[{`${notification.task.project.name}`}] </p>}
                     <p className="text-sm font-semibold">{notification.title}</p>
                   </div>
                   <p className="text-xs">{notification.body}</p>
                 </div>
-                {!notification.isRead && <Dot color="blue" size={36} />}
+                {!notification.readed && <Dot color="blue" size={36} />}
               </div>
             ))}
           </div>
