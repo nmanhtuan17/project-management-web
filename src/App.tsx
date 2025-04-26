@@ -31,8 +31,6 @@ import { TaskTimeline } from '@/views/tasks/TaskTimeline'
 import { Milestones } from '@/views/milestones'
 import ChangePassword from '@/views/setting/components/change-password/change-password'
 import ResetPasswordPage from '@/views/auth/ResetPassword'
-import { messaging, requestForToken } from '@/configs/firebase.config'
-import { onMessage } from 'firebase/messaging'
 
 function App() {
 
@@ -40,14 +38,6 @@ function App() {
     Notification.requestPermission();
   }, [])
 
-  useEffect(() => {
-    onMessage(messaging, ({ notification, data }) => {
-      new Notification(notification.title, {
-        body: notification.body,
-        icon: notification.icon,
-      });
-    });
-  }, [])
 
   return (
     <ReduxProvider>

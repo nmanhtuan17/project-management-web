@@ -35,3 +35,10 @@ export const requestForToken = () => {
     });
 };
 
+onMessage(messaging, ({ notification, data }) => {
+  new Notification(notification.title, {
+    body: notification.body,
+    icon: notification.icon,
+  });
+});
+

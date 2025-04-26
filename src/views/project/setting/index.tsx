@@ -16,13 +16,15 @@ import { Textarea } from "@/components/ui/textarea";
 import { current } from "@reduxjs/toolkit";
 import { slugify } from "@/utils";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ProjectTypes } from "@/types/project";
+import { ProjectRoles, ProjectTypes } from "@/types/project";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { Camera, Plus } from "lucide-react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { updateProject, updateProjectAvatar } from "@/redux/actions/project.action";
+import { deleteProject, leaveProject, updateProject, updateProjectAvatar } from "@/redux/actions/project.action";
+import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
 const UpdateProjectForm = z.object({
   name: z.string().min(1),
@@ -33,14 +35,15 @@ type UpdateProjectFormData = z.infer<typeof UpdateProjectForm>
 
 
 export function ProjectSetting() {
-  const { openDialog } = useDialogContext();
-  const { currentProject, setCurrentProject } = useCurrentProject();
+  const { openDialog, setDialogOpen } = useDialogContext();
+  const { currentProject, setCurrentProject, profile, reset } = useCurrentProject();
   const { labels } = useAppSelector(state => state.project)
   const dispatch = useAppDispatch();
   const inputRef = useRef(null)
   const [file, setFile] = useState<File>()
   const [imageData, setImageData] = useState(null);
   const { loading } = useAppSelector(state => state.project)
+  const navigate = useNavigate()
 
   const form = useForm<UpdateProjectFormData>({
     defaultValues: {
@@ -90,6 +93,45 @@ export function ProjectSetting() {
     }
   }
 
+  const handleLeaveProject = async (e) => {
+    e.preventDefault()
+    try {
+      if (profile.role === ProjectRoles.OWNER) {
+        dispatch(deleteProject({
+          projectId: currentProject._id
+        })).then(() => {
+          reset()
+          navigate('/')
+        })
+      } else {
+        dispatch(leaveProject({
+          projectId: currentProject._id,
+          memberId: profile._id
+        })).then(() => {
+          reset()
+          navigate('/')
+        })
+      }
+    } catch (error) {
+      toast.error('Rời dự án thất bại')
+    } finally {
+      setDialogOpen('confirmDialog', false)
+    }
+  }
+
+  const handleOpenDialog = (e) => {
+    e.preventDefault()
+    setDialogOpen('confirmDialog', true, {
+      element: <div>
+        <p>Bạn chắc chắn muốn {profile.role === ProjectRoles.OWNER ? 'xóa dự án' : 'rời dự án'}?</p>
+        <div className="flex gap-2 justify-end">
+          <Button variant="secondary" onClick={() => setDialogOpen('confirmDialog', false)}>Hủy</Button>
+          <Button variant="destructive" onClick={handleLeaveProject}>Xác nhận</Button>
+        </div>
+      </div>
+    })
+  }
+
   return (
     <div className="h-full">
       <div className="p-4 flex flex-col min-h-0 w-full">
@@ -137,7 +179,7 @@ export function ProjectSetting() {
                 <FormItem>
                   <FormLabel>Tên dự án</FormLabel>
                   <FormDescription>
-                    Tên sự án của bạn
+                    Tên dự án của bạn
                   </FormDescription>
                   <FormControl>
                     <Input className="focus-visible:ring-0" placeholder="shadcn" {...field} />
@@ -199,7 +241,10 @@ export function ProjectSetting() {
                 </div>
               </div>
             </div>
-            <Button loading={loading} disabled={form.formState.isDirty || file ? false : true} type="submit">Cập nhật</Button>
+            <div className="flex gap-2">
+              <Button loading={loading} disabled={form.formState.isDirty || file ? false : true} type="submit">Cập nhật</Button>
+              <Button variant="destructive" onClick={handleOpenDialog}>{profile.role === ProjectRoles.OWNER ? 'Xóa dự án' : 'Rời dự án'}</Button>
+            </div>
           </form>
         </Form>
       </div>

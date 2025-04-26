@@ -113,3 +113,21 @@ export const updateProjectAvatar = createAsyncThunk<
   return await apiService.post(`projects/${projectId}/avatar`, avatar)
 })
 
+export const leaveProject = createAsyncThunk<
+  { message: string },
+  { projectId: string, memberId: string }
+>('project/leave-project', async ({ projectId, memberId }, thunkAPI) => {
+  const res = await apiService.delete(`projects/${projectId}/members/${memberId}`, {})
+  thunkAPI.dispatch(loadProjects())
+  return res
+})
+
+export const deleteProject = createAsyncThunk<
+  { message: string },
+  { projectId: string }
+>('project/delete-project', async ({ projectId }, thunkAPI) => {
+  const res = await apiService.delete(`projects/${projectId}`, {})
+  thunkAPI.dispatch(loadProjects())
+  return res
+})
+
