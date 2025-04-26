@@ -19,6 +19,7 @@ import { setAuth } from "@/redux/slices/auth.slice.ts";
 import { useCurrentProject } from "@/lib/hooks/useCurrentProject";
 import { LogOut, Settings2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import apiService from "@/services/api.service";
 
 export const UserNav = () => {
   const { user } = useAppSelector(state => state.auth)
@@ -63,6 +64,7 @@ export const UserNav = () => {
           }))
           reset()
           navigate('/auth/login')
+          apiService.logout()
         }}>
           <LogOut />
           Đăng xuất

@@ -4,7 +4,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Separator } from "@/components/ui/separator"
 import apiService from "@/services/api.service"
 import TaskDetail from "@/views/tasks/TaskDetail"
-import { Bell } from "lucide-react"
+import { Bell, Dot } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 
@@ -14,13 +14,18 @@ export const NotificationHelper = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchNotifications = async () => {
-      const res = await apiService.get('notification');
-      setNotifications(res.data);
-    }
     fetchNotifications();
   }, []);
+  
+  const fetchNotifications = async () => {
+    const res = await apiService.get('notification');
+    setNotifications(res.data);
+  }
 
+  const markAsRead = async (id: string) => {
+    await apiService.markAsReadNotification(id);
+    fetchNotifications()
+  }
 
   return (
     <Popover>
@@ -37,8 +42,9 @@ export const NotificationHelper = () => {
             {notifications.map((notification) => (
               <div
                 key={notification.id}
-                className="gap-2 bg-muted p-2 rounded-md cursor-pointer"
+                className="flex justify-between items-center gap-2 bg-muted p-2 rounded-md cursor-pointer"
                 onClick={() => {
+                  markAsRead(notification._id);
                   if (notification.type === 'task') {
                     setDialogOpen('taskDetail', true, { element: <TaskDetail taskId={notification.task._id} /> });
                   } else if (notification.type === 'email') {
@@ -46,11 +52,14 @@ export const NotificationHelper = () => {
                   }
                 }}
               >
-                <div className="flex items-center gap-2">
-                  {notification.type === 'task' && <p>[{`${notification.task.project.name}`}] </p>}
-                  <p className="text-sm font-semibold">{notification.title}</p>
+                <div>
+                  <div className="flex items-center gap-2">
+                    {notification.type === 'task' && <p>[{`${notification.task.project.name}`}] </p>}
+                    <p className="text-sm font-semibold">{notification.title}</p>
+                  </div>
+                  <p className="text-xs">{notification.body}</p>
                 </div>
-                <p className="text-xs">{notification.body}</p>
+                {!notification.isRead && <Dot color="blue" size={36} />}
               </div>
             ))}
           </div>

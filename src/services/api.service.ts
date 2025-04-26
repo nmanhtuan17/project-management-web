@@ -14,6 +14,7 @@ class ApiService {
     accessToken: '',
     refreshToken: '',
   }
+  prototype: any;
 
   async setCredentials(tokens: { accessToken: string, refreshToken: string }) {
     this.auth = tokens;
@@ -41,6 +42,9 @@ class ApiService {
     return this.callApi('DELETE', endpoint, data, config);
   }
 
+  async markAsReadNotification(id: string) {
+    return this.post(`notification/${id}`);
+  }
 
   async getAttachments(project: string) {
     return this.get(`projects/${project}/attachment`)
@@ -51,6 +55,10 @@ class ApiService {
   }
   async deleteAttachment(project: string, attachment: string) {
     return this.delete(`projects/${project}/attachment/${attachment}`, {})
+  }
+
+  async logout() {
+    return this.post('auth/logout');
   }
 
   async sendMail(data: any) {
