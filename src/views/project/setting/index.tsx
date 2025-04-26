@@ -20,26 +20,74 @@ import { ProjectTypes } from "@/types/project";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { Camera, Plus } from "lucide-react";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { updateProject, updateProjectAvatar } from "@/redux/actions/project.action";
+
+const UpdateProjectForm = z.object({
+  name: z.string().min(1),
+  type: z.nativeEnum(ProjectTypes),
+})
+
+type UpdateProjectFormData = z.infer<typeof UpdateProjectForm>
 
 
 export function ProjectSetting() {
   const { openDialog } = useDialogContext();
-  const { currentProject } = useCurrentProject();
+  const { currentProject, setCurrentProject } = useCurrentProject();
   const { labels } = useAppSelector(state => state.project)
   const dispatch = useAppDispatch();
   const inputRef = useRef(null)
   const [file, setFile] = useState<File>()
   const [imageData, setImageData] = useState(null);
+  const { loading } = useAppSelector(state => state.project)
 
-  const form = useForm({
+  const form = useForm<UpdateProjectFormData>({
     defaultValues: {
       name: currentProject.name,
       type: currentProject.type,
-    }
+    },
+    resolver: zodResolver(UpdateProjectForm)
   })
 
-  const onSubmit = () => {
+  const onSubmit = async (data: UpdateProjectFormData) => {
+    try {
+      const updateProjectPromise = dispatch(updateProject({
+        projectId: currentProject._id,
+        payload: data
+      }));
 
+      let updateAvatarPromise;
+      if (file) {
+        const formData = new FormData();
+        formData.append('avatar', file);
+        updateAvatarPromise = dispatch(updateProjectAvatar({
+          projectId: currentProject._id,
+          avatar: formData
+        }));
+      }
+      const [projectResult, avatarResult] = await Promise.all([
+        updateProjectPromise,
+        updateAvatarPromise
+      ]);
+
+      if (avatarResult) {
+        setCurrentProject({
+          ...currentProject,
+          ...data,
+          avatar: avatarResult.payload.data
+        });
+      } else {
+        setCurrentProject({
+          ...currentProject,
+          ...data
+        });
+      }
+      form.reset();
+      setFile(undefined);
+    } catch (error) {
+      console.error('Error updating project:', error);
+    }
   }
 
   return (
@@ -151,7 +199,7 @@ export function ProjectSetting() {
                 </div>
               </div>
             </div>
-            <Button disabled={form.formState.isDirty || file ? false : true} type="submit">Cập nhật</Button>
+            <Button loading={loading} disabled={form.formState.isDirty || file ? false : true} type="submit">Cập nhật</Button>
           </form>
         </Form>
       </div>

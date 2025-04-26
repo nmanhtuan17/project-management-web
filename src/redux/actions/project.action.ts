@@ -98,3 +98,18 @@ export const deleteAttachment = createAsyncThunk<
   thunkAPI.dispatch(getAttachments(project))
   return res
 })
+
+export const updateProject = createAsyncThunk<
+  { data: Project, message: string },
+  { projectId: string, payload: Partial<Project> }
+>('project/update-project', async ({ projectId, payload }) => {
+  return await apiService.put(`projects/${projectId}`, payload)
+})
+
+export const updateProjectAvatar = createAsyncThunk<
+  { data: Project, message: string },
+  { projectId: string, avatar: FormData }
+>('project/update-project-avatar', async ({ projectId, avatar }, thunkAPI) => {
+  return await apiService.post(`projects/${projectId}/avatar`, avatar)
+})
+

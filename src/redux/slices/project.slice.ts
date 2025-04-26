@@ -1,6 +1,6 @@
 import { Milestone, Project, ProjectAttachment, ProjectLabel, ProjectMember } from '@/types/project';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { createLabel, createMilestone, getAttachments, getStatistics, loadMilestones, loadProjectLabels, loadProjectMembers, loadProjects, uploadAttachment } from '../actions/project.action';
+import { createLabel, createMilestone, getAttachments, getStatistics, loadMilestones, loadProjectLabels, loadProjectMembers, loadProjects, updateProject, updateProjectAvatar, uploadAttachment } from '../actions/project.action';
 import { toast } from 'sonner';
 
 export interface ProjectSliceState {
@@ -86,6 +86,26 @@ export const projectSlice = createSlice({
       })
       .addCase(getAttachments.fulfilled, (state, action) => {
         state.attachments = action.payload.data
+      })
+      .addCase(updateProject.pending, (state) => {
+        state.loading = true
+      })
+      .addCase(updateProject.fulfilled, (state, action) => {
+        state.loading = false
+        state.projects = state.projects.map(project => project._id === action.payload.data._id ? action.payload.data : project)
+      })
+      .addCase(updateProject.rejected, (state, action) => {
+        state.loading = false
+      })
+      .addCase(updateProjectAvatar.pending, (state) => {
+        state.loading = true
+      })
+      .addCase(updateProjectAvatar.fulfilled, (state, action) => {
+        state.loading = false
+        state.projects = state.projects.map(project => project._id === action.payload.data._id ? action.payload.data : project)
+      })
+      .addCase(updateProjectAvatar.rejected, (state) => {
+        state.loading = false
       })
   }
 });
