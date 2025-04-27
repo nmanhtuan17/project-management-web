@@ -5,17 +5,35 @@ import { Icons } from "@/components/ui/icons";
 import { GoogleLogin } from "@react-oauth/google";
 import apiService from "@/services/api.service.ts";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert.tsx";
-import { ExclamationTriangleIcon, RocketIcon } from "@radix-ui/react-icons";
+import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import { useEffect, useState } from "react";
 import { Label } from "@radix-ui/react-label";
 import { Input } from "@/components/ui/input.tsx";
-import { useAppDispatch, useAppSelector } from "@/redux/store.ts";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { useAppDispatch } from "@/redux/store.ts";
+import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import { setAuth } from "@/redux/slices/auth.slice";
 import { useCurrentProject } from "@/lib/hooks/useCurrentProject";
 import { toast } from "sonner";
 import { requestForToken } from "@/configs/firebase.config";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+
+const loginSchema = z.object({
+  email: z.string({ required_error: "Email là bắt buộc" }).email("Email không hợp lệ"),
+  password: z.string({ required_error: "Mật khẩu là bắt buộc" }).min(8, "Mật khẩu phải có ít nhất 8 ký tự"),
+});
+
+type LoginFormData = z.infer<typeof loginSchema>;
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {
 }
@@ -26,28 +44,30 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const [message, setMessage] = useState<{ show: boolean, title?: string, description?: string }>({
     show: false,
   });
-  const [showLoginPassword, setShowLoginPassword] = useState(false);
   const navigate = useNavigate();
   const [hide, setHide] = useState<boolean>(true);
   const { reset } = useCurrentProject();
 
-  async function onSubmit(event: React.SyntheticEvent) {
-    event.preventDefault();
-    if (!showLoginPassword) return setShowLoginPassword(true);
-    const formData = new FormData(event.target as HTMLFormElement);
+  const form = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+    mode: "onSubmit"
+  });
+
+  const onSubmit = async (data: LoginFormData) => {
     setIsLoading(true);
-    apiService.callApi('POST', '/auth/login', Object.fromEntries(formData), {}, true)
-      .then(finalizeLogin)
-      .catch(err => {
-        setMessage({
-          show: true,
-          title: 'Error',
-          description: err.message,
-        });
-      }).finally(() => {
-        setIsLoading(false);
+    try {
+      const response = await apiService.callApi('POST', '/auth/login', data, {}, true);
+      await finalizeLogin(response);
+    } catch (err: any) {
+      setMessage({
+        show: true,
+        title: 'Error',
+        description: err.message,
       });
-  }
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const finalizeLogin = async (response: any) => {
     const { data } = response;
@@ -84,7 +104,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     }, 5000);
   }, [message.show]);
 
-  const handleLoginSuccess = async (credentialResponse) => {
+  const handleLoginSuccess = async (credentialResponse: any) => {
     try {
       const res = await apiService.post('auth/google-login', {
         token: credentialResponse.credential,
@@ -107,9 +127,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           onSuccess={handleLoginSuccess}
           onError={() => {
             toast.error('Đăng nhập thất bại')
-          }} >
-
-        </GoogleLogin>
+          }} />
       </div>
       <div className="relative">
         <div className="absolute inset-0 flex items-center">
@@ -121,59 +139,71 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           </span>
         </div>
       </div>
-      <form onSubmit={onSubmit}>
-        <div className="grid gap-2">
-          {showLoginPassword && (
-            <>
-              <div className="grid gap-1">
-                <Label className="sr-only" htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  placeholder="name@example.com"
-                  name="email"
-                  type="email"
-                  autoCapitalize="none"
-                  autoComplete="email"
-                  autoCorrect="off"
-                  disabled={isLoading}
-                />
-              </div>
-              <div className="grid gap-1">
-                <Label className="sr-only" htmlFor="password">
-                  Mật khẩu
-                </Label>
-                <div className={'flex items-center relative'}>
-                  <Input
-                    id="password"
-                    placeholder="Password..."
-                    name="password"
-                    type={hide ? 'password' : 'text'}
-                    autoCapitalize="none"
-                    autoComplete="email"
-                    autoCorrect="off"
-                    disabled={isLoading}
-                  />
-                  {hide ? (
-                    <EyeOff
-                      className={'w-4 h-4 absolute right-2 cursor-pointer text-foreground dark:text-black'}
-                      onClick={() => setHide(!hide)} />
-                  ) : (
-                    <Eye
-                      className={'w-4 h-4 absolute right-2 cursor-pointer text-foreground dark:text-black'}
-                      onClick={() => setHide(!hide)} />
-                  )}
-                </div>
-              </div>
-            </>
-          )}
-          <div className="grid gap-2">
-            <Button disabled={isLoading}>
-              {isLoading && (
-                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <>
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="sr-only">Email</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="name@example.com"
+                      type="email"
+                      autoCapitalize="none"
+                      autoComplete="email"
+                      autoCorrect="off"
+                      disabled={isLoading}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
               )}
-              Đăng nhập
-            </Button>
-          </div>
+            />
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="sr-only">Mật khẩu</FormLabel>
+                  <FormControl>
+                    <div className="relative">
+                      <Input
+                        placeholder="Password..."
+                        type={hide ? 'password' : 'text'}
+                        autoCapitalize="none"
+                        autoComplete="current-password"
+                        autoCorrect="off"
+                        disabled={isLoading}
+                        {...field}
+                      />
+                      {hide ? (
+                        <EyeOff
+                          className="absolute right-2 top-1/2 -translate-y-1/2 h-4 w-4 cursor-pointer text-muted-foreground"
+                          onClick={() => setHide(!hide)}
+                        />
+                      ) : (
+                        <Eye
+                          className="absolute right-2 top-1/2 -translate-y-1/2 h-4 w-4 cursor-pointer text-muted-foreground"
+                          onClick={() => setHide(!hide)}
+                        />
+                      )}
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </>
+          <Button type="submit" disabled={isLoading} className="w-full">
+            {isLoading && (
+              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+            )}
+            Đăng nhập
+          </Button>
           <div className="flex justify-between gap-2">
             <span className="text-sm text-muted-foreground text-center">
               Bạn chưa có tài khoản?
@@ -183,8 +213,8 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               <Link to='/auth/reset-password' className="text-sm">Quên mật khẩu?</Link>
             </span>
           </div>
-        </div>
-      </form>
+        </form>
+      </Form>
     </div>
   )
 }
