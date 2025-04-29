@@ -33,7 +33,7 @@ export function TaskBoardItem(props: TaskBoardItemProps) {
       </p>
       <div className="flex items-center justify-between mt-3">
         <div className="flex items-center gap-2">
-          <Badge className="px-2 text-xs" variant="secondary">{priority?.label}</Badge>
+          <Badge className="px-2 text-xs" variant="secondary" style={{ backgroundColor: priority?.backgroundColor }}>{priority?.label}</Badge>
           <p className="text-xs text-muted-foreground">{dayjs(task?.time?.to).format('D MMMM')}</p>
         </div>
         <div className="flex -space-x-2 *:ring-1 *:ring-transparent">
