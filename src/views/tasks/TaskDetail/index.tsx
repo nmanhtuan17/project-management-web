@@ -9,7 +9,7 @@ import {
   CircleAlert,
   Ellipsis
 } from "lucide-react";
-import { createContext, createElement, useContext, useEffect, useState } from "react";
+import { createContext, createElement, useContext, useEffect, useMemo, useState } from "react";
 import apiService from "@/services/api.service.ts";
 import { ETaskStatus, Task, TaskActivity, TaskPriority, TaskTypes } from "@/types/task";
 import { activitiesConfig, taskConfig } from "@/configs/task.config.ts";
@@ -19,7 +19,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar.tsx";
 import { AvatarImage } from "@radix-ui/react-avatar";
 import { Card, CardContent } from "@/components/ui/card.tsx";
 import { Separator } from "@/components/ui/separator.tsx";
-import { useAppDispatch } from "@/redux/store.ts";
+import { useAppDispatch, useAppSelector } from "@/redux/store.ts";
 import useApi from "@/lib/hooks/useApi.ts";
 import { CaretDownIcon, CounterClockwiseClockIcon, PlusIcon } from "@radix-ui/react-icons";
 import { QuestionMarkCircleIcon } from "@heroicons/react/16/solid";
@@ -112,6 +112,7 @@ export default function TaskDetail(props: TaskDetailProps) {
   const [getActivities, { data: activities, error, loading }] = useApi<TaskActivity[]>(apiService.getTaskActivities);
   const [getSubTasks, { data: subTasks }] = useApi<Task[]>(apiService.getSubTasks);
   const { setDialogOpen } = useDialogContext()
+  const { milestones } = useAppSelector(state => state.project)
 
 
   const loadActivities = () => {
@@ -182,6 +183,8 @@ export default function TaskDetail(props: TaskDetailProps) {
       toast.error(error.message)
     }
   }
+
+  const milestone = useMemo(() => milestones.find(m => m._id === form.watch('milestone')), [form.watch('milestone'), milestones])
 
   return <TaskDetailContext.Provider value={{
     taskId,
@@ -359,6 +362,8 @@ export default function TaskDetail(props: TaskDetailProps) {
                         variant="ghost"
                         className="flex-1 w-full"
                         date={field.value as unknown as DateRange}
+                        min={milestone?.time.from}
+                        max={milestone?.time.to}
                         onChange={field.onChange}
                       />
                     </FormControl>
