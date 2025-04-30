@@ -1,6 +1,6 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { useCurrentProject } from "@/lib/hooks/useCurrentProject"
-import { Project } from "@/types/project"
+import { Project, ProjectTypes } from "@/types/project"
 import { useAppDispatch, useAppSelector } from "@/redux/store"
 import { format } from "date-fns"
 import { Badge } from "@/components/ui/badge"
@@ -12,8 +12,12 @@ import { loadKanbanBoard } from "@/redux/actions/project.action"
 import { resetFilter } from "@/redux/slices/task.slice"
 import apiService from "@/services/api.service"
 import { Button } from "@/components/ui/button"
-import { PlusIcon } from "lucide-react"
+import { PlusIcon, Search } from "lucide-react"
 import { useDialogContext } from "@/components/providers/DialogProvider"
+import { Input } from "@/components/ui/input"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { useState } from "react"
+
 interface ProjectListProps {
 }
 
@@ -23,6 +27,14 @@ export const ProjectList = ({ }: ProjectListProps) => {
   const dispatch = useAppDispatch()
   const { setCurrentProject, setProfile } = useCurrentProject()
   const { setDialogOpen } = useDialogContext()
+  const [searchQuery, setSearchQuery] = useState("")
+  const [projectType, setProjectType] = useState<ProjectTypes | "all">("all")
+
+  const filteredProjects = projects.filter(project => {
+    const matchesSearch = project.name.toLowerCase().includes(searchQuery.toLowerCase())
+    const matchesType = projectType === "all" || project.type === projectType
+    return matchesSearch && matchesType
+  })
 
   const onSelectProject = async (project: Project) => {
     dispatch(loadKanbanBoard(project._id))
@@ -49,6 +61,27 @@ export const ProjectList = ({ }: ProjectListProps) => {
       </CardTitle>
     </CardHeader>
     <CardContent className="flex-1 gap-4 overflow-y-auto">
+      <div className="flex gap-4 mb-4">
+        <div className="relative">
+          <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Input
+            placeholder="Tìm kiếm dự án..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-8 outline-none focus-visible:ring-0 w-48"
+          />
+        </div>
+        <Select value={projectType} onValueChange={(value: ProjectTypes | "all") => setProjectType(value)}>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Loại dự án" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Tất cả</SelectItem>
+            <SelectItem value={ProjectTypes.PERSONAL}>Cá nhân</SelectItem>
+            <SelectItem value={ProjectTypes.TEAM}>Nhóm</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
       <div className="rounded-md">
         <Table>
           <TableHeader>
@@ -60,7 +93,7 @@ export const ProjectList = ({ }: ProjectListProps) => {
             </TableRow>
           </TableHeader>
           <TableBody className="">
-            {projects.map((project) => (
+            {filteredProjects.map((project) => (
               <TableRow key={project._id} className="cursor-pointer" onClick={() => onSelectProject(project)}>
                 <TableCell className="font-medium hover:underline flex items-center">
                   <Avatar className="mr-2 h-6 w-6">
