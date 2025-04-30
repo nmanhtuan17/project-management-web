@@ -32,14 +32,6 @@ export default function HomePage() {
   const isMobileScreen = width < 768;
   const { currentProject, profile } = useCurrentProject();
 
-  useEffect(() => {
-    if (currentProject._id) {
-      dispatch(loadProjectMembers(currentProject._id)).then(() => {
-        dispatch(loadRecentTask({ projectId: currentProject._id, assignee: profile._id }))
-      })
-    }
-  }, [currentProject._id]);
-
   return (
     <div className={'flex-1 flex flex-row'}>
       <ResizablePanelGroup
@@ -64,66 +56,6 @@ export default function HomePage() {
             </div>
           </div>
         </ResizablePanel>
-        {currentProject._id && <>
-          <ResizableHandle />
-          <ResizablePanel
-            defaultSize={isMobileScreen ? 5 : 15}
-            collapsedSize={isMobileScreen ? 5 : 15}
-            collapsible={true}
-            minSize={isMobileScreen ? 5 : 15}
-            maxSize={isMobileScreen ? 5 : 15}
-            className={cn(
-              isCollapsed &&
-              "min-w-[50px] transition-all duration-300 ease-in-out"
-            )}
-          >
-            <div>
-              <div className={'px-4 py-2 font-bold'}>
-                {!isCollapsed && 'Thông tin thành viên'}
-              </div>
-              {members.map(mem => (!isCollapsed ?
-                <div
-                  className={'px-4 py-2 flex flex-row items-center gap-2 hover:bg-muted cursor-pointer'}
-                  key={mem._id}
-                >
-                  <Avatar>
-                    <AvatarImage src={mem.user?.avatar} />
-                    <AvatarFallback>{mem.user?.fullName.split(' ')?.pop()?.charAt(0)?.toUpperCase() || '!'}</AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <div className={'font-semibold text-sm'}>
-                      {mem.user?.fullName}
-                    </div>
-                    <div className={'text-xs'}>
-                      {mem?.role}
-                    </div>
-                  </div>
-                </div>
-                :
-                <div key={mem._id} className={'px-4 py-2 flex flex-row items-center justify-center hover:bg-muted cursor-pointer'}>
-                  <TooltipProvider>
-                    <Tooltip delayDuration={0}>
-                      <TooltipTrigger asChild>
-                        <Avatar>
-                          <AvatarImage src={mem?.user?.avatar} />
-                          <AvatarFallback>{mem?.user?.fullName.split(' ')?.pop()?.charAt(0)?.toUpperCase() || '!'}</AvatarFallback>
-                        </Avatar>
-                      </TooltipTrigger>
-                      <TooltipContent side="right">
-                        <div className={'text-sm'}>
-                          {mem?.user?.fullName}
-                        </div>
-                        <div className={'text-xs'}>
-                          {mem?.role}
-                        </div>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                </div>))}
-            </div>
-          </ResizablePanel>
-        </>
-        }
       </ResizablePanelGroup>
     </div>
   )

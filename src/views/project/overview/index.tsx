@@ -2,7 +2,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { useCurrentProject } from "@/lib/hooks/useCurrentProject"
-import { useAppSelector } from "@/redux/store"
+import { useAppDispatch, useAppSelector } from "@/redux/store"
 import dayjs from 'dayjs'
 import { Plus, Settings } from "lucide-react"
 import { useNavigate } from "react-router-dom"
@@ -10,11 +10,20 @@ import { RecentTasks } from "../components/RecentTasks"
 import { MilestonesSpace } from "../components/MilestonesSpace"
 import { LabelsManage } from "../components"
 import { ProjectDocument } from "../components/ProjectDocument"
+import { useEffect } from 'react'
+import { loadProjectMembers } from "@/redux/actions/project.action"
 
 export const ProjectOverview = () => {
   const { currentProject } = useCurrentProject()
   const { members } = useAppSelector(state => state.project)
+  const dispatch = useAppDispatch()
   const navigate = useNavigate()
+
+  useEffect(() => {
+    if (currentProject._id) {
+      dispatch(loadProjectMembers(currentProject._id))
+    }
+  }, [currentProject._id]);
 
 
   return (
