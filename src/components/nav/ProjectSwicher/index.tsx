@@ -65,7 +65,7 @@ export const ProjectSwitcher = ({ className }: ProjectSwitcherProps) => {
     setCurrentProject(project)
     const profile = await apiService.getProjectProfile(project._id)
     setProfile(profile)
-    navigate('/projects/' + project.slug);
+    navigate(`/projects/${project.slug}/overview`)
   }
 
   return (<Popover open={open} onOpenChange={setOpen}>

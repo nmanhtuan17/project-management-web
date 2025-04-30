@@ -153,7 +153,7 @@ export function CreateProjectDialog() {
               render={({ field }) => (
                 <FormItem className={'space-y-1'}>
                   <FormLabel>
-                    Kiểu dự án
+                    Loại
                   </FormLabel>
                   <FormControl>
                     <RadioGroup
@@ -162,11 +162,11 @@ export function CreateProjectDialog() {
                     >
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="personal" id="personal" />
-                        <Label htmlFor="personal">Dự án cá nhân</Label>
+                        <Label htmlFor="personal">Cá nhân</Label>
                       </div>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="team" id="team" />
-                        <Label htmlFor="team">Dự án nhóm</Label>
+                        <Label htmlFor="team">Nhóm</Label>
                       </div>
                     </RadioGroup>
                   </FormControl>

@@ -21,6 +21,7 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { useCurrentProject } from "@/lib/hooks/useCurrentProject";
 import { ProjectSpace } from "./components/ProjectSpace";
 import { ProfileCard } from "./components/ProfileCard";
+import { ProjectList } from "./components/ProjectList";
 
 export default function HomePage() {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -51,24 +52,14 @@ export default function HomePage() {
         <ResizablePanel>
           <div className="flex flex-col flex-1 px-16 h-full">
             <div className={'py-4 md:py-6'}>
-              <h2 className="text-2xl md:text-3xl font-bold tracking-tight">Tổng quan</h2>
+              <h2 className="text-2xl md:text-3xl font-bold tracking-tight">Trang chủ</h2>
             </div>
             <div className="flex flex-1 gap-4 pb-4">
               <div className="space-y-4">
                 <ProfileCard />
-                <Card className="w-[320px]">
-                  <CardHeader>
-                    <CardTitle>Hoạt động</CardTitle>
-                    <CardDescription>Các hoạt động gần đây của bạn</CardDescription>
-                    <Separator className="mt-2" />
-                  </CardHeader>
-                  <CardContent className="flex flex-col items-center justify-center p-4 pb-0 mt-4">
-
-                  </CardContent>
-                </Card>
               </div>
               <div className="flex flex-col flex-1 space-y-4">
-                <ProjectSpace />
+                <ProjectList />
               </div>
             </div>
           </div>
