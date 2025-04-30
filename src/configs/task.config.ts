@@ -30,31 +30,37 @@ export const taskConfig = {
   priorities: [{
     icon: ArrowUpIcon,
     value: TaskPriority.HIGH,
-    label: 'Gấp'
+    label: 'Gấp',
+    backgroundColor: '#ff5656'
   }, {
     icon: ArrowRightIcon,
     value: TaskPriority.MEDIUM,
-    label: 'Trung bình'
+    label: 'Trung bình',
+    backgroundColor: '#ffb95cdb'
   }, {
     icon: ArrowDownIcon,
     value: TaskPriority.LOW,
-    label: 'Thấp'
+    label: 'Thấp',
+    backgroundColor: '#5c8bffdb'
   }],
   statuses: [{
     label: 'Chưa thực hiện',
     value: ETaskStatus.TODO,
     backgroundColor: '#cccccc',
-    icon: ClockIcon
+    icon: ClockIcon,
+    text: '#7d7d7d'
   }, {
     label: 'Đang xử lý',
     value: ETaskStatus.INPROCESS,
     backgroundColor: '#1c84c6',
-    icon: PlaneTakeoff
+    icon: PlaneTakeoff,
+    text: '#007ac7'
   }, {
     label: 'Đã hoàn thành',
     value: ETaskStatus.DONE,
     backgroundColor: '#93c572',
-    icon: SquareCheck
+    icon: SquareCheck,
+    text: '#59bd17'
   }],
 }
 

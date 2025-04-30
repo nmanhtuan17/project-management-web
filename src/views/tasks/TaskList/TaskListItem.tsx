@@ -73,7 +73,7 @@ export const TaskListItem = ({ task }: TaskListItemProp) => {
         </div>
       </TableCell>
       <TableCell className="text-xs font-semibold">
-        <div className="flex flex-row gap-1">
+        <div className="flex flex-row gap-1" style={{ color: status?.text }}>
           {<status.icon className={'w-4 h-4'} />}
           <p className="text-[12px] line-clamp-1 font-semibold flex-row">
             {status.label}

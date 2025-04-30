@@ -41,7 +41,7 @@ export const NotificationHelper = () => {
           <div className="flex flex-col gap-2 mt-2 overflow-y-auto max-h-[600px]">
             {notifications.map((notification) => (
               <div
-                key={notification.id}
+                key={notification._id}
                 className="flex justify-between items-center gap-2 bg-muted p-2 rounded-md cursor-pointer"
                 onClick={() => {
                   markAsRead(notification._id);
