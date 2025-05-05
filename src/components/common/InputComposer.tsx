@@ -37,8 +37,6 @@ export const InputComposer = forwardRef((props, ref) => {
       toggleLink,
       undo,
       redo,
-      uploadImage,
-      uploadAttachments
     }
   ] = useEditor({ placeholder: "Enter content..." });
 
@@ -97,19 +95,6 @@ export const InputComposer = forwardRef((props, ref) => {
         </div>
       </BubbleMenu>
       <EditorContent editor={editor} />
-      <div className="sticky top-10 flex flex-col gap-2 my-2">
-        {attachments.map((attachment, index) => {
-          return (
-            <div key={index} className="group bg-accent rounded-md p-2 cursor-pointer flex justify-between ">
-              <span className="text-[14px] ">Test upload</span>
-              <div className="flex text-muted-foreground items-center gap-2"><span className="text-[14px]">120KB</span>
-                <Trash2Icon
-                  className={'w-4 h-4 transition-all ease-in-out duration-200 overflow-hidden hidden group-hover:block'} />
-              </div>
-            </div>
-          )
-        })}
-      </div>
     </div>
     <div className={'flex flex-row divide-x'}>
       <div className={'flex flex-row pr-2'}>
@@ -228,17 +213,11 @@ export const InputComposer = forwardRef((props, ref) => {
           variant={'ghost'}>
           <ListBulletIcon className={'w-4 h-4'} />
         </Button>
-        <Button onClick={uploadAttachments} className={'w-6 h-6 p-0'} variant={'ghost'}>
-          <PaperClipIcon className={'w-4 h-4'} />
-        </Button>
         <Button
           onClick={toggleLink}
           className={cn('w-6 h-6 p-0', editor.isActive('link') ? 'text-blue-700 dark:text-blue-500 hover:text-blue-700 dark:hover:text-blue-500' : '')}
           variant={'ghost'}>
           <Link1Icon className={'w-4 h-4'} />
-        </Button>
-        <Button onClick={uploadImage} className={'w-6 h-6 p-0'} variant={'ghost'}>
-          <ImageIcon className={'w-4 h-4'} />
         </Button>
       </div>
     </div>
