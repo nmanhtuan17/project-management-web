@@ -20,18 +20,23 @@ export function TaskPrioritySelect(props: TaskPrioritySelectProps) {
   const options = [{
     label: 'All',
     value: 'all',
+    backgroundColor: '#5c8bffdb'
   }, {
     label: 'Thấp',
     value: TaskPriority.LOW,
+    backgroundColor: '#5c8bffdb'
+    
   }, {
     label: 'Trung bình',
     value: TaskPriority.MEDIUM,
+    backgroundColor: '#ffb149'
   }, {
     label: 'Gấp',
     value: TaskPriority.HIGH,
+    backgroundColor: '#ff5656'
   }].filter(item => props.showAllSelector ? true : item.value !== 'all').map(item => {
     item.value = item.value.toString();
-    return item as { label: string, value: string };
+    return item as { label: string, value: string, backgroundColor: string };
   });
 
   useEffect(() => {
@@ -66,7 +71,7 @@ export function TaskPrioritySelect(props: TaskPrioritySelectProps) {
       <SelectContent>
         {options.map((option, index) => (
           <SelectItem value={option.value} key={index} >
-            <div className={'flex flex-row gap-1 items-center'}>
+            <div className={'flex flex-row gap-1 items-center'} style={{ color: option.backgroundColor }}>
               {props.showIcon && createElement(taskConfig.priorities.find(t => t.value === parseInt(option.value))?.icon || QuestionMarkIcon as any, {
                 className: 'w-4 h-4',
               })} {option.label}

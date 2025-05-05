@@ -34,7 +34,6 @@ export function TaskStatusSelect(props: TaskStatusSelectProps) {
       onChange={(selected: string[]) => {
         let filtered: string[] = selected;
         if (filtered[filtered.length - 1] === 'all') {
-          // last item is all
           filtered = ['all'];
         } else if (selected.includes('all')) {
           filtered = filtered.filter(e => e !== 'all')
@@ -56,7 +55,7 @@ export function TaskStatusSelect(props: TaskStatusSelectProps) {
       <SelectContent>
         {taskConfig.statuses.map((option, index) => (
           <SelectItem value={option.value} key={index}>
-            <div className={'flex flex-row gap-1 items-center'}>
+            <div className={'flex flex-row gap-1 items-center'} style={{ color: option.text }}>
               {props.showIcon && <option.icon className={'w-4 h-4'} />} {option.label}
             </div>
           </SelectItem>
