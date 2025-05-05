@@ -9,7 +9,7 @@ import {
   Legend,
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
-import { useAppSelector } from '@/redux/store';
+import { useAppDispatch, useAppSelector } from '@/redux/store';
 import useApi from '@/lib/hooks/useApi';
 import { Task } from '@/types/task';
 import apiService from '@/services/api.service';
@@ -34,6 +34,19 @@ const CHART_OPTIONS = {
     },
     title: {
       display: true,
+      text: 'Thống kê công việc',
+    },
+  },
+};
+const CHART_OPTIONS_PERFORMANCE = {
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    legend: {
+      position: 'top' as const,
+    },
+    title: {
+      display: true,
       text: 'Hiệu suất công việc',
     },
   },
@@ -43,15 +56,26 @@ export const TaskPerformance = () => {
   const { members } = useAppSelector(state => state.project);
   const { tasks, filter } = useAppSelector(state => state.task);
   const { currentProject } = useCurrentProject();
+  const [getProjectPerformance, { data: projectPerformance }] = useApi(apiService.getTaskPerformance);
+  const [getTaskPerformanceByMember, { data: performanceDataByMember }] = useApi(apiService.getTaskPerformanceByMember);
+
+  useEffect(() => {
+    getProjectPerformance(currentProject._id);
+    getTaskPerformanceByMember(currentProject._id);
+  }, [currentProject._id])
+
+
+  console.log(projectPerformance);
+  console.log(performanceDataByMember);
 
   const assignees = useMemo(() => {
     if (filter.assignees.length === 0) return [];
     return filter.assignees.map(a => members.find(m => a === m._id)).filter(Boolean);
   }, [filter.assignees, members]);
 
-  const labels = useMemo(() => 
-    assignees.length > 0 
-      ? assignees.map(member => member?.user?.fullName) 
+  const labels = useMemo(() =>
+    assignees.length > 0
+      ? assignees.map(member => member?.user?.fullName)
       : ['Tổng'],
     [assignees]
   );
@@ -102,9 +126,27 @@ export const TaskPerformance = () => {
     };
   }, [tasks]);
 
+  const performanceData = {
+    labels: ['Hoàn thành đúng hạn', 'Hoàn thành trễ', 'Chưa hoàn thành'],
+    datasets: [
+      {
+        label: 'Tổng',
+        data: [4, 9, 3],
+        backgroundColor: 'rgba(53, 162, 235, 0.5)',
+      },
+    ]
+  }
+
+
   return (
-    <div className='w-full flex-1'>
-      <Bar options={CHART_OPTIONS} data={data} className='w-full' />
+    <div className='w-full flex flex-col gap-4 flex-1'>
+      <div className='w-full'>
+        <Bar options={CHART_OPTIONS} data={data} className='w-full' />
+      </div>
+      <div className='w-full'>
+
+        <Bar options={CHART_OPTIONS_PERFORMANCE} data={performanceData} className='w-full' />
+      </div>
     </div>
   );
 };

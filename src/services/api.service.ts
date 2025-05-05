@@ -98,6 +98,14 @@ class ApiService {
     return this.get(`/projects/${projectId}/tasks/${taskId}/activities`);
   }
 
+  async getTaskPerformance(projectId: string) {
+    return this.get(`/projects/${projectId}/tasks/performance`);
+  }
+
+  async getTaskPerformanceByMember(projectId: string) {
+    return this.get(`/projects/${projectId}/tasks/performance/members`);
+  }
+
   async callApi(method: string, endpoint: string, data: any = {}, config?: AxiosRequestConfig, ignoreAuth = false) {
     if (!ignoreAuth) await this.refreshTokenCheck();
     try {
