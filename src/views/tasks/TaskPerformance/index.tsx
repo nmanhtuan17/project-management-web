@@ -15,6 +15,8 @@ import { Task } from '@/types/task';
 import apiService from '@/services/api.service';
 import { useCurrentProject } from '@/lib/hooks/useCurrentProject';
 import { taskConfig } from '@/configs/task.config';
+import { TaskPerformanceChart, TaskPerformanceData } from '@/components/TaskPerformanceChart';
+import { TeamPerformanceCharts } from '@/components/TeamPerformanceCharts';
 
 ChartJS.register(
   CategoryScale,
@@ -25,39 +27,29 @@ ChartJS.register(
   Legend
 );
 
-const CHART_OPTIONS = {
-  responsive: true,
-  maintainAspectRatio: false,
-  plugins: {
-    legend: {
-      position: 'top' as const,
-    },
-    title: {
-      display: true,
-      text: 'Thống kê công việc',
-    },
-  },
-};
-const CHART_OPTIONS_PERFORMANCE = {
-  responsive: true,
-  maintainAspectRatio: false,
-  plugins: {
-    legend: {
-      position: 'top' as const,
-    },
-    title: {
-      display: true,
-      text: 'Hiệu suất công việc',
-    },
-  },
-};
+
 
 export const TaskPerformance = () => {
   const { members } = useAppSelector(state => state.project);
   const { tasks, filter } = useAppSelector(state => state.task);
   const { currentProject } = useCurrentProject();
-  const [getProjectPerformance, { data: projectPerformance }] = useApi(apiService.getTaskPerformance);
-  const [getTaskPerformanceByMember, { data: performanceDataByMember }] = useApi(apiService.getTaskPerformanceByMember);
+  const [getProjectPerformance, { data: projectPerformance }] = useApi<TaskPerformanceData>(apiService.getTaskPerformance);
+  const [getTaskPerformanceByMember, { data: performanceDataByMember }] = useApi<any>(apiService.getTaskPerformanceByMember);
+
+
+  const CHART_OPTIONS = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'top' as const,
+      },
+      title: {
+        display: true,
+        text: 'Thống kê công việc',
+      },
+    },
+  };
 
   useEffect(() => {
     getProjectPerformance(currentProject._id);
@@ -139,13 +131,15 @@ export const TaskPerformance = () => {
 
 
   return (
-    <div className='w-full flex flex-col gap-4 flex-1'>
+    <div className='w-full flex flex-col flex-1 gap-4 overflow-y-auto'>
       <div className='w-full'>
-        <Bar options={CHART_OPTIONS} data={data} className='w-full' />
+        <Bar options={CHART_OPTIONS} data={data} className='w-full h-[300px]' />
       </div>
       <div className='w-full'>
-
-        <Bar options={CHART_OPTIONS_PERFORMANCE} data={performanceData} className='w-full' />
+        <TaskPerformanceChart {...projectPerformance} />
+      </div>
+      <div className='w-full'>
+        <TeamPerformanceCharts data={performanceDataByMember} />
       </div>
     </div>
   );
