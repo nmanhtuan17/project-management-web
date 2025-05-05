@@ -152,7 +152,7 @@ export function ProfileForm() {
                   <div className="flex border items-center rounded-sm pr-4">
                     <Input disabled className="focus-visible:ring-0 border-none" placeholder="Please active your internal email" {...field} />
                     <Separator orientation="vertical" />
-                    <span className="text-sm text-muted-foreground">@tuan.website</span>
+                    <span className="text-sm text-muted-foreground">@tlusolution.site</span>
                   </div>
                 </FormControl>
                 <FormDescription>
