@@ -107,7 +107,16 @@ export const TaskListItem = ({ task }: TaskListItemProp) => {
           }
         </div>
       </TableCell>
-      <TableCell className="text-xs font-semibold">{dayjs(task?.time?.to).format('DD/MM/YYYY')}</TableCell>
+      <TableCell className="text-xs font-semibold">
+        <div className="flex items-center gap-2">
+          {dayjs(task?.time?.to).format('DD/MM/YYYY')}
+          {dayjs(task?.time?.to).isBefore(dayjs(), 'day') && (
+            <Badge variant="destructive" className="text-[10px] px-1 py-0">
+              Quá hạn
+            </Badge>
+          )}
+        </div>
+      </TableCell>
       <TableCell className="text-xs font-semibold">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
