@@ -1,0 +1,13 @@
+
+{
+  "firebaseConfig": {
+    "apiKey": "AIzaSyAs3c_U_e9fbJYsq-5uvkit6FItTb9qMWQ",
+    "authDomain": "project-management-94023.firebaseapp.com",
+    "projectId": "project-management-94023",
+    "storageBucket": "project-management-94023.firebasestorage.app",
+    "messagingSenderId": "MESSAG822597456095ING_SENDER_ID",
+    "appId": "1:822597456095:web:5ef34ab2213418b645996a",
+    "measurementId": "G-03VPEW7HQG",
+    "vapidKey": "BMdOgsbQrkpVCw6Eo0MlBPooIhTueZH9NiVWSsqN_z4gcBv-VQG2Rabyy5sffc39qHiA1CwYZmP1PH2TldtllHk"
+  }
+}
