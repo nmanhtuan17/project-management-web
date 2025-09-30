@@ -35,23 +35,6 @@ export default function MailPage() {
   const currentEmailLabel = pathname.split("/")[2];
   const { user } = useAppSelector(state => state.auth);
 
-
-  // useEffect(() => {
-  //   if (emailAddresses && emailAddresses.length !== 0) {
-  //     setActiveEmail(emailAddresses[0]);
-  //   }
-  // }, [emailAddresses]);
-
-  const loadMail = (mailId: string) => {
-    // loadSingleMail(mailId).then(mailDetail => {
-    //   if (emails.findIndex(m => m._id === mailDetail._id) < 0) {
-    //     setEmails(mails => {
-    //       return [mailDetail, ...mails];
-    //     });
-    //   }
-    // });
-  };
-
   const handleLoadEmails = async () => {
     setLoadingEmails(true)
     if (!user.internalEmail) return;
